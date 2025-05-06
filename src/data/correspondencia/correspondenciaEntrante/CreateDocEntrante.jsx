@@ -2,13 +2,14 @@ import { InputField } from "../../../components/shared/InputField";
 import CreateEntity from "../../../components/shared/CreateEntity";
 import {
   useContactos,
-  useCorrespondenciaEntranteMutations,
+  useCorrespondenciaEntranteMutations,useTiposDocumentos,
 } from "../../../hooks/useEntities";
-import { FaBackspace, FaEye, FaPencilAlt, FaPlus } from "react-icons/fa";
+import { FaBackspace, FaEye, FaPencilAlt, FaPlus, FaUpload } from "react-icons/fa";
 import { useFormEntity } from "../../../utils/useFormEntity";
 import { obtenerIdUser } from "../../../utils/auth";
 import { SelectField } from "../../../components/shared/SelectField";
-import DocumentosFieldArray from "../../../components/shared/DocumentoFieldArray";
+import  UploadDocumentoFieldArray  from "../../../components/shared/UploadDocumento";
+
 
 export default function createCorrespondenciaEntrante() {
   const { paraSelectsdestructuringYMap } = useFormEntity();
@@ -25,6 +26,14 @@ export default function createCorrespondenciaEntrante() {
       "id_contacto",
       "nombre_completo"
     );
+    const documentoOptions = () =>
+      //Modelo 2
+      paraSelectsdestructuringYMap(
+        useTiposDocumentos,
+        true, //maneja la logica de la paginacion
+        "id_tipo_documento",
+        "nombre_tipo_documento"
+      );
 
   const opcionesTipo = [
     { id: "enviado", nombre: "Enviado" },
@@ -56,15 +65,6 @@ export default function createCorrespondenciaEntrante() {
     comentario: "",
     contacto: "",
     documento: [
-      {
-        id_documento: "",
-        nombre_documento: "",
-        archivo: "",
-        fecha_subida: "",
-        correspondencia: "",
-        tipo_documento: "",
-        tipo_documento_interno: "",
-      },
     ],
   };
   const camposExtras = (formValues) => ({
@@ -163,13 +163,14 @@ export default function createCorrespondenciaEntrante() {
           estilos: "text-blue-600 hover:bg-blue-600 hover:text-white p-1",
         },
       ],
+
     },
-    {
-      component: DocumentosFieldArray,
-      label: "Documentos",
-      name: "documento",
-      onChange: manejarEntradas.handleInputChange,
-    },
+   {
+  component: UploadDocumentoFieldArray,
+  label: "Documentos",
+  name: "documento",
+  onChange: manejarEntradas.handleInputChange,
+}
   ];
 
   const paraNavegacion = {
