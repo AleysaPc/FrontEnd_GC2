@@ -37,10 +37,10 @@ function CorrespondenciaRecibidaList() {
       label: "Estado",
       render: (item) => item.estado,},
     {
-      key: "contacto",
+      key: "datos_contacto",
       label: "Remitente",
       render: (item) => (
-        `${item.contacto || 'Sin remitente'}`
+        `${item.datos_contacto || 'Sin remitente'}`
       ),
     },
     {

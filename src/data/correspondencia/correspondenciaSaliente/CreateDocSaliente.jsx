@@ -17,13 +17,13 @@ export default function createCorrespondenciaSaliente() {
   };
 
   const contactoOptions = () =>
-    //Modelo 2
-    paraSelectsdestructuringYMap(
-      useContactos,
-      true, //maneja la logica de la paginacion
-      "id_contacto",
-      "nombre_contacto",
-    );
+  paraSelectsdestructuringYMap(
+    useContactos,
+    true,
+    "id_contacto",
+    "nombre_completo",
+  );
+
 
   const opcionPrioridad = [
     { id: "alta", nombre: "Alta" },
@@ -40,7 +40,7 @@ export default function createCorrespondenciaSaliente() {
 
   const configuracionFormulario = {
     fecha_envio: "",
-    fecha_recepción: "",
+    fecha_recepcion: "",
     fecha_seguimiento: "",
     tipo: "enviado",
     referencia:"",
@@ -58,7 +58,7 @@ export default function createCorrespondenciaSaliente() {
   });
 
   const paraEnvio = (formValues) => ({
-    link: "/correspondenciaEntranteList",
+    link: "/correspondenciaEnviadaList",
     params: camposExtras(formValues),
   });
 
@@ -74,7 +74,7 @@ export default function createCorrespondenciaSaliente() {
     {
       component: InputField,
       label: "Fecha Recepción",
-      name: "fecha_recepción",
+      name: "fecha_recepcion",
       type: "date",
       required: true,
       onChange: manejarEntradas.handleInputChange,

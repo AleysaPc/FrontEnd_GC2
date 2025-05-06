@@ -8,6 +8,7 @@ import { FaBackspace, FaEye, FaPencilAlt, FaPlus } from "react-icons/fa";
 import { useFormEntity } from "../../../utils/useFormEntity";
 import { obtenerIdUser } from "../../../utils/auth";
 import { SelectField } from "../../../components/shared/SelectField";
+import DocumentosFieldArray from "../../../components/shared/DocumentoFieldArray";
 
 export default function createCorrespondenciaEntrante() {
   const { paraSelectsdestructuringYMap } = useFormEntity();
@@ -22,7 +23,7 @@ export default function createCorrespondenciaEntrante() {
       useContactos,
       true, //maneja la logica de la paginacion
       "id_contacto",
-      "nombre_contacto",
+      "nombre_completo"
     );
 
   const opcionesTipo = [
@@ -47,14 +48,24 @@ export default function createCorrespondenciaEntrante() {
     fecha_recepción: "",
     fecha_respuesta: "",
     tipo: "recibido",
-    referencia:"",
-    descripcion: "",	
+    referencia: "",
+    descripcion: "",
     paginas: "",
     prioridad: "",
     estado: "",
     comentario: "",
     contacto: "",
-    documento: "",   
+    documento: [
+      {
+        id_documento: "",
+        nombre_documento: "",
+        archivo: "",
+        fecha_subida: "",
+        correspondencia: "",
+        tipo_documento: "",
+        tipo_documento_interno: "",
+      },
+    ],
   };
   const camposExtras = (formValues) => ({
     usuario: logicaNegocio.idUsuario,
@@ -154,15 +165,13 @@ export default function createCorrespondenciaEntrante() {
       ],
     },
     {
-      component: InputField,
-      label: "Documento",
+      component: DocumentosFieldArray,
+      label: "Documentos",
       name: "documento",
-      type: "file",
       onChange: manejarEntradas.handleInputChange,
-      required: false,
     },
   ];
-  
+
   const paraNavegacion = {
     title: "Registrar Correspondencia",
     subTitle: "Correspondencia Entrante",

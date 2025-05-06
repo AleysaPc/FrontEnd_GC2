@@ -76,6 +76,7 @@ export const useFormEntity = () => {
     }));
   };
 
+
   const todosDatosOpaginacion = (fetchDataHook, all_data) => {
     const { currentPage, handlePageChange } = usePagination();
 

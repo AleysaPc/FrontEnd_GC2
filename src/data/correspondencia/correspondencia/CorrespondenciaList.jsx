@@ -30,7 +30,7 @@ function CorrespondenciaList() {
     { key: "estado", label: "Estado" },
     {
       key: "contacto",
-      label: "contacto",
+      label: "datos_contacto",
     },
   ];
 

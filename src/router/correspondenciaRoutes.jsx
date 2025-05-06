@@ -27,20 +27,20 @@ export const correspondenciaRoutes = [
     element: <CreateCorrespondencia />,
   },
   {
-    path: "editCorrespondencia/:id",
+    path: "/editCorrespondencia/:id",
     element: <EditCorrespondencia />,
   },
   {
-    path: "createDocEntrante",
+    path: "/createDocEntrante",
     element: <CreateDocEntrante />,
   },
   {
 
-    path : "detailDocEntrante/:id",
+    path : "/detailDocEntrante/:id",
     element: <DetailDocEntrante />,
   },
   {
-    path: "createDocSaliente",
+    path: "/createDocSaliente",
     element: <CreateDocSaliente />,
   }
     
