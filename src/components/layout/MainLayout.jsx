@@ -31,7 +31,7 @@ const MainLayout = () => {
       <Navbar toggleSidebar={toggleSidebar} />
       <div className="flex h-full overflow-visible">
         <Sidebar isVisible={sidebarVisible} />
-        <div className="border-orange-400 border-2 rounded-lg mx-4 mt-2 mb-3 flex-1 overflow-auto">
+        <div className="border-gray-700  border-2 rounded-lg mx-4 mt-2 mb-3 flex-1 overflow-auto p-2">
           <Outlet />
         </div>
       </div>

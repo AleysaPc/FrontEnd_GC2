@@ -5,7 +5,7 @@ import { ActionButton } from "../shared/ActionButton";
 // Función para optimizar la clase activa de NavLink
 const getNavLinkClass = (isActive) =>
   `block px-4 py-2 rounded-lg transition-all duration-200 hover:text-white ${
-    isActive ? "bg-gray-700 text-white" : "text-gray-700 hover:bg-gray-700"
+    isActive ? "bg-green-700 text-white" : "text-gray-700 hover:bg-gray-700" //Texto del Sidebar
   }`;
 
 const SidebarMenu = ({ title, icon: Icon, items, isOpen, toggleMenu }) => (

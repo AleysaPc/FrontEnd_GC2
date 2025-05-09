@@ -7,13 +7,18 @@ const Navbar = ({ toggleSidebar }) => {
   const logoutUser = useLogout();
 
   return (
-    <nav className="sticky top-2 z-50 bg-white border-gray-400 border-2 rounded-lg mx-4 mt-2 flex justify-between p-4">
+    <nav className="sticky top-2 z-50 bg-gradient-to-r from-gray-700 via-gray-700 to-gray-700 border-gray-100 border-2 text-white shadow rounded-lg mx-4 mt-2 flex justify-between p-4">
       <ActionButton
         icon={FaBars}
         onClick={toggleSidebar}
         estilos="border-2 border-gray-400 rounded-lg p-1"
       />
-      <ActionButton label={"Navbar"} to={"/home"} />
+      <ActionButton
+        label={
+          "Federación de Trabajadores de Luz-Fuerza, Telecomunicación y Aguas del Departamento La Paz"
+        }
+        to={"/home"}
+      />
 
       {/* {sidebarToggle && (
         <div>

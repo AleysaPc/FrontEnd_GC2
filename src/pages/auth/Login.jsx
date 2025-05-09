@@ -35,16 +35,18 @@ const Login = () => {
   };
 
   return (
-    <div className="flex justify-center items-center w-full h-screen bg-gradient-to-r from-orange-950 via-blue-700 to-blue-400">
+    <div className="flex justify-center items-center w-full h-screen bg-gradient-to-r from-green-900 via-green-800 to-green-900">
       <div className="w-full max-w-sm bg-white p-8 rounded-xl shadow-lg">
         {/* Sección de Logo y Nombre */}
         <div className="flex flex-col items-center mb-6">
           <img
-            src="/conquistador.png" // Cambia esto por la ruta correcta de tu logo
+            src="/LogoFed.PNG" 
             alt="Logo de la Empresa"
-            className="h-16 mb-2" // Ajusta el tamaño según sea necesario
+            className="h-16 mb-2" 
           />
-          <h1 className="text-xl font-bold text-red-700">Conquistador Y.S.</h1>
+          <h1 className="text-center text-xl font-bold bg-gradient-to-r from-red-800 via-red-700 to-green-900 text-transparent bg-clip-text">
+            FEDERACIÓN DE TRABAJADORES LA PAZ
+          </h1>
         </div>
 
         <h2 className="text-3xl text-center font-bold text-blue-600 mb-6">

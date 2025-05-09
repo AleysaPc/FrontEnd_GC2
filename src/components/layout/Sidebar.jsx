@@ -7,7 +7,7 @@ const Sidebar = ({ isVisible }) => {
 
   return (
     <div
-      className={`sticky top-20 z-50 bg-white shadow border-gray-400 border-2 rounded-lg ml-4 mr-2 mt-2 mb-3 w-64 transition-all duration-300 ${
+      className={`sticky top-20 z-50 bg-white shadow border-gray-600 border-2 rounded-lg ml-4 mr-2 mt-2 mb-3 w-64 transition-all duration-300 ${
         isVisible ? "block" : "hidden"
       } h-[calc(100vh-6rem)] overflow-y-auto`}
     >

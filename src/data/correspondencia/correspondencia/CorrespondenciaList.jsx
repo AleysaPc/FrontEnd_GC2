@@ -44,14 +44,14 @@ function CorrespondenciaList() {
     itemKey: "id_correspondencia", //Debe ser igual al modelo
     entityFields: useFields,
     clavesBusqueda: ["referencia"],
-    actions: [
-      {
-        to: "/createCorrespondencia",
-        label: "Crear Correspondencia",
-        estilos:
-          "bg-purple-500 hover:bg-purple-800 text-white px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",
-      },
-    ],
+    // actions: [
+    //   {
+    //     to: "/createCorrespondencia",
+    //     label: "Crear Correspondencia",
+    //     estilos:
+    //       "bg-purple-500 hover:bg-purple-800 text-white px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",
+    //   },
+    //],
   };
   return <EntityList entityData={entityData} />;
 }
