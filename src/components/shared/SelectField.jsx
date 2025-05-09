@@ -1,4 +1,4 @@
-export function SelectField({ label, name, value, onChange, options }) {
+export function SelectField({ label, name, value, onChange, options = [] }) {
     return (
       <div>
         <label className="block text-gray-700 font-medium text-sm mb-2">{label}</label>

@@ -5,6 +5,7 @@ import EntityList from "../../../components/shared/EntityList";
 import FormattedDate from "../../../components/shared/FormattedDate";
 
 function CorrespondenciaRecibidaList() {
+
   const useFields = () => [
     { key: "index", label: "#" },
     {
@@ -55,7 +56,7 @@ function CorrespondenciaRecibidaList() {
             Ver
           </a>
           <a
-            href={`/correspondenciaRecibida/${item.id_doc_entrante}/edit`}
+            href={`/editCorrespondenciaRecibida/${item.id_correspondencia}`}
             className="bg-green-800 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded"
           >
             Editar

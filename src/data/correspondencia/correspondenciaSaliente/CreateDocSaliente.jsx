@@ -1,7 +1,8 @@
 import { InputField } from "../../../components/shared/InputField";
 import CreateEntity from "../../../components/shared/CreateEntity";
 import {
-  useContactos, useCorrespondenciaSalienteMutations
+  useContactos,
+  useCorrespondenciaSalienteMutations
 
 } from "../../../hooks/useEntities";
 import { FaBackspace, FaEye, FaPencilAlt, FaPlus } from "react-icons/fa";

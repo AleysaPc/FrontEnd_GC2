@@ -1,6 +1,7 @@
 import { useState } from "react";
 import SidebarMenu from "./SidebarMenu";
 import { menus } from "../../data/SidebarData";
+import {Link} from 'react-router-dom';
 
 const Sidebar = ({ isVisible }) => {
   const [openMenu, setOpenMenu] = useState(null);
@@ -11,11 +12,13 @@ const Sidebar = ({ isVisible }) => {
         isVisible ? "block" : "hidden"
       } h-[calc(100vh-6rem)] overflow-y-auto`}
     >
-      <div className="p-5 text-center">
-        <h1 className="text-gray-800">Sidebar</h1>
-      </div>
-      <hr className="border-gray-400 mx-4" />
 
+      <Link to="/home">
+        <div className="p-5 text-center">
+          <h1 className="text-gray-800">Inicio</h1>
+        </div>
+      </Link>
+      <hr className="border-gray-400 mx-4" />
       {/* Menú de navegación */}
       <ul className="mt-4 px-2 space-y-2">
         {menus.map((menu, index) => (

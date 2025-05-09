@@ -2,14 +2,18 @@ import { InputField } from "../../../components/shared/InputField";
 import CreateEntity from "../../../components/shared/CreateEntity";
 import {
   useContactos,
-  useCorrespondenciaEntranteMutations,useTiposDocumentos,
+  useCorrespondenciaEntranteMutations,
 } from "../../../hooks/useEntities";
-import { FaBackspace, FaEye, FaPencilAlt, FaPlus, FaUpload } from "react-icons/fa";
+import {
+  FaBackspace,
+  FaEye,
+  FaPencilAlt,
+  FaPlus,
+} from "react-icons/fa";
 import { useFormEntity } from "../../../utils/useFormEntity";
 import { obtenerIdUser } from "../../../utils/auth";
 import { SelectField } from "../../../components/shared/SelectField";
-import  UploadDocumentoFieldArray  from "../../../components/shared/UploadDocumento";
-
+//import UploadDocumentoFieldArray from "../../../components/shared/UploadDocumento";
 
 export default function createCorrespondenciaEntrante() {
   const { paraSelectsdestructuringYMap } = useFormEntity();
@@ -26,19 +30,14 @@ export default function createCorrespondenciaEntrante() {
       "id_contacto",
       "nombre_completo"
     );
-    const documentoOptions = () =>
-      //Modelo 2
-      paraSelectsdestructuringYMap(
-        useTiposDocumentos,
-        true, //maneja la logica de la paginacion
-        "id_tipo_documento",
-        "nombre_tipo_documento"
-      );
-
-  const opcionesTipo = [
-    { id: "enviado", nombre: "Enviado" },
-    { id: "recibido", nombre: "Recibido" },
-  ];
+  // const documentoOptions = () =>
+  //   //Modelo 2
+  //   paraSelectsdestructuringYMap(
+  //     useTiposDocumentos,
+  //     true, //maneja la logica de la paginacion
+  //     "id_tipo_documento",
+  //     "nombre_tipo_documento"
+  //   );
 
   const opcionPrioridad = [
     { id: "alta", nombre: "Alta" },
@@ -47,7 +46,6 @@ export default function createCorrespondenciaEntrante() {
   ];
 
   const opcionEstado = [
-    { id: "borrador", nombre: "Borrador" },
     { id: "en revision", nombre: "En revisión" },
     { id: "aprobado", nombre: "Aprobado" },
     { id: "rechazado", nombre: "Rechazado" },
@@ -64,8 +62,7 @@ export default function createCorrespondenciaEntrante() {
     estado: "",
     comentario: "",
     contacto: "",
-    documento: [
-    ],
+    documento: "",
   };
   const camposExtras = (formValues) => ({
     usuario: logicaNegocio.idUsuario,
@@ -91,7 +88,7 @@ export default function createCorrespondenciaEntrante() {
       label: "Fecha Respuesta",
       name: "fecha_respuesta",
       type: "date",
-      required: true,
+      required: false,
       onChange: manejarEntradas.handleInputChange,
     },
     {
@@ -133,16 +130,16 @@ export default function createCorrespondenciaEntrante() {
       required: true,
     },
 
-    {
-      component: InputField,
-      label: "Comentario",
-      name: "comentario",
-      onChange: manejarEntradas.handleInputChange,
-      required: false,
-    },
+    // {
+    //   component: InputField,
+    //   label: "Comentario",
+    //   name: "comentario",
+    //   onChange: manejarEntradas.handleInputChange,
+    //   required: false,
+    // },
     {
       component: SelectField,
-      label: "Contacto",
+      label: "Remitente",
       name: "contacto", //Hace referencia al modelo correspondencia
       options: contactoOptions(),
       onChange: manejarEntradas.handleInputChange,
@@ -163,14 +160,21 @@ export default function createCorrespondenciaEntrante() {
           estilos: "text-blue-600 hover:bg-blue-600 hover:text-white p-1",
         },
       ],
-
     },
-   {
-  component: UploadDocumentoFieldArray,
-  label: "Documentos",
-  name: "documento",
-  onChange: manejarEntradas.handleInputChange,
-}
+    // {
+    //   component: UploadDocumentoFieldArray,
+    //   label: "Documentos",
+    //   name: "documento",
+    //   onChange: manejarEntradas.handleInputChange,
+    // },
+    {
+      component: InputField,
+      label: "Documento",
+      name: "documento",
+      type: "file",
+      onChange: manejarEntradas.handleInputChange,
+      required: false,
+    },
   ];
 
   const paraNavegacion = {
