@@ -7,7 +7,7 @@ import { useFormEntity } from "../../../utils/useFormEntity";
 import {  obtenerIdUser } from "../../../utils/auth";
 import { use } from "react";
 
-export default function editCorrespondenciaRecibida() {
+export default function editRecibida() {
 
   const { paraSelectsdestructuringYMap } = useFormEntity();
 

@@ -78,7 +78,7 @@ function CorrespondenciaRecibidaList() {
     clavesBusqueda: ["referencia"],
     actions: [
       {
-        to: "/createDocEntrante",
+        to: "/createRecibida",
         label: "Crear",
         estilos:
           "bg-red-800 hover:bg-red-800 text-white px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",

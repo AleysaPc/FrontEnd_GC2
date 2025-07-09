@@ -5,11 +5,11 @@ const CreateCorrespondencia = lazy(() => import("../data/correspondencia/corresp
 const CorrespondenciaRecibidaList = lazy(() => import("../data/correspondencia/correspondencia/CorrespondenciaRecibidaList"));
 const CorrespondenciaEnviadaList = lazy(() => import("../data/correspondencia/correspondencia/CorrespondenciaEnviadaList"));
 const EditCorrespondencia = lazy(() => import("../data/correspondencia/correspondencia/editCorrespondencia"));
-const CreateDocEntrante = lazy(() => import("../data/correspondencia/correspondenciaEntrante/CreateDocEntrante"));
-const DetailDocEntrante = lazy(() => import("../data/correspondencia/correspondenciaEntrante/DetailDocEntrante"));
+const CreateRecibida = lazy(() => import("../data/correspondencia/correspondenciaRecibida/CreateRecibida"));
+const DetailRecibida = lazy(() => import("../data/correspondencia/correspondenciaRecibida/DetailRecibida"));
 const CreateDocSaliente = lazy(() => import("../data/correspondencia/correspondenciaSaliente/CreateDocSaliente"));
 const DetailDocSaliente = lazy(() => import("../data/correspondencia/correspondenciaSaliente/DetailDocSaliente"));
-const EditCorrespondenciaRecibida = lazy(() => import("../data/correspondencia/correspondenciaEntrante/EditCorrespondenciaRecibida"))
+const EditRecibida = lazy(() => import("../data/correspondencia/correspondenciaRecibida/EditRecibida"))
 export const correspondenciaRoutes = [
   // rutas de correspondencia
   {
@@ -33,13 +33,13 @@ export const correspondenciaRoutes = [
     element: <EditCorrespondencia />,
   },
   {
-    path: "/createDocEntrante",
-    element: <CreateDocEntrante />,
+    path: "/createRecibida",
+    element: <CreateRecibida />,
   },
   {
 
-    path : "/detailDocEntrante/:id",
-    element: <DetailDocEntrante />,
+    path : "/detailRecibida/:id",
+    element: <DetailRecibida />,
   },
   {
 
@@ -51,8 +51,8 @@ export const correspondenciaRoutes = [
     element: <CreateDocSaliente />,
   },
   {
-    path: "/editCorrespondenciaRecibida/:id",
-    element: <EditCorrespondenciaRecibida />,
+    path: "/editRecibida/:id",
+    element: <EditRecibida />,
   }
     
 ];

@@ -70,7 +70,7 @@ export default function createCorrespondencia() {
     const pathname = location.pathname;
   
     // Si estamos en la ruta de creación de DocEntrante, no redirigimos
-    if (pathname === "/createDocEntrante") {
+    if (pathname === "/createRecibida") {
       return {
         link: "", // No redirigir a ninguna parte
         params: camposExtras(formValues), // Mantener los params

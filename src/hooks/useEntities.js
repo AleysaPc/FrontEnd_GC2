@@ -1,5 +1,5 @@
 import { useEntityMutations } from "./useEntityMutations";
-import {CorrespondenciaApi, CorrespondenciaEntranteApi, CorrespondenciaSalienteApi} from "../api/correspondencia.api";
+import {CorrespondenciaApi, RecibidaApi, EnviadaApi} from "../api/correspondencia.api";
 import useData from "./useData";
 import { CustomUsersAPI, RolesApi, PasswordResetAPI} from "../api/usuario.api";
 import { useMutationWithToast } from "./useMutationWithToast";
@@ -16,17 +16,17 @@ export const useCorrespondenciaMutations = () => useEntityMutations(Corresponden
 
 // Correspondencia Entrante
 export const useCorrespondenciaEntrantes = (all_data = false, page = 1) => { //Plural
-    return useData(CorrespondenciaEntranteApi, "correspondencia_entrantes", null, { all_data, page }, 1000 * 60 * 5);
+    return useData(RecibidaApi, "correspondencia_entrantes", null, { all_data, page }, 1000 * 60 * 5);
 }
-export const useCorrespondenciaEntrante = (id) => useData(CorrespondenciaEntranteApi, "correspondencia_entrantes", id); //Singular
-export const useCorrespondenciaEntranteMutations = () => useEntityMutations(CorrespondenciaEntranteApi, "correspondencia_entrante");
+export const useCorrespondenciaEntrante = (id) => useData(RecibidaApi, "correspondencia_entrantes", id); //Singular
+export const useCorrespondenciaEntranteMutations = () => useEntityMutations(RecibidaApi, "correspondencia_entrante");
 
 // Correspondencia Saliente
 export const useCorrespondenciaSalientes = (all_data = false, page = 1) => { //Plural
-    return useData(CorrespondenciaSalienteApi, "correspondencia_salientes", null, { all_data, page }, 1000 * 60 * 5);
+    return useData(EnviadaApi, "correspondencia_salientes", null, { all_data, page }, 1000 * 60 * 5);
 }
-export const useCorrespondenciaSaliente = (id) => useData(CorrespondenciaSalienteApi, "correspondencia_salientes", id); //Singular
-export const useCorrespondenciaSalienteMutations = () => useEntityMutations(CorrespondenciaSalienteApi, "correspondencia_saliente");
+export const useCorrespondenciaSaliente = (id) => useData(EnviadaApi, "correspondencia_salientes", id); //Singular
+export const useCorrespondenciaSalienteMutations = () => useEntityMutations(EnviadaApi, "correspondencia_saliente");
 
 //users
 export const useUsers = (all_data = false, page = 1) => {

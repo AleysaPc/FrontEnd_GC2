@@ -6,7 +6,7 @@ import VisorPDF from "../../../components/shared/VisorPdf";
 import { ActionButton } from "../../../components/shared/ActionButton";
 import { useState, useEffect } from "react";
 import  FormattedDate from "../../../components/shared/FormattedDate";
-function DetailDocEntrante() {
+function DetailRecibida() {
   const { id } = useParams(); //use params para recuperar el ID
 
   const { data: response = {}, isLoading } = useCorrespondenciaEntrante(id);
@@ -130,4 +130,4 @@ function DetailDocEntrante() {
   );
 }
 
-export default DetailDocEntrante;
+export default DetailRecibida;

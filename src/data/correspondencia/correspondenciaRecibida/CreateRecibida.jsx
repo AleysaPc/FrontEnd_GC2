@@ -15,7 +15,7 @@ import { obtenerIdUser } from "../../../utils/auth";
 import { SelectField } from "../../../components/shared/SelectField";
 //import UploadDocumentoFieldArray from "../../../components/shared/UploadDocumento";
 
-export default function createCorrespondenciaEntrante() {
+export default function createRecibida() {
   const { paraSelectsdestructuringYMap } = useFormEntity();
 
   const logicaNegocio = {
@@ -167,14 +167,14 @@ export default function createCorrespondenciaEntrante() {
     //   name: "documento",
     //   onChange: manejarEntradas.handleInputChange,
     // },
-    {
-      component: InputField,
-      label: "Documento",
-      name: "documento",
-      type: "file",
-      onChange: manejarEntradas.handleInputChange,
-      required: false,
-    },
+    // {
+    //   component: InputField,
+    //   label: "Documento",
+    //   name: "documento",
+    //   type: "file",
+    //   onChange: manejarEntradas.handleInputChange,
+    //   required: false,
+    // },
   ];
 
   const paraNavegacion = {
