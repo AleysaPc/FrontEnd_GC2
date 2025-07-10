@@ -1,19 +1,14 @@
 import { InputField } from "../../../components/shared/InputField";
+import { MultipleInputs } from "../../../components/shared/MultipleInputs";
 import CreateEntity from "../../../components/shared/CreateEntity";
 import {
   useContactos,
   useCorrespondenciaEntranteMutations,
 } from "../../../hooks/useEntities";
-import {
-  FaBackspace,
-  FaEye,
-  FaPencilAlt,
-  FaPlus,
-} from "react-icons/fa";
+import { FaBackspace, FaEye, FaPencilAlt, FaPlus } from "react-icons/fa";
 import { useFormEntity } from "../../../utils/useFormEntity";
 import { obtenerIdUser } from "../../../utils/auth";
 import { SelectField } from "../../../components/shared/SelectField";
-//import UploadDocumentoFieldArray from "../../../components/shared/UploadDocumento";
 
 export default function createRecibida() {
   const { paraSelectsdestructuringYMap } = useFormEntity();
@@ -23,21 +18,12 @@ export default function createRecibida() {
   };
 
   const contactoOptions = () =>
-    //Modelo 2
     paraSelectsdestructuringYMap(
       useContactos,
-      true, //maneja la logica de la paginacion
+      true,
       "id_contacto",
       "nombre_completo"
     );
-  // const documentoOptions = () =>
-  //   //Modelo 2
-  //   paraSelectsdestructuringYMap(
-  //     useTiposDocumentos,
-  //     true, //maneja la logica de la paginacion
-  //     "id_tipo_documento",
-  //     "nombre_tipo_documento"
-  //   );
 
   const opcionPrioridad = [
     { id: "alta", nombre: "Alta" },
@@ -46,7 +32,7 @@ export default function createRecibida() {
   ];
 
   const opcionEstado = [
-    { id: "en revision", nombre: "En revisión" },
+    { id: "en_revision", nombre: "En revisión" },
     { id: "aprobado", nombre: "Aprobado" },
     { id: "rechazado", nombre: "Rechazado" },
   ];
@@ -62,7 +48,7 @@ export default function createRecibida() {
     estado: "",
     comentario: "",
     contacto: "",
-    documento: "",
+    documentos: [],
   };
   const camposExtras = (formValues) => ({
     usuario: logicaNegocio.idUsuario,
@@ -129,14 +115,6 @@ export default function createRecibida() {
       onChange: manejarEntradas.handleInputChange,
       required: true,
     },
-
-    // {
-    //   component: InputField,
-    //   label: "Comentario",
-    //   name: "comentario",
-    //   onChange: manejarEntradas.handleInputChange,
-    //   required: false,
-    // },
     {
       component: SelectField,
       label: "Remitente",
@@ -161,20 +139,13 @@ export default function createRecibida() {
         },
       ],
     },
-    // {
-    //   component: UploadDocumentoFieldArray,
-    //   label: "Documentos",
-    //   name: "documento",
-    //   onChange: manejarEntradas.handleInputChange,
-    // },
-    // {
-    //   component: InputField,
-    //   label: "Documento",
-    //   name: "documento",
-    //   type: "file",
-    //   onChange: manejarEntradas.handleInputChange,
-    //   required: false,
-    // },
+    {
+      component: MultipleInputs,
+      label: "Documento",
+      name: "documentos",
+      type: "file",
+      onChange: manejarEntradas.handleInputChange,
+    },
   ];
 
   const paraNavegacion = {

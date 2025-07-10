@@ -20,9 +20,10 @@ export const useFormEntity = () => {
   };
 
   const manejarCambioDeEntrada = (setFormValues) => (e) => {
+    const { name, type, files, value } = e.target;
     setFormValues((prevState) => ({
       ...prevState,
-      [e.target.name]: e.target.value,
+      [name]: type === "file" ? files[0] : value,
     }));
   };
 
@@ -51,15 +52,95 @@ export const useFormEntity = () => {
     entityId,
     params = {}
   ) => {
+    event.preventDefault(); // Prevenir acción por defecto del formulario
+
+    // Combinar formValues con params
     const dataToSend = {
       ...formValues,
       ...params,
     };
 
+    // Filtrar valores válidos
+    const filteredData = {};
+    Object.entries(dataToSend).forEach(([key, value]) => {
+      if (
+        value instanceof File ||
+        (typeof Blob !== "undefined" && value instanceof Blob)
+      ) {
+        filteredData[key] = value;
+      } else if (
+        typeof value === "string" &&
+        (value.startsWith("http") || value.startsWith("blob:"))
+      ) {
+        // omitimos archivos existentes representados como URLs
+      } else if (value !== null && value !== undefined) {
+        filteredData[key] = value;
+      }
+    });
+
+    // 🔧 Transformar array de archivos (si vienen como solo files) a objetos tipo { archivo: File }
+    if (Array.isArray(filteredData.documentos)) {
+      const documentosTransformados = filteredData.documentos.map((archivo) => {
+        // Si ya es objeto con campo archivo, lo dejamos igual
+        if (archivo?.archivo) return archivo;
+        return { archivo };
+      });
+      filteredData.documentos = documentosTransformados;
+    }
+
+    // 📦 Crear FormData si contiene archivos
+    const contieneArchivo = Object.values(filteredData).some(
+      (value) =>
+        value instanceof File ||
+        value instanceof Blob ||
+        (Array.isArray(value) &&
+          value.some((item) => item.archivo instanceof File))
+    );
+
+    let data;
+
+    if (contieneArchivo) {
+      data = new FormData();
+
+      Object.entries(filteredData).forEach(([key, value]) => {
+        if (key === "documentos" && Array.isArray(value)) {
+          value.forEach((doc, index) => {
+            if (doc?.archivo) {
+              data.append(`documentos[${index}][archivo]`, doc.archivo);
+            }
+            if (doc?.nombre_documento) {
+              data.append(
+                `documentos[${index}][nombre_documento]`,
+                doc.nombre_documento
+              );
+            }
+          });
+        } else {
+          data.append(key, value);
+        }
+      });
+    } else {
+      data = filteredData; // Enviar como JSON si no hay archivos
+    }
+
+    // 🚀 Enviar
     const mutation = entityId ? updateMutation : createMutation;
+    console.log([...data.entries()]);
     mutation.mutate(
-      { id: entityId || undefined, data: dataToSend },
-      { onSuccess: () => navigate(`${entityName}`) }
+      { id: entityId || undefined, data },
+      {
+        onSuccess: (response) => {
+          if (response?.data?.link !== undefined) {
+            if (response.data.link === -1) {
+              navigate(-1);
+            } else if (typeof response.data.link === "string") {
+              navigate(response.data.link);
+            }
+          } else if (entityName) {
+            navigate(entityName);
+          }
+        },
+      }
     );
   };
 
@@ -76,7 +157,6 @@ export const useFormEntity = () => {
     }));
   };
 
-
   const todosDatosOpaginacion = (fetchDataHook, all_data) => {
     const { currentPage, handlePageChange } = usePagination();
 
@@ -87,7 +167,9 @@ export const useFormEntity = () => {
     } = fetchDataHook(all_data, currentPage);
 
     const {
-      count = 0,
+      total_pages,
+      per_page,
+      total,
       next = null,
       previous = null,
       results,
@@ -95,7 +177,7 @@ export const useFormEntity = () => {
 
     const items = results || response.data || [];
 
-    const totalItems = count;
+    const totalItems = total;
 
     const hasPagination = next || previous;
 
@@ -109,6 +191,8 @@ export const useFormEntity = () => {
       hasPagination,
       next,
       previous,
+      per_page,
+      total_pages,
     };
   };
 
