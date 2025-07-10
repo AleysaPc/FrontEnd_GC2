@@ -69,9 +69,9 @@ export const MultipleInputs = ({ value = [], onChange }) => {
       <button
         type="button"
         onClick={handleAdd}
-        className="mt-2 text-blue-600 hover:underline"
+        className="mt-2 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
       >
-        + Agregar otro documento
+        + Adjuntar documento
       </button>
     </div>
   );
