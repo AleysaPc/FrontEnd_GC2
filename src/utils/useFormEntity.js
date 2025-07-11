@@ -115,6 +115,10 @@ export const useFormEntity = () => {
               );
             }
           });
+        } else if (key === "usuarios" && Array.isArray(value)) {
+          value.forEach((userId) => {
+            data.append("usuarios", userId); // ⬅ esto es clave
+          });
         } else {
           data.append(key, value);
         }

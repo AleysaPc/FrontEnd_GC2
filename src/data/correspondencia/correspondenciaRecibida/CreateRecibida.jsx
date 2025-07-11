@@ -65,10 +65,9 @@ export default function createRecibida() {
     usuarios: [], // Changed from usuario to usuarios and made it an array
   };
   const camposExtras = (formValues) => ({
-    usuario: logicaNegocio.idUsuario,
     contacto: Number(formValues.contacto),
-    usuarios: Array.isArray(formValues.usuarios) 
-      ? formValues.usuarios.map(Number) // Convertir cada ID a número
+    usuarios: Array.isArray(formValues.usuarios)
+      ? formValues.usuarios.map(Number)
       : [],
   });
 
@@ -174,7 +173,7 @@ export default function createRecibida() {
     },
     {
       component: UserCheckboxList,
-      label: "Deribar a:",
+      label: "Derivar a:",
       name: "usuarios",
       options: usuarioOptions(),
       onChange: (name, value) => manejarEntradas.handleToggleChange(name)(value),

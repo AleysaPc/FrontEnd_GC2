@@ -1,5 +1,5 @@
 import { useEntityMutations } from "./useEntityMutations";
-import {CorrespondenciaApi, RecibidaApi, EnviadaApi} from "../api/correspondencia.api";
+import {CorrespondenciaApi, RecibidaApi, EnviadaApi, AccionCorrespondenciaApi} from "../api/correspondencia.api";
 import useData from "./useData";
 import { CustomUsersAPI, RolesApi, PasswordResetAPI} from "../api/usuario.api";
 import { useMutationWithToast } from "./useMutationWithToast";
@@ -27,6 +27,13 @@ export const useCorrespondenciaSalientes = (all_data = false, page = 1) => { //P
 }
 export const useCorrespondenciaSaliente = (id) => useData(EnviadaApi, "correspondencia_salientes", id); //Singular
 export const useCorrespondenciaSalienteMutations = () => useEntityMutations(EnviadaApi, "correspondencia_saliente");
+
+// AccionCorrrespondencia
+export const useAccionCorrespondencias = (all_data = false, page = 1) => { //Plural
+    return useData(AccionCorrespondenciaApi, "accion_correspondencias", null, { all_data, page }, 1000 * 60 * 5);
+}
+export const useAccionCorrespondencia = (id) => useData(AccionCorrespondenciaApi, "accionCorrespondencia", id); //Singular
+export const useAccionCorrespondenciaMutations = () => useEntityMutations(AccionCorrespondenciaApi, "accionCorrespondencia");
 
 //users
 export const useUsers = (all_data = false, page = 1) => {
