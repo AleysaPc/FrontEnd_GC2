@@ -1,11 +1,8 @@
-import {
-  useCorrespondenciaEntrantes,
-} from "../../../hooks/useEntities";
+import { useCorrespondenciaEntrantes } from "../../../hooks/useEntities";
 import EntityList from "../../../components/shared/EntityList";
 import FormattedDate from "../../../components/shared/FormattedDate";
 
 function CorrespondenciaRecibidaList() {
-
   const useFields = () => [
     { key: "index", label: "#" },
     {
@@ -31,18 +28,12 @@ function CorrespondenciaRecibidaList() {
       label: "Referencia",
       render: (item) => item.referencia,
     },
-    { key: "prioridad", 
-      label: "Prioridad",
-      render: (item) => item.prioridad,}, 
-    { key: "estado",
-      label: "Estado",
-      render: (item) => item.estado,},
+    { key: "prioridad", label: "Prioridad", render: (item) => item.prioridad },
+    { key: "estado", label: "Estado", render: (item) => item.estado },
     {
       key: "datos_contacto",
       label: "Remitente",
-      render: (item) => (
-        `${item.datos_contacto || 'Sin remitente'}`
-      ),
+      render: (item) => `${item.datos_contacto || "Sin remitente"}`,
     },
     {
       key: "acciones",
@@ -63,7 +54,7 @@ function CorrespondenciaRecibidaList() {
           </a>
         </div>
       ),
-    }
+    },
   ];
 
   const entityData = {

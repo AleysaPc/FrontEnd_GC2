@@ -8,6 +8,7 @@ import { authRoutes } from "./authRoutes";//
 import { homeRoutes } from "./homeRoutes";//
 import { usuariosRoutes } from "./usuariosRoutes";//
 import { correspondenciaRoutes } from "./correspondenciaRoutes";
+import { contactoRoutes } from "./ContactoRoutes";
 
 const FallbackComponent = () => <div>Hubo un error al cargar la página</div>;
 
@@ -16,6 +17,7 @@ const rutasPrivadas = [
   ...homeRoutes,//... tres puntos para indicar que hay mas cosas adelante 
   ...usuariosRoutes,
   ...correspondenciaRoutes,
+  ...contactoRoutes,
 ];
 
 const AppRoutes = () => {

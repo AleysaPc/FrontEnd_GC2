@@ -129,7 +129,12 @@ export const useFormEntity = () => {
 
     // 🚀 Enviar
     const mutation = entityId ? updateMutation : createMutation;
-    console.log([...data.entries()]);
+    // Log data based on its type
+    if (data instanceof FormData) {
+      console.log('FormData entries:', [...data.entries()]);
+    } else {
+      console.log('Plain object data:', data);
+    }
     mutation.mutate(
       { id: entityId || undefined, data },
       {

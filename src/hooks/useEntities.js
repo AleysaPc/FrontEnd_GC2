@@ -3,7 +3,7 @@ import {CorrespondenciaApi, RecibidaApi, EnviadaApi, AccionCorrespondenciaApi} f
 import useData from "./useData";
 import { CustomUsersAPI, RolesApi, PasswordResetAPI} from "../api/usuario.api";
 import { useMutationWithToast } from "./useMutationWithToast";
-import { ContactoApi } from "../api/contacto.api";
+import { ContactoApi, InstitucionApi } from "../api/contacto.api";
 import { DocumentoApi, TipoDocumentoApi } from "../api/documento.api";
 
 //Correspondencia
@@ -62,16 +62,15 @@ export const useContactos = (all_data = false, page = 1) => {
     return useData(ContactoApi, "contactos", null, { all_data, page }, 1000 * 60 * 5);
 };
 
-
 export const useContacto = (id) => useData(ContactoApi, "contactos", id);
 export const useContactoMutations = () => useEntityMutations(ContactoApi, "contacto");
 
 //Institucion
 export const useInstituciones = (all_data = false, page = 1) => {
-    return useData(ContactoApi, "instituciones", null, { all_data, page }, 1000 * 60 * 5);
+    return useData(InstitucionApi, "instituciones", null, { all_data, page }, 1000 * 60 * 5);
 }
-export const useInstitucion = (id) => useData(ContactoApi, "instituciones", id);
-export const useInstitucionMutations = () => useEntityMutations(ContactoApi, "institucion");
+export const useInstitucion = (id) => useData(InstitucionApi, "institucion", id);
+export const useInstitucionMutations = () => useEntityMutations(InstitucionApi, "institucion");
 
 //Documento
 export const useDocumentos = (all_data = false, page = 1) => {

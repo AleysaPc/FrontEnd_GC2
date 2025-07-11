@@ -24,14 +24,19 @@ export const menus = [
   {
     title: "Crear Documento",
     icon: IoCreateSharp,
-    items: [{ label: "Externo", path: "/ver_movimientos" }, 
-            { label: "Interno", path: "/ver_movimientos" }, 
-            { label: "En revisión", path: "/ver_movimientos" }],
+    items: [
+      { label: "Externo", path: "/ver_movimientos" },
+      { label: "Interno", path: "/ver_movimientos" },
+      { label: "En revisión", path: "/ver_movimientos" },
+    ],
   },
   {
     title: "Contactos",
     icon: RiContactsBookFill,
-    items: [{ label: "Lista de contactos", path: "/ver_inventario" }],
+    items: [
+      { label: "Lista de contactos", path: "/contactoList" },
+      { label: "Nuevo Contacto", path: "/createContacto" },
+    ],
   },
   {
     title: "Usuarios",
