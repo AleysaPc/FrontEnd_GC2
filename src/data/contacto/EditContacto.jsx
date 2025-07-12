@@ -110,7 +110,7 @@ export default function EditContacto() {
           estilos: "text-yellow-600 hover:bg-yellow-600 hover:text-white p-1",
         },
         {
-          to: "/addInstitucion",
+          to: "/createInstitucion",
           icon: FaPlus,
           estilos: "text-green-600 hover:bg-green-600 hover:text-white p-1",
         },
