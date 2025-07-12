@@ -9,26 +9,26 @@ export default function InstitucionList() {
       { key: "direccion", label: "Direccion" },
       { key: "telefono", label: "Telefono" },
       { key: "fecha_fundacion", label: "Fecha Fundacion" },
-      {
-        key: "acciones",
-        label: "Acciones",
-        render: (item) => (
-          <div className="flex gap-2">
-            <a
-              //href={`detailDocEntrante/${item.id_correspondencia}`}
-              className="bg-red-800 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-            >
-              Ver
-            </a>
-            <a
-              href={`/editInstitucion/${item.id_institucion}`}
-              className="bg-green-800 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded"
-            >
-              Editar
-            </a>
-          </div>
-        ),
-      },
+      //{
+      //key: "acciones",
+      //label: "Acciones",
+      //render: (item) => (
+      //  <div className="flex gap-2">
+      //    <a
+      //      //href={`detailDocEntrante/${item.id_correspondencia}`}
+      //      className="bg-red-800 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+      //    >
+      //      Ver
+      //    </a>
+      //    <a
+      //      href={`/editInstitucion/${item.id_institucion}`}
+      //      className="bg-green-800 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded"
+      //    >
+      //      Editar
+      //    </a>
+      //  </div>
+      //),
+      //},
     ];   
 
     const entityData = {

@@ -1,7 +1,7 @@
 import { useEntityMutations } from "./useEntityMutations";
 import {CorrespondenciaApi, RecibidaApi, EnviadaApi, AccionCorrespondenciaApi} from "../api/correspondencia.api";
 import useData from "./useData";
-import { CustomUsersAPI, RolesApi, PasswordResetAPI} from "../api/usuario.api";
+import { CustomUsersAPI, RolesApi, PasswordResetAPI, DepartamentosApi} from "../api/usuario.api";
 import { useMutationWithToast } from "./useMutationWithToast";
 import { ContactoApi, InstitucionApi } from "../api/contacto.api";
 import { DocumentoApi, TipoDocumentoApi } from "../api/documento.api";
@@ -56,6 +56,13 @@ export const usePasswordResetConfirm = () => {
   export const usePasswordResetRequest = () => {
     return useMutationWithToast((email) => PasswordResetAPI.requestReset(email), "Solicitud de restablecimiento de contraseña enviada", "Error al solicitar el restablecimiento de contraseña", null);
   }
+
+//Departamentos
+export const useDepartamentos = (all_data = false, page = 1) => {
+    return useData(DepartamentosApi, "departamentos", null, { all_data, page }, 1000 * 60 * 5);
+}
+export const useDepartamento = (id) => useData(DepartamentosApi, "departamento", id);
+export const useDepartamentoMutations = () => useEntityMutations(DepartamentosApi, "departamento");
 
 //Contacto
 export const useContactos = (all_data = false, page = 1) => {

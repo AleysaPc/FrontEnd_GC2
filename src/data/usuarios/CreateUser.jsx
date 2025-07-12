@@ -10,19 +10,10 @@ import CreateEntity from "../../components/shared/CreateEntity";
 export default function CreateUser() {
   const { paraSelectsdestructuringYMap } = useFormEntity();
 
-  //const almacenOptions = () =>
-    //paraSelectsdestructuringYMap(
-      //useAlmacenes,
-      //true,
-      //"id_almacen_tienda",
-      //"nombre"
-    //);
-
   const rolesOptions = () =>
     paraSelectsdestructuringYMap(useRoles, true, "id", "name");
 
   const selects = {
-    almacenOptions,
     rolesOptions,
   };
 
@@ -38,7 +29,6 @@ export default function CreateUser() {
   };
 
   const camposExtras = (formValues) => ({
-    lugar_de_trabajo: Number(formValues.lugar_de_trabajo),
     role: Number(formValues.role),
   });
 
@@ -100,30 +90,6 @@ export default function CreateUser() {
       type: "password",
       required: true,
       onChange: manejarEntradas.handleInputChange,
-    },
-    {
-      component: SelectField,
-      label: "Lugar de Trabajo",
-      name: "lugar_de_trabajo",
-      onChange: manejarEntradas.handleInputChange,
-      options: selects.almacenOptions(),
-      actionButtons: [
-        {
-          to: "/editCategory",
-          icon: FaPencilAlt,
-          estilos: "text-yellow-600 hover:bg-yellow-600 hover:text-white p-1",
-        },
-        {
-          to: "/addCategory",
-          icon: FaPlus,
-          estilos: "text-green-600 hover:bg-green-600 hover:text-white p-1",
-        },
-        {
-          to: "/categoryList",
-          icon: FaEye,
-          estilos: "text-blue-600 hover:bg-blue-600 hover:text-white p-1",
-        },
-      ],
     },
     {
       component: SelectField,
