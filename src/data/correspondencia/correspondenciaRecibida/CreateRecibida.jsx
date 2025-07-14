@@ -115,17 +115,12 @@ export default function createRecibida() {
       onChange: manejarEntradas.handleInputChange,
       actionButtons: [
         {
-          to: "/editUsuario",
-          icon: FaPencilAlt,
-          estilos: "text-yellow-600 hover:bg-yellow-600 hover:text-white p-1",
-        },
-        {
-          to: "/addCategory",
+          to: "/createContacto",
           icon: FaPlus,
           estilos: "text-green-600 hover:bg-green-600 hover:text-white p-1",
         },
         {
-          to: "/categoryList",
+          to: "/contactoList",
           icon: FaEye,
           estilos: "text-blue-600 hover:bg-blue-600 hover:text-white p-1",
         },

@@ -2,15 +2,16 @@ import { InputField } from "../../../components/shared/InputField";
 import CreateEntity from "../../../components/shared/CreateEntity";
 import {
   useContactos,
-  useCorrespondenciaSalienteMutations
-
+  useCorrespondenciaSalienteMutations,
+  useUsers,
 } from "../../../hooks/useEntities";
 import { FaBackspace, FaEye, FaPencilAlt, FaPlus } from "react-icons/fa";
 import { useFormEntity } from "../../../utils/useFormEntity";
 import { obtenerIdUser } from "../../../utils/auth";
 import { SelectField } from "../../../components/shared/SelectField";
-
-export default function createCorrespondenciaSaliente() {
+import { UserCheckboxList } from "../../../components/shared/UserCheckboxList";
+import { MultipleInputs } from "../../../components/shared/MultipleInputs";
+export default function createEnviada() {
   const { paraSelectsdestructuringYMap } = useFormEntity();
 
   const logicaNegocio = {
@@ -18,14 +19,15 @@ export default function createCorrespondenciaSaliente() {
   };
 
   const contactoOptions = () =>
-  paraSelectsdestructuringYMap(
-    useContactos,
-    true,
-    "id_contacto",
-    "nombre_completo",
-  );
+    paraSelectsdestructuringYMap(
+      useContactos,
+      true,
+      "id_contacto",
+      "nombre_completo"
+    );
 
-
+  const usuarioOptions = () =>
+    paraSelectsdestructuringYMap(useUsers, true, "id", "email");
   const opcionPrioridad = [
     { id: "alta", nombre: "Alta" },
     { id: "media", nombre: "Media" },
@@ -44,18 +46,21 @@ export default function createCorrespondenciaSaliente() {
     fecha_recepcion: "",
     fecha_seguimiento: "",
     tipo: "enviado",
-    referencia:"",
-    descripcion: "",	
+    referencia: "",
+    descripcion: "",
     paginas: "",
     prioridad: "",
     estado: "",
     comentario: "",
     contacto: "",
-    documento: "",   
+    documentos: [],
+    usuarios: [],
   };
   const camposExtras = (formValues) => ({
-    usuario: logicaNegocio.idUsuario,
     contacto: Number(formValues.contacto),
+    usuarios: Array.isArray(formValues.usuarios)
+      ? formValues.usuarios.map(Number)
+      : [],
   });
 
   const paraEnvio = (formValues) => ({
@@ -77,6 +82,14 @@ export default function createCorrespondenciaSaliente() {
       label: "Fecha Recepción",
       name: "fecha_recepcion",
       type: "date",
+      required: true,
+      onChange: manejarEntradas.handleInputChange,
+    },
+    {
+      component: InputField,
+      label: "Hora de recepción",
+      name: "hora_recepcion",
+      type: "time",
       required: true,
       onChange: manejarEntradas.handleInputChange,
     },
@@ -110,22 +123,23 @@ export default function createCorrespondenciaSaliente() {
       required: true,
       onChange: manejarEntradas.handleInputChange,
     },
-    {
-      component: SelectField,
-      label: "Prioridad",
-      name: "prioridad",
-      options: opcionPrioridad,
-      onChange: manejarEntradas.handleInputChange,
-      required: true,
-    },
-    {
-      component: SelectField,
-      label: "Estado",
-      name: "estado",
-      options: opcionEstado,
-      onChange: manejarEntradas.handleInputChange,
-      required: true,
-    },
+    //{
+    //component: SelectField,
+    //label: "Prioridad",
+    //name: "prioridad",
+    //options: opcionPrioridad,
+    //onChange: manejarEntradas.handleInputChange,
+    //required: true,
+    //},
+    //{
+    //component: SelectField,
+    //label: "Estado",
+    //name: "estado",
+    //options: opcionEstado,
+    //onChange: manejarEntradas.handleInputChange,
+    //required: true,
+    //},
+    //},
 
     {
       component: InputField,
@@ -136,38 +150,39 @@ export default function createCorrespondenciaSaliente() {
     },
     {
       component: SelectField,
-      label: "Contacto",
+      label: "Enviado a:",
       name: "contacto", //Hace referencia al modelo correspondencia
       options: contactoOptions(),
       onChange: manejarEntradas.handleInputChange,
       actionButtons: [
         {
-          to: "/editUsuario",
-          icon: FaPencilAlt,
-          estilos: "text-yellow-600 hover:bg-yellow-600 hover:text-white p-1",
-        },
-        {
-          to: "/addCategory",
+          to: "/createContacto",
           icon: FaPlus,
           estilos: "text-green-600 hover:bg-green-600 hover:text-white p-1",
         },
         {
-          to: "/categoryList",
+          to: "/contactoList",
           icon: FaEye,
           estilos: "text-blue-600 hover:bg-blue-600 hover:text-white p-1",
         },
       ],
     },
     {
-      component: InputField,
+      component: MultipleInputs,
       label: "Documento",
-      name: "documento",
+      name: "documentos",
       type: "file",
       onChange: manejarEntradas.handleInputChange,
-      required: false,
+    },
+    {
+      component: UserCheckboxList,
+      label: "Derivar a:",
+      name: "usuarios",
+      options: usuarioOptions(),
+      onChange: (name, value) => manejarEntradas.handleToggleChange(name)(value),
     },
   ];
-  
+
   const paraNavegacion = {
     title: "Registrar Correspondencia",
     subTitle: "Correspondenia Saliente",
