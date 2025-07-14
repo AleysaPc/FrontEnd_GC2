@@ -3,6 +3,7 @@ import {
   useUserMutations,
   useUser,
   useDepartamentos,
+  useInstituciones,
 } from "../../hooks/useEntities";
 import { InputField } from "../../components/shared/InputField";
 import { ToggleSwitch } from "../../components/shared/ToggleSwitch";
@@ -37,6 +38,14 @@ export default function EditUser() {
       "nombre"
     );
 
+    const institucionOptions = () =>
+    paraSelectsdestructuringYMap(
+      useInstituciones,
+      true,
+      "id_institucion",
+      "razon_social"
+    );
+
   const configuracionFormulario = (entidad) => ({
     first_name: entidad?.first_name || "",
     last_name: entidad?.last_name || "",
@@ -46,11 +55,14 @@ export default function EditUser() {
     role: entidad?.role || "",
     is_active: entidad?.is_active || false,
     departamento: entidad?.departamento || "",
+    institucion: entidad?.institucion || "",
+
   });
 
   const camposExtras = (formValues) => ({
     role: Number(formValues.role),
     departamento: Number(formValues.departamento),
+    institucion: Number(formValues.institucion),
   });
 
   const paraEnvio = (formValues) => ({
@@ -113,17 +125,17 @@ export default function EditUser() {
       options: rolesOptions(),
       actionButtons: [
         {
-          to: "/editCategory",
+          to: `/editRol/${formValues.role}`,
           icon: FaPencilAlt,
           estilos: "text-yellow-600 hover:bg-yellow-600 hover:text-white p-1",
         },
         {
-          to: "/addCategory",
+          to: "/createRol",
           icon: FaPlus,
           estilos: "text-green-600 hover:bg-green-600 hover:text-white p-1",
         },
         {
-          to: "/categoryList",
+          to: "/rolList",
           icon: FaEye,
           estilos: "text-blue-600 hover:bg-blue-600 hover:text-white p-1",
         },
@@ -137,17 +149,17 @@ export default function EditUser() {
       options: departamentoOptions(),
       actionButtons: [
         {
-          to: "/editCategory",
+          to: `/editDepartament/${formValues.departamento}`,
           icon: FaPencilAlt,
           estilos: "text-yellow-600 hover:bg-yellow-600 hover:text-white p-1",
         },
         {
-          to: "/addCategory",
+          to: "/createDepartament",
           icon: FaPlus,
           estilos: "text-green-600 hover:bg-green-600 hover:text-white p-1",
         },
         {
-          to: "/categoryList",
+          to: "/departamentList",
           icon: FaEye,
           estilos: "text-blue-600 hover:bg-blue-600 hover:text-white p-1",
         },
@@ -166,6 +178,30 @@ export default function EditUser() {
       name: "is_superuser",
       checked: formValues.is_superuser,
       onChange: manejarEntradas.handleToggleChange("is_superuser"),
+    },
+    {
+      component: SelectField,
+      label: "Institucion",
+      name: "institucion",
+      onChange: manejarEntradas.handleInputChange,
+      options: institucionOptions(),
+      actionButtons: [
+        {
+          to: `/editInstitucion/${formValues.institucion}`,
+          icon: FaPencilAlt,
+          estilos: "text-yellow-600 hover:bg-yellow-600 hover:text-white p-1",
+        },
+        {
+          to: "/createInstitucion",
+          icon: FaPlus,
+          estilos: "text-green-600 hover:bg-green-600 hover:text-white p-1",
+        },
+        {
+          to: "/institucionList",
+          icon: FaEye,
+          estilos: "text-blue-600 hover:bg-blue-600 hover:text-white p-1",
+        },
+      ],
     },
   ];
 
