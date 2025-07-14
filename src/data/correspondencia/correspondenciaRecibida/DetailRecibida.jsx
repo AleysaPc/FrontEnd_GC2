@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { useCorrespondenciaEntrante } from "../../../hooks/useEntities";
+import { useCorrespondenciaRecibida } from "../../../hooks/useEntities";
 import { Navigation } from "../../../components/shared/Navigation";
 import { FaFile, FaFileArchive, FaFilePrescription, FaFileSignature, FaHistory } from "react-icons/fa";
 import VisorPDF from "../../../components/shared/VisorPdf";
@@ -9,7 +9,7 @@ import  FormattedDate from "../../../components/shared/FormattedDate";
 function DetailRecibida() {
   const { id } = useParams(); //use params para recuperar el ID
 
-  const { data: response = {}, isLoading } = useCorrespondenciaEntrante(id);
+  const { data: response = {}, isLoading } = useCorrespondenciaRecibida(id);
 
   const items = response.data || [];
   console.log("docEntrante", items.nro_registro);
@@ -31,10 +31,10 @@ function DetailRecibida() {
   return (
     <div className="p-4 space-y-4">
       <Navigation
-        title="Correspondencia Entrante"
+        title="Correspondencia Recibida"
         actions={[
           {
-            to : `/correspondencia-entrante/${id}/historial`, //Historial del documento 
+            to : `/correspondencia-recibida/${id}/historial`, //Historial del documento 
             label: "Historial",
             icon: FaHistory,
             estilos:
@@ -48,7 +48,7 @@ function DetailRecibida() {
       <div className="bg-white shadow rounded-2xl p-6 grid grid-cols-2">
         <div>
           <h2 className="text-xl font-semibold mb-4 text-gray-800">
-            Detalle del Documento Entrante
+            Detalle del Documento Recibido
           </h2>
           <div>
             <span className="font-medium">Nro Registro:</span>{" "}

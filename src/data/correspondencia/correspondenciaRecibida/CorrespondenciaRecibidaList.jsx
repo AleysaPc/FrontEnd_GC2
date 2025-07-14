@@ -1,4 +1,4 @@
-import { useCorrespondenciaEntrantes } from "../../../hooks/useEntities";
+import { useCorrespondenciaRecibidas } from "../../../hooks/useEntities";
 import EntityList from "../../../components/shared/EntityList";
 import FormattedDate from "../../../components/shared/FormattedDate";
 
@@ -62,7 +62,7 @@ function CorrespondenciaRecibidaList() {
     subTitle: "Listado de correspondencias recibidas",
     loadingMessage: "Cargando correspondencias recibidas...",
     errorMessage: "Error al obtener las correspondencias recibidas",
-    fetchDataHook: useCorrespondenciaEntrantes,
+    fetchDataHook: useCorrespondenciaRecibidas,
     all_data: false, // true para obtener todos los datos, false para paginación
     itemKey: "id_doc_entrante", //Debe ser igual al modelo
     entityFields: useFields,

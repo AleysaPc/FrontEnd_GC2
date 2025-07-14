@@ -1,11 +1,10 @@
 import { InputField } from "../../../components/shared/InputField"
 import { SelectField } from "../../../components/shared/SelectField";
 import EditEntity from "../../../components/shared/EditEntity";
-import { useCorrespondenciaEntranteMutations, useContactos, useCorrespondencia, useCorrespondenciaEntrante } from "../../../hooks/useEntities";
+import { useCorrespondenciaRecibidaMutations, useContactos, useCorrespondenciaRecibida } from "../../../hooks/useEntities";
 import { FaBackspace, FaEye, FaPencilAlt, FaPlus } from "react-icons/fa";
 import { useFormEntity } from "../../../utils/useFormEntity";
 import {  obtenerIdUser } from "../../../utils/auth";
-import { use } from "react";
 
 export default function editRecibida() {
 
@@ -176,8 +175,8 @@ export default function editRecibida() {
   
   return (
     <EditEntity
-        useEntityMutations={useCorrespondenciaEntranteMutations}
-        useEntity={useCorrespondenciaEntrante}
+        useEntityMutations={useCorrespondenciaRecibidaMutations}
+        useEntity={useCorrespondenciaRecibida}
         configForm={configuracionFormulario}
         paraEnvio={paraEnvio}
         construirCampos={construirCampos}

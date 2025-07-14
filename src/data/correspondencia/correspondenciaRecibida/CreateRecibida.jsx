@@ -3,7 +3,7 @@ import { MultipleInputs } from "../../../components/shared/MultipleInputs";
 import CreateEntity from "../../../components/shared/CreateEntity";
 import {
   useContactos,
-  useCorrespondenciaEntranteMutations,
+  useCorrespondenciaRecibidaMutations,
   useUsers,
 } from "../../../hooks/useEntities";
 import { FaBackspace, FaEye, FaPencilAlt, FaPlus } from "react-icons/fa";
@@ -194,7 +194,7 @@ export default function createRecibida() {
   return (
     <>
       <CreateEntity
-        useEntityMutations={useCorrespondenciaEntranteMutations}
+        useEntityMutations={useCorrespondenciaRecibidaMutations}
         configForm={configuracionFormulario}
         paraEnvio={paraEnvio}
         construirCampos={construirCampos}

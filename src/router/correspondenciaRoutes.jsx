@@ -7,10 +7,10 @@ const CreateCorrespondencia = lazy(() =>
   import("../data/correspondencia/correspondencia/createCorrespondencia")
 );
 const CorrespondenciaRecibidaList = lazy(() =>
-  import("../data/correspondencia/correspondencia/CorrespondenciaRecibidaList")
+  import("../data/correspondencia/correspondenciaRecibida/CorrespondenciaRecibidaList")
 );
 const CorrespondenciaEnviadaList = lazy(() =>
-  import("../data/correspondencia/correspondencia/CorrespondenciaEnviadaList")
+  import("../data/correspondencia/correspondenciaEnviada/CorrespondenciaEnviadaList")
 );
 const EditCorrespondencia = lazy(() =>
   import("../data/correspondencia/correspondencia/EditCorrespondencia")
@@ -22,10 +22,10 @@ const DetailRecibida = lazy(() =>
   import("../data/correspondencia/correspondenciaRecibida/DetailRecibida")
 );
 const CreateDocSaliente = lazy(() =>
-  import("../data/correspondencia/correspondenciaSaliente/CreateDocSaliente")
+  import("../data/correspondencia/correspondenciaEnviada/CreateEnviada")
 );
 const DetailDocSaliente = lazy(() =>
-  import("../data/correspondencia/correspondenciaSaliente/DetailDocSaliente")
+  import("../data/correspondencia/correspondenciaEnviada/DetailDocSaliente")
 );
 const EditRecibida = lazy(() =>
   import("../data/correspondencia/correspondenciaRecibida/EditRecibida")

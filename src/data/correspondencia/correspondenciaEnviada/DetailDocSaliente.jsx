@@ -1,15 +1,16 @@
 import { useParams } from "react-router-dom";
-import { useCorrespondenciaSaliente } from "../../../hooks/useEntities";
+import { useCorrespondenciaEnviada } from "../../../hooks/useEntities";
 import { Navigation } from "../../../components/shared/Navigation";
 import { FaFile, FaFileArchive, FaFilePrescription, FaFileSignature, FaHistory } from "react-icons/fa";
 import VisorPDF from "../../../components/shared/VisorPdf";
 import { ActionButton } from "../../../components/shared/ActionButton";
 import { useState, useEffect } from "react";
 import  FormattedDate from "../../../components/shared/FormattedDate";
-function DetailDocSaliente() {
+
+function DetailDocEnviada() {
   const { id } = useParams(); //use params para recuperar el ID
 
-  const { data: response = {}, isLoading } = useCorrespondenciaSaliente(id);
+  const { data: response = {}, isLoading } = useCorrespondenciaEnviada(id);
 
   const items = response.data || [];
   console.log("docSoliente", items.cite);
@@ -142,4 +143,4 @@ function DetailDocSaliente() {
   );
 }
 
-export default DetailDocSaliente;
+export default DetailDocEnviada;

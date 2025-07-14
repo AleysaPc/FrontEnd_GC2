@@ -2,7 +2,7 @@ import { InputField } from "../../../components/shared/InputField";
 import CreateEntity from "../../../components/shared/CreateEntity";
 import {
   useContactos,
-  useCorrespondenciaSalienteMutations,
+  useCorrespondenciaEnviadaMutations,
   useUsers,
 } from "../../../hooks/useEntities";
 import { FaBackspace, FaEye, FaPencilAlt, FaPlus } from "react-icons/fa";
@@ -11,6 +11,7 @@ import { obtenerIdUser } from "../../../utils/auth";
 import { SelectField } from "../../../components/shared/SelectField";
 import { UserCheckboxList } from "../../../components/shared/UserCheckboxList";
 import { MultipleInputs } from "../../../components/shared/MultipleInputs";
+
 export default function createEnviada() {
   const { paraSelectsdestructuringYMap } = useFormEntity();
 
@@ -28,18 +29,6 @@ export default function createEnviada() {
 
   const usuarioOptions = () =>
     paraSelectsdestructuringYMap(useUsers, true, "id", "email");
-  const opcionPrioridad = [
-    { id: "alta", nombre: "Alta" },
-    { id: "media", nombre: "Media" },
-    { id: "baja", nombre: "Baja" },
-  ];
-
-  const opcionEstado = [
-    { id: "borrador", nombre: "Borrador" },
-    { id: "en_revision", nombre: "En revisión" },
-    { id: "aprobado", nombre: "Aprobado" },
-    { id: "rechazado", nombre: "Rechazado" },
-  ];
 
   const configuracionFormulario = {
     fecha_envio: "",
@@ -49,8 +38,6 @@ export default function createEnviada() {
     referencia: "",
     descripcion: "",
     paginas: "",
-    prioridad: "",
-    estado: "",
     comentario: "",
     contacto: "",
     documentos: [],
@@ -123,24 +110,6 @@ export default function createEnviada() {
       required: true,
       onChange: manejarEntradas.handleInputChange,
     },
-    //{
-    //component: SelectField,
-    //label: "Prioridad",
-    //name: "prioridad",
-    //options: opcionPrioridad,
-    //onChange: manejarEntradas.handleInputChange,
-    //required: true,
-    //},
-    //{
-    //component: SelectField,
-    //label: "Estado",
-    //name: "estado",
-    //options: opcionEstado,
-    //onChange: manejarEntradas.handleInputChange,
-    //required: true,
-    //},
-    //},
-
     {
       component: InputField,
       label: "Comentario",
@@ -201,7 +170,7 @@ export default function createEnviada() {
   return (
     <>
       <CreateEntity
-        useEntityMutations={useCorrespondenciaSalienteMutations}
+        useEntityMutations={useCorrespondenciaEnviadaMutations}
         configForm={configuracionFormulario}
         paraEnvio={paraEnvio}
         construirCampos={construirCampos}

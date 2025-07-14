@@ -15,22 +15,22 @@ export const useCorrespondencia = (id) => useData(CorrespondenciaApi, "correspon
 export const useCorrespondenciaMutations = () => useEntityMutations(CorrespondenciaApi, "correspondencia");
 
 // Correspondencia Entrante
-export const useCorrespondenciaEntrantes = (all_data = false, page = 1) => { //Plural
-    return useData(RecibidaApi, "correspondencia_entrantes", null, { all_data, page }, 1000 * 60 * 5);
+export const useCorrespondenciaRecibidas = (all_data = false, page = 1) => { //Plural
+    return useData(RecibidaApi, "correspondenciaRecibidas", null, { all_data, page }, 1000 * 60 * 5);
 }
-export const useCorrespondenciaEntrante = (id) => useData(RecibidaApi, "correspondencia_entrantes", id); //Singular
-export const useCorrespondenciaEntranteMutations = () => useEntityMutations(RecibidaApi, "correspondencia_entrante");
+export const useCorrespondenciaRecibida = (id) => useData(RecibidaApi, "correspondenciaRecibida", id); //Singular
+export const useCorrespondenciaRecibidaMutations = () => useEntityMutations(RecibidaApi, "correspondenciaRecibida");
 
 // Correspondencia Saliente
-export const useCorrespondenciaSalientes = (all_data = false, page = 1) => { //Plural
-    return useData(EnviadaApi, "correspondencia_salientes", null, { all_data, page }, 1000 * 60 * 5);
+export const useCorrespondenciaEnviadas = (all_data = false, page = 1) => { //Plural
+    return useData(EnviadaApi, "correspondenciaEnviadas", null, { all_data, page }, 1000 * 60 * 5);
 }
-export const useCorrespondenciaSaliente = (id) => useData(EnviadaApi, "correspondencia_salientes", id); //Singular
-export const useCorrespondenciaSalienteMutations = () => useEntityMutations(EnviadaApi, "correspondencia_saliente");
+export const useCorrespondenciaEnviada = (id) => useData(EnviadaApi, "correspondenciaEnviada", id); //Singular
+export const useCorrespondenciaEnviadaMutations = () => useEntityMutations(EnviadaApi, "correspondenciaEnviada");
 
 // AccionCorrrespondencia
 export const useAccionCorrespondencias = (all_data = false, page = 1) => { //Plural
-    return useData(AccionCorrespondenciaApi, "accion_correspondencias", null, { all_data, page }, 1000 * 60 * 5);
+    return useData(AccionCorrespondenciaApi, "accionCorrespondencias", null, { all_data, page }, 1000 * 60 * 5);
 }
 export const useAccionCorrespondencia = (id) => useData(AccionCorrespondenciaApi, "accionCorrespondencia", id); //Singular
 export const useAccionCorrespondenciaMutations = () => useEntityMutations(AccionCorrespondenciaApi, "accionCorrespondencia");
