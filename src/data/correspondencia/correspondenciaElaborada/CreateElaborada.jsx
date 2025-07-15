@@ -33,6 +33,7 @@ export default function CreateElaborada() {
   ];
 
   const configuracionFormulario = {
+    fecha_elaboracion: "",
     referencia: "",
     descripcion: "",
     prioridad: "",
@@ -41,11 +42,11 @@ export default function CreateElaborada() {
     contacto: "",
     plantilla_id: "",
     usuarios: [],
-    fecha_envio: "",
     cite: "",
   };
 
   const camposExtras = (formValues) => ({
+    fecha_elaboracion: formValues.fecha_elaboracion,
     referencia: formValues.referencia,
     descripcion: formValues.descripcion,
     prioridad: formValues.prioridad,
@@ -56,7 +57,6 @@ export default function CreateElaborada() {
     usuarios: Array.isArray(formValues.usuarios)
       ? formValues.usuarios.map(Number)
       : [],
-    fecha_envio: formValues.fecha_envio || null,
     cite: formValues.cite,
   });
 
@@ -70,7 +70,7 @@ export default function CreateElaborada() {
       component: InputView,
       label: "CITE generado",
       name: "cite",
-    },
+    },  
     {
       component: InputField,
       label: "Referencia",
@@ -135,14 +135,6 @@ export default function CreateElaborada() {
       options: plantillaOptions(),
       onChange: manejarEntradas.handleInputChange,
       required: true,
-    },
-    {
-      component: InputField,
-      label: "Fecha de Envío",
-      name: "fecha_envio",
-      type: "date",
-      required: false,
-      onChange: manejarEntradas.handleInputChange,
     },
     {
       component: UserCheckboxList,

@@ -1,3 +1,5 @@
+//Abre el documento pdf directamente en el navegador
+
 import { useParams } from "react-router-dom";
 import { useEffect } from "react";
 
