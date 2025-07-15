@@ -1,10 +1,10 @@
 import { useEntityMutations } from "./useEntityMutations";
-import {CorrespondenciaApi, RecibidaApi, EnviadaApi, AccionCorrespondenciaApi} from "../api/correspondencia.api";
+import {CorrespondenciaApi, RecibidaApi, EnviadaApi, AccionCorrespondenciaApi, ElaboradaApi} from "../api/correspondencia.api";
 import useData from "./useData";
 import { CustomUsersAPI, RolesApi, PasswordResetAPI, DepartamentosApi} from "../api/usuario.api";
 import { useMutationWithToast } from "./useMutationWithToast";
 import { ContactoApi, InstitucionApi } from "../api/contacto.api";
-import { DocumentoApi, TipoDocumentoApi } from "../api/documento.api";
+import { DocumentoApi, PlantillaDocumentoApi } from "../api/documento.api";
 
 //Correspondencia
 export const useCorrespondencias = (all_data = false, page = 1) => {
@@ -27,6 +27,13 @@ export const useCorrespondenciaEnviadas = (all_data = false, page = 1) => { //Pl
 }
 export const useCorrespondenciaEnviada = (id) => useData(EnviadaApi, "correspondenciaEnviada", id); //Singular
 export const useCorrespondenciaEnviadaMutations = () => useEntityMutations(EnviadaApi, "correspondenciaEnviada");
+
+// Correspondencia Elaborada
+export const useCorrespondenciaElaboradas = (all_data = false, page = 1) => { //Plural
+    return useData(ElaboradaApi, "correspondenciaElaboradas", null, { all_data, page }, 1000 * 60 * 5);
+}
+export const useCorrespondenciaElaborada = (id) => useData(ElaboradaApi, "correspondenciaElaborada", id); //Singular
+export const useCorrespondenciaElaboradaMutations = () => useEntityMutations(ElaboradaApi, "correspondenciaElaborada");
 
 // AccionCorrrespondencia
 export const useAccionCorrespondencias = (all_data = false, page = 1) => { //Plural
@@ -86,9 +93,9 @@ export const useDocumentos = (all_data = false, page = 1) => {
 export const useDocumento = (id) => useData(DocumentoApi, "documentos", id);
 export const useDocumentoMutations = () => useEntityMutations(DocumentoApi, "documento");
 
-// Tipo de Documento
-export const useTiposDocumentos = (all_data = false, page = 1) => {
-  return useData(TipoDocumentoApi, "tipos_documento", null, { all_data, page }, 1000 * 60 * 5);
-};
-export const useTipoDocumento = (id) => useData(TipoDocumentoApi, "tipos_documento", id);
-export const useTipoDocumentoMutations = () => useEntityMutations(TipoDocumentoApi, "tipo_documento");
+//Plantilla Documento
+export const usePlantillaDocumentos = (all_data = false, page = 1) => {
+    return useData(PlantillaDocumentoApi, "plantillaDocumentos", null, { all_data, page }, 1000 * 60 * 5);
+}
+export const usePlantillaDocumento = (id) => useData(PlantillaDocumentoApi, "plantillaDocumentos", id);
+export const usePlantillaDocumentoMutations = () => useEntityMutations(PlantillaDocumentoApi, "plantillaDocumento");

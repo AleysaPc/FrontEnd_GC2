@@ -25,9 +25,8 @@ export const menus = [
     title: "Crear Documento",
     icon: IoCreateSharp,
     items: [
-      { label: "Externo", path: "/ver_movimientos" },
-      { label: "Interno", path: "/ver_movimientos" },
-      { label: "En revisión", path: "/ver_movimientos" },
+      { label: "Nuevo", path: "/createElaborada" },
+      { label: "Lista Documentos elaborados", path: "/elaboradaList" },
     ],
   },
   {

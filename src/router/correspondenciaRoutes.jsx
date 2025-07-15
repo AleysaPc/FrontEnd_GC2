@@ -33,7 +33,10 @@ const EditRecibida = lazy(() =>
 const CreateContacto = lazy(() => import("../data/contacto/createContacto"));
 const ContactoList = lazy(() => import("../data/contacto/ContactoList"));
 const EditContacto = lazy(() => import("../data/contacto/EditContacto"));
-
+const CreateElaborada = lazy(() => import("../data/correspondencia/correspondenciaElaborada/CreateElaborada"));
+const ElaboradaList = lazy(() => import("../data/correspondencia/correspondenciaElaborada/ElaboradaList"));
+const VistaPreviaDocumento = lazy(() => import("../data/correspondencia/correspondenciaElaborada/VistaPreviaDocumento"));
+const VistaPdfDocumento = lazy(() => import("../data/correspondencia/correspondenciaElaborada/VistaPdfDocumento"));
 export const correspondenciaRoutes = [
   // rutas de correspondencia
   {
@@ -88,4 +91,20 @@ export const correspondenciaRoutes = [
     path: "/editContacto/:id",
     element: <EditContacto />,
   },
+  {
+    path: "/createElaborada",
+    element: <CreateElaborada />,
+  },
+  {
+    path: "/elaboradaList",
+    element: <ElaboradaList />,
+  },
+  {
+    path: "/vistaPreviaDocumento/:id_correspondencia",
+    element: <VistaPreviaDocumento />,
+  },
+  {
+    path: "/vistaPdfDocumento/:id_correspondencia",
+    element: <VistaPdfDocumento />,
+  }
 ];

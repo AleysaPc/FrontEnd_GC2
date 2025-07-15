@@ -22,7 +22,7 @@ function CorrespondenciaEnviadaList() {
       key: "referencia",
       label: "Referencia",
       render: (item) => item.referencia,
-    },
+    },  
     {
       key: "acciones",
       label: "Acciones",
