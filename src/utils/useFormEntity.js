@@ -131,9 +131,9 @@ export const useFormEntity = () => {
     const mutation = entityId ? updateMutation : createMutation;
     // Log data based on its type
     if (data instanceof FormData) {
-      console.log('FormData entries:', [...data.entries()]);
+      console.log("FormData entries:", [...data.entries()]);
     } else {
-      console.log('Plain object data:', data);
+      console.log("Plain object data:", data);
     }
     mutation.mutate(
       { id: entityId || undefined, data },
@@ -166,43 +166,51 @@ export const useFormEntity = () => {
     }));
   };
 
-  const todosDatosOpaginacion = (fetchDataHook, all_data) => {
+  const todosDatosOpaginacion = (fetchDataHook, params = {}) => {
+    const { all_data = false } = params;
     const { currentPage, handlePageChange } = usePagination();
 
+    // Usar currentPage solo si no es all_data
+    const pageToUse = all_data ? 1 : currentPage;
+
+    // Llamar hook con todos los params y la página correcta
     const {
       data: response = {},
       isLoading,
       isError,
-    } = fetchDataHook(all_data, currentPage);
+    } = fetchDataHook({ ...params, page: pageToUse });
 
-    const {
-      total_pages,
-      per_page,
-      total,
-      next = null,
-      previous = null,
-      results,
-    } = response.data || {};
+    if (all_data) {
+      const items = response.data || [];
+      return { items, isLoading, isError, hasPagination: false };
+    } else {
+      const {
+        total_pages,
+        per_page,
+        total,
+        next = null,
+        previous = null,
+        results,
+      } = response.data || {};
 
-    const items = results || response.data || [];
+      const items = results || response.data || [];
+      const totalItems = total;
+      const hasPagination = Boolean(next || previous);
 
-    const totalItems = total;
-
-    const hasPagination = next || previous;
-
-    return {
-      currentPage,
-      handlePageChange,
-      isLoading,
-      isError,
-      items,
-      totalItems,
-      hasPagination,
-      next,
-      previous,
-      per_page,
-      total_pages,
-    };
+      return {
+        currentPage,
+        handlePageChange,
+        isLoading,
+        isError,
+        items,
+        totalItems,
+        hasPagination,
+        next,
+        previous,
+        per_page,
+        total_pages,
+      };
+    }
   };
 
   return {

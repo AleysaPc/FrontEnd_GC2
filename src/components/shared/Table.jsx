@@ -22,7 +22,10 @@ const Table = ({
         </thead>
         <tbody className="border-t-2 border-gray-400">
           {items.map((item, index) => {
-            const globalIndex = (currentPage - 1) * itemsPerPage + index;
+            const globalIndex =
+              currentPage && itemsPerPage
+                ? (currentPage - 1) * itemsPerPage + index
+                : index;
             const key = item[itemKey] ?? globalIndex;
             return (
               <Row

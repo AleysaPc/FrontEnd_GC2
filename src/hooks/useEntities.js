@@ -6,6 +6,38 @@ import { useMutationWithToast } from "./useMutationWithToast";
 import { ContactoApi, InstitucionApi } from "../api/contacto.api";
 import { DocumentoApi, PlantillaDocumentoApi } from "../api/documento.api";
 
+//productos
+export const useProducts = (
+  params = {},
+  enabled = true,
+  staleTime = 1000 * 60 * 5
+) => {
+  const defaultParams = {
+    all_data: false,
+    page: 1,
+    per_page: 10,
+    filters: {},
+    ordering: "",
+    search: "",
+  };
+
+  const mergedParams =
+    //params sobreescribe defaultParams si hay campos repetidos
+    { ...defaultParams, ...params };
+  return useData(
+    ProductosAPI,
+    "productos",
+    null,
+    mergedParams,
+    staleTime,
+    enabled
+  );
+};
+
+//para obtener un solo producto
+export const useProduct = (id) =>
+  useData(ProductosAPI, "producto", id, {}, 1000 * 60 * 5, !!id);
+
 //Correspondencia
 export const useCorrespondencias = (all_data = false, page = 1) => {
     return useData(CorrespondenciaApi, "correspondencias", null, { all_data, page }, 1000 * 60 * 5);

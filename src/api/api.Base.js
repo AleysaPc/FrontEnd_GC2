@@ -1,6 +1,5 @@
 import axios from "axios";
 
-//variable de entorno
 const ApiBaseURL = import.meta.env.VITE_API_BASE_URL;
 
 // Crear instancia base de Axios

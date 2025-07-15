@@ -1,26 +1,28 @@
-// components/shared/SearchBar.jsx
 import { useState } from "react";
 
-function BarraBusqueda({ onSearch, searchKeys = [], placeholder = "Buscar..." }) {
-  const [query, setQuery] = useState("");
+const BarraBusqueda = ({ onSearch, placeholder = "Buscar..." }) => {
+  const [valor, setValor] = useState("");
 
-  const handleChange = (e) => {
-    const value = e.target.value;
-    setQuery(value);
-    onSearch(value); // se lo delegamos al componente padre
+  const manejarCambio = (e) => {
+    setValor(e.target.value);
+  };
+
+  const manejarEnter = (e) => {
+    if (e.key === "Enter") {
+      onSearch(valor); // Ejecuta búsqueda solo al presionar Enter
+    }
   };
 
   return (
-    <div className="">
-      <input
-        type="text"
-        value={query}
-        onChange={handleChange}
-        className="w-4/12 p-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-sm"
-        placeholder={placeholder}
-      />
-    </div>
+    <input
+      type="text"
+      className="border p-2 rounded w-full"
+      value={valor}
+      onChange={manejarCambio}
+      onKeyDown={manejarEnter}
+      placeholder={placeholder}
+    />
   );
-}
+};
 
 export default BarraBusqueda;
