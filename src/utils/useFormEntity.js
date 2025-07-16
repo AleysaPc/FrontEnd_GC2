@@ -2,14 +2,19 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import usePagination from "./usePagination";
 
+export const options = (entity, keyId, keyNombre) => {
+  // Si no hay datos o no es un array, retornamos un array vacío
+  if (!entity || !Array.isArray(entity)) {
+    return [];
+  }
+  return entity.map((item) => ({
+    id: item[keyId], // Accede dinámicamente a la clave id
+    nombre: item[keyNombre], // Accede dinámicamente a la clave nombre
+  }));
+};
+
 export const useFormEntity = () => {
   const navigate = useNavigate();
-
-  const options = (entity, keyId, keyNombre) =>
-    entity.map((item) => ({
-      id: item[keyId], // Accede dinámicamente a la clave id
-      nombre: item[keyNombre], // Accede dinámicamente a la clave nombre
-    }));
 
   const crearEstadoFomulario = (campos) => {
     const estadoInicial = {};
@@ -160,10 +165,16 @@ export const useFormEntity = () => {
 
   const paraSelectsdestructuringYMap = (hook, all_data, keyId, keyNombre) => {
     const { data: response = {} } = hook(all_data);
-    return (response.data || []).map((item) => ({
-      id: item[keyId], // Accede dinámicamente a la clave id
-      nombre: item[keyNombre], // Accede dinámicamente a la clave nombre
-    }));
+    
+    // Verificar si hay datos válidos
+    const items = response?.data ? (Array.isArray(response.data) ? response.data : [response.data]) : [];
+    
+    return items
+      .filter(item => item) // Eliminar items undefined o null
+      .map((item) => ({
+        id: item?.[keyId] || '', // Usar operador opcional y valor por defecto
+        nombre: item?.[keyNombre] || '',
+      }));
   };
 
   const todosDatosOpaginacion = (fetchDataHook, params = {}) => {

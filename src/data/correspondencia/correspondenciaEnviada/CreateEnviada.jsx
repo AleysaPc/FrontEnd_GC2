@@ -11,6 +11,7 @@ import { obtenerIdUser } from "../../../utils/auth";
 import { SelectField } from "../../../components/shared/SelectField";
 import { UserCheckboxList } from "../../../components/shared/UserCheckboxList";
 import { MultipleInputs } from "../../../components/shared/MultipleInputs";
+import { useEffect } from "react";
 
 export default function createEnviada() {
   const { paraSelectsdestructuringYMap } = useFormEntity();
@@ -18,17 +19,38 @@ export default function createEnviada() {
   const logicaNegocio = {
     idUsuario: obtenerIdUser(),
   };
-
-  const contactoOptions = () =>
-    paraSelectsdestructuringYMap(
-      useContactos,
-      true,
-      "id_contacto",
-      "nombre_completo"
-    );
-
-  const usuarioOptions = () =>
-    paraSelectsdestructuringYMap(useUsers, true, "id", "email");
+    const { data: contactosData, isLoading: loadingContactos, error: errorContactos } = useContactos({ all_data: true });
+    const { data: usuariosData, isLoading: loadingUsuarios, error: errorUsuarios } = useUsers({ all_data: true });
+  
+    // Asegurarnos de que los datos sean arrays
+    const contactosArray = contactosData?.data || [];
+    const usuariosArray = usuariosData?.data || [];
+  
+    const { options } = useFormEntity();
+  
+    const contactoOptions = () =>
+      contactosArray ? options(contactosArray, "id_contacto", "nombre_completo") : [];
+  
+    const usuarioOptions = () =>
+      usuariosArray ? options(usuariosArray, "id", "email") : []; 
+  
+    // Manejo de errores
+    useEffect(() => {
+      if (errorContactos) {
+        console.error('Error al cargar contactos:', errorContactos);
+      }
+      if (errorUsuarios) {
+        console.error('Error al cargar usuarios:', errorUsuarios);
+      }
+    }, [errorContactos, errorUsuarios]);
+  
+    if (loadingContactos || loadingUsuarios) {
+      return <div className="text-center">Cargando datos...</div>;
+    }
+  
+    if (errorContactos || errorUsuarios) {
+      return <div className="text-red-500 text-center">Error al cargar datos</div>;
+    }
 
   const configuracionFormulario = {
     fecha_envio: "",

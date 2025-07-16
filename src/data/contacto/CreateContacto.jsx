@@ -5,7 +5,8 @@ import { FaBackspace, FaEye, FaPencilAlt, FaPlus } from "react-icons/fa";
 import { useFormEntity } from "../../utils/useFormEntity";
 import { obtenerIdUser } from "../../utils/auth";
 import { SelectField } from "../../components/shared/SelectField";
-import { useInstituciones } from "../../hooks/useEntities";
+import { useInstituciones, useContactos } from "../../hooks/useEntities";
+import { useEffect } from "react";
 
 export default function CreateContacto() {
   const { paraSelectsdestructuringYMap } = useFormEntity();
@@ -13,13 +14,38 @@ export default function CreateContacto() {
   const logicaNegocio = {
     idUsuario: obtenerIdUser(),
   };
+  const { data: contactosData, isLoading: loadingContactos, error: errorContactos } = useContactos({ all_data: true });
+  const { data: institucionesData, isLoading: loadingInstituciones, error: errorInstituciones } = useInstituciones({ all_data: true });
+
+  // Asegurarnos de que los datos sean arrays
+  const contactosArray = contactosData?.data || [];
+  const institucionesArray = institucionesData?.data || [];
+
+  const { options } = useFormEntity();
+
+  const contactoOptions = () =>
+    contactosArray ? options(contactosArray, "id_contacto", "nombre_completo") : [];
+
   const institucionOptions = () =>
-    paraSelectsdestructuringYMap(
-      useInstituciones,
-      true,
-      "id_institucion",
-      "razon_social"
-    );
+    institucionesArray ? options(institucionesArray, "id_institucion", "razon_social") : [];
+
+  // Manejo de errores
+  useEffect(() => {
+    if (errorContactos) {
+      console.error('Error al cargar contactos:', errorContactos);
+    }
+    if (errorInstituciones) {
+      console.error('Error al cargar instituciones:', errorInstituciones);
+    }
+  }, [errorContactos, errorInstituciones]);
+
+  if (loadingContactos || loadingInstituciones) {
+    return <div className="text-center">Cargando datos...</div>;
+  }
+
+  if (errorContactos || errorInstituciones) {
+    return <div className="text-red-500 text-center">Error al cargar datos</div>;
+  }
   const configuracionFormulario = {
     nombre_contacto: "",
     apellido_pat_contacto: "",
@@ -102,6 +128,8 @@ export default function CreateContacto() {
         name:"id_institucion",
         options: institucionOptions(),
         onChange: manejarEntradas.handleInputChange,
+        isLoading: loadingInstituciones,
+        error: errorInstituciones,
         actionButtons: [
             {
                 to: "/CreateInstitucion",

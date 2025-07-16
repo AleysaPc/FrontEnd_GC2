@@ -1,10 +1,10 @@
 import Table from "../../components/shared/Table";
-import Loading from "@/components/shared/Loading";
-import ErrorMessage from "@/components/shared/ErrorMessaje";
+import Loading from "../../components/shared/Loading";
+import ErrorMessage from "../../components/shared/ErrorMessaje";
 import Pagination from "../../components/shared/Pagination";
 import { Navigation } from "../../components/shared/Navigation";
 import { useFormEntity } from "../../utils/useFormEntity";
-import BarraBusqueda from "./BarraBusqueda";
+import BarraBusqueda from "../../components/shared/BarraBusqueda";
 import { useState } from "react";
 
 function EntityList({ entityData }) {
@@ -36,7 +36,7 @@ function EntityList({ entityData }) {
     page: page,
     per_page: perPage,
     search: "",
-    filters: { codigo_barras: codigo },
+    filters: { cite: codigo },
     ordering: "",
   });
 
@@ -110,7 +110,7 @@ function EntityList({ entityData }) {
       )}
       <BarraBusqueda
         onSearch={manejarBusqueda}
-        placeholder="Buscar por codigo de barras"
+        placeholder="Buscar por cite"
       />
       <SelectPerPage
         perPage={perPage}

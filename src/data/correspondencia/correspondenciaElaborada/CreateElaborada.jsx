@@ -6,18 +6,49 @@ import { FaPlus, FaBackspace, FaEye } from "react-icons/fa";
 import CreateEntity from "../../../components/shared/CreateEntity";
 import { UserCheckboxList } from "../../../components/shared/UserCheckboxList";
 import InputView from "../../../components/shared/InputView";
+import { useEffect } from "react";
 
 export default function CreateElaborada() {
-  const { paraSelectsdestructuringYMap } = useFormEntity();
+  const { paraSelectsdestructuringYMap, options } = useFormEntity();
+
+  const { data: plantillasData, isLoading: loadingPlantillas, error: errorPlantillas } = usePlantillaDocumentos({ all_data: true });
+  const { data: contactosData, isLoading: loadingContactos, error: errorContactos } = useContactos({ all_data: true });
+  const { data: usuariosData, isLoading: loadingUsuarios, error: errorUsuarios } = useUsers({ all_data: true });
+
+  // Asegurarnos de que los datos sean arrays
+  const plantillasArray = plantillasData?.data || [];
+  const contactosArray = contactosData?.data || [];
+  const usuariosArray = usuariosData?.data || [];
 
   const plantillaOptions = () =>
-    paraSelectsdestructuringYMap(usePlantillaDocumentos, true, "id_plantilla", "nombre_plantilla");
+    plantillasArray ? options(plantillasArray, "id_plantilla", "nombre_plantilla") : [];
 
   const contactoOptions = () =>
-    paraSelectsdestructuringYMap(useContactos, true, "id_contacto", "nombre_completo");
+    contactosArray ? options(contactosArray, "id_contacto", "nombre_completo") : [];
 
   const usuarioOptions = () =>
-    paraSelectsdestructuringYMap(useUsers, true, "id", "email");
+    usuariosArray ? options(usuariosArray, "id", "email") : [];
+
+  // Manejo de errores
+  useEffect(() => {
+    if (errorPlantillas) {
+      console.error('Error al cargar plantillas:', errorPlantillas);
+    }
+    if (errorContactos) {
+      console.error('Error al cargar contactos:', errorContactos);
+    }
+    if (errorUsuarios) {
+      console.error('Error al cargar usuarios:', errorUsuarios);
+    }
+  }, [errorPlantillas, errorContactos, errorUsuarios]);
+
+  if (loadingPlantillas || loadingContactos || loadingUsuarios) {
+    return <div className="text-center">Cargando datos...</div>;
+  }
+
+  if (errorPlantillas || errorContactos || errorUsuarios) {
+    return <div className="text-red-500 text-center">Error al cargar datos</div>;
+  }
 
   const opcionPrioridad = [
     { id: "alta", nombre: "Alta" },
@@ -127,6 +158,8 @@ export default function CreateElaborada() {
           estilos: "text-blue-600 hover:bg-blue-600 hover:text-white p-1",
         },
       ],
+      isLoading: loadingContactos,
+      error: errorContactos,
     },
     {
       component: SelectField,
@@ -135,6 +168,8 @@ export default function CreateElaborada() {
       options: plantillaOptions(),
       onChange: manejarEntradas.handleInputChange,
       required: true,
+      isLoading: loadingPlantillas,
+      error: errorPlantillas,
     },
     {
       component: UserCheckboxList,
@@ -142,6 +177,8 @@ export default function CreateElaborada() {
       name: "usuarios",
       options: usuarioOptions(),
       onChange: (name, value) => manejarEntradas.handleToggleChange(name)(value),
+      isLoading: loadingUsuarios,
+      error: errorUsuarios,
     },
   ];
 

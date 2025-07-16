@@ -15,7 +15,7 @@ const Sidebar = ({ isVisible }) => {
       {/* titulo */}
       <div className="p-4 px-6 text-center flex items-center gap-2 bg-gray-800">
         <FaCrown className="text-white text-2xl" />
-        <h1 className="text-white text-xl font-bold">Conquistador</h1>
+        <h1 className="text-white text-xl font-bold">FEDERACIÓN</h1>
       </div>
 
       {/* Sección de Perfil de Usuario */}
@@ -23,15 +23,15 @@ const Sidebar = ({ isVisible }) => {
         {/* Avatar */}
         <div className="mb-3">
           <div className="w-16 h-16 rounded-full bg-blue-500 flex items-center justify-center text-white font-semibold text-xl">
-            WF
+            AP
           </div>
         </div>
         {/* Información del usuario */}
         <div className="text-center">
           <p className="text-sm font-medium text-white">
-            William Fabricio Tito Vargas
+            AleysaPc
           </p>
-          <p className="text-xs text-white">wil.fabri777@gmail.com</p>
+          <p className="text-xs text-white">aleysapc@gmail.com</p>
         </div>
       </div>
 
