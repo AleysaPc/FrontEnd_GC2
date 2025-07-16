@@ -21,7 +21,8 @@ const CreateRecibida = lazy(() =>
 const DetailRecibida = lazy(() =>
   import("../data/correspondencia/correspondenciaRecibida/DetailRecibida")
 );
-const CreateDocSaliente = lazy(() =>
+//Sería registroDocEnviado
+const CreateDocSaliente = lazy(() => 
   import("../data/correspondencia/correspondenciaEnviada/CreateEnviada")
 );
 const DetailDocSaliente = lazy(() =>
@@ -37,6 +38,8 @@ const CreateElaborada = lazy(() => import("../data/correspondencia/correspondenc
 const ElaboradaList = lazy(() => import("../data/correspondencia/correspondenciaElaborada/ElaboradaList"));
 const VistaPreviaDocumento = lazy(() => import("../data/correspondencia/correspondenciaElaborada/VistaPreviaDocumento"));
 const VistaPdfDocumento = lazy(() => import("../data/correspondencia/correspondenciaElaborada/VistaPdfDocumento"));
+const EnviadaModal = lazy(() => import("../data/correspondencia/correspondenciaEnviada/enviadaModal"));
+const EditEnviada = lazy(() => import("../data/correspondencia/correspondenciaEnviada/editEnviada"));
 export const correspondenciaRoutes = [
   // rutas de correspondencia
   {
@@ -106,5 +109,13 @@ export const correspondenciaRoutes = [
   {
     path: "/vistaPdfDocumento/:id_correspondencia",
     element: <VistaPdfDocumento />,
+  },
+  {
+    path: "/enviadaModal",
+    element: <EnviadaModal />,
+  },
+  {
+    path: "/editEnviada/:id",
+    element: <EditEnviada />,
   }
 ];

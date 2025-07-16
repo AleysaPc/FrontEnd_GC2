@@ -9,6 +9,7 @@ export const menus = [
     items: [
       { label: "Recibido", path: "/createRecibida" },
       { label: "Enviado", path: "/createDocSaliente" },
+      { label: "Enviado2", path: "/enviadaModal" },
     ],
     roleRequired: "Cajero",
   },
@@ -19,6 +20,7 @@ export const menus = [
       { label: "Correspondencia", path: "/correspondenciaList" },
       { label: "Bandeja de Entrada", path: "/correspondenciaRecibidaList" },
       { label: "Bandeja de Salida", path: "/correspondenciaEnviadaList" },
+      
     ],
   },
   {

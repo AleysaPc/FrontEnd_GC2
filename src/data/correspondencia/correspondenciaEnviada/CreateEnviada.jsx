@@ -4,6 +4,7 @@ import {
   useContactos,
   useCorrespondenciaEnviadaMutations,
   useUsers,
+  useCorrespondenciaElaboradas,
 } from "../../../hooks/useEntities";
 import { FaBackspace, FaEye, FaPencilAlt, FaPlus } from "react-icons/fa";
 import { useFormEntity } from "../../../utils/useFormEntity";
@@ -12,6 +13,7 @@ import { SelectField } from "../../../components/shared/SelectField";
 import { UserCheckboxList } from "../../../components/shared/UserCheckboxList";
 import { MultipleInputs } from "../../../components/shared/MultipleInputs";
 import { useEffect } from "react";
+import EntityList from "../../../components/shared/EntityList";
 
 export default function createEnviada() {
   const { paraSelectsdestructuringYMap } = useFormEntity();
@@ -76,6 +78,8 @@ export default function createEnviada() {
     link: "/correspondenciaEnviadaList",
     params: camposExtras(formValues),
   });
+
+ 
 
   const construirCampos = (formValues, manejarEntradas) => [
     {
@@ -200,4 +204,5 @@ export default function createEnviada() {
       />
     </>
   );
+  
 }

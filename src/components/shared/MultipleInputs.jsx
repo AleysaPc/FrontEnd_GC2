@@ -26,7 +26,7 @@ export const MultipleInputs = ({ value = [], onChange }) => {
 
   return (
     <div className="space-y-4">
-      {value.map((doc, index) => (
+      {Array.isArray(value) && value.map((doc, index) => (  // ✅ Validación segura
         <div key={index} className="border p-4 rounded-md shadow-sm space-y-2">
           {/* Campo: Nombre del documento */}
           <div>
