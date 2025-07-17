@@ -23,10 +23,25 @@ function EntityList({ entityData }) {
   const [page, setPage] = useState(1);
   const [perPage, setPerPage] = useState(10);
   const [allData, setAllData] = useState(false);
-  const [codigo, setCodigo] = useState("");
+
+  const [search, setSearch] = useState("");
+  const [filters, setFilters] = useState({});
+  const [ordering, setOrdering] = useState("");
 
   const manejarBusqueda = (termino) => {
-    setCodigo(termino); // Actualiza el estado para disparar la búsqueda
+    setSearch(termino); // Actualiza el estado para disparar la búsqueda
+    setPage(1); //resetea la pagina a 1
+  };
+
+  // Función para actualizar filtros específicos
+  const manejarFiltro = (campo, valor) => {
+    setFilters((prev) => ({ ...prev, [campo]: valor }));
+    setPage(1); //resetea la pagina a 1
+  };
+
+  // Función para actualizar orden
+  const manejarOrden = (campoOrden) => {
+    setOrdering(campoOrden);
   };
 
   const { todosDatosOpaginacion } = useFormEntity();
@@ -35,9 +50,9 @@ function EntityList({ entityData }) {
     all_data: allData,
     page: page,
     per_page: perPage,
-    search: "",
-    filters: { cite: codigo },
-    ordering: "",
+    search: search,
+    filters: filters,
+    ordering: ordering,
   });
 
   const {
@@ -108,10 +123,39 @@ function EntityList({ entityData }) {
           total_pages={total_pages}
         />
       )}
-      <BarraBusqueda
-        onSearch={manejarBusqueda}
-        placeholder="Buscar por cite"
-      />
+      <BarraBusqueda onSearch={manejarBusqueda} placeholder="Buscar por cite" />
+      
+      {/* Aquí podrías renderizar inputs/selects para filtros */}
+      {/* Ejemplo para filtro precio mínimo */}
+      <div>
+        <label>Precio mínimo:</label>
+        <input
+          type="number"
+          value={filters.precio_min || ""}
+          onChange={(e) => manejarFiltro("precio_min", e.target.value)}
+          placeholder="Ej: 10"
+          className="border px-2 py-1 rounded"
+        />
+        {/* Agrega otros filtros similares según filterFields */}
+      </div>
+      {/* Select para ordenar */}
+      <div>
+        <label>Ordenar por:</label>
+        <select
+          value={ordering}
+          onChange={(e) => manejarOrden(e.target.value)}
+          className="border px-2 py-1 rounded"
+        >
+          <option value="">-- Ninguno --</option>
+          <option value="precio">Precio</option>
+          <option value="fecha_creacion">Fecha de creación</option>
+          <option value="nombre">Nombre</option>
+          <option value="-precio">Precio (desc)</option>
+          <option value="-fecha_creacion">Fecha de creación (desc)</option>
+          <option value="-nombre">Nombre (desc)</option>
+        </select>
+      </div>
+
       <SelectPerPage
         perPage={perPage}
         setPerPage={setPerPage}
