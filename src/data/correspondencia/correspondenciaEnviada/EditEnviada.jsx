@@ -1,6 +1,6 @@
 import {
-  useCorrespondenciaEnviadaMutations,
-  useCorrespondenciaEnviada,
+  useCorrespondenciaElaboradaMutations,
+  useCorrespondenciaElaborada,
 } from "../../../hooks/useEntities";
 import { useContactos } from "../../../hooks/useEntities";
 import { useFormEntity } from "../../../utils/useFormEntity";
@@ -28,6 +28,12 @@ export default function editEnviada() {
       ? options(contactosArray, "id_contacto", "nombre_completo")
       : [];
 
+  const estadoOptions = [
+    { id: "enviado", nombre: "Enviado" },
+    { id: "en_revision", nombre: "En revisión" },
+    { id: "aprobado", nombre: "Aprobado" },
+    { id: "rechazado", nombre: "Rechazado" },
+  ];
   const logicaNegocio = {
     idUsuario: obtenerIdUser(),
   };
@@ -41,9 +47,9 @@ export default function editEnviada() {
     descripcion: entidad?.data?.descripcion || "",
     paginas: entidad?.data?.paginas || "",
     comentario: entidad?.data?.comentario || "",
-    documento: entidad?.data?.documento || "",
     contacto: entidad?.data?.contacto || "", //Es el nombre del FK que tiene conectado con la correspondencia
-    documentos: entidad?.data?.documentos || "", //Es el nombre del FK que tiene conectado con la correspondencia
+    documentos: Array.isArray(entidad?.data?.documentos) ? entidad.data.documentos : [],
+    estado: entidad?.data?.estado || "",
   });
 
   const camposExtras = (formValues) => ({
@@ -134,6 +140,13 @@ export default function editEnviada() {
       ],
     },
     {
+      component: SelectField,
+      label: "Estado",
+      name: "estado",
+      options: estadoOptions,
+      onChange: manejarEntradas.handleInputChange,
+    },
+    {
       component: MultipleInputs,
       label: "Documento",
       name: "documentos",
@@ -157,8 +170,8 @@ export default function editEnviada() {
   };
   return (
     <EditEntity
-      useEntityMutations={useCorrespondenciaEnviadaMutations}
-      useEntity={useCorrespondenciaEnviada}
+      useEntityMutations={useCorrespondenciaElaboradaMutations}
+      useEntity={useCorrespondenciaElaborada}
       configForm={configuracionFormulario}
       paraEnvio={paraEnvio}
       construirCampos={construirCampos}

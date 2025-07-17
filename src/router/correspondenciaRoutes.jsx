@@ -22,9 +22,6 @@ const DetailRecibida = lazy(() =>
   import("../data/correspondencia/correspondenciaRecibida/DetailRecibida")
 );
 //Sería registroDocEnviado
-const CreateDocSaliente = lazy(() => 
-  import("../data/correspondencia/correspondenciaEnviada/CreateEnviada")
-);
 const DetailDocSaliente = lazy(() =>
   import("../data/correspondencia/correspondenciaEnviada/DetailDocSaliente")
 );
@@ -38,7 +35,7 @@ const CreateElaborada = lazy(() => import("../data/correspondencia/correspondenc
 const ElaboradaList = lazy(() => import("../data/correspondencia/correspondenciaElaborada/ElaboradaList"));
 const VistaPreviaDocumento = lazy(() => import("../data/correspondencia/correspondenciaElaborada/VistaPreviaDocumento"));
 const VistaPdfDocumento = lazy(() => import("../data/correspondencia/correspondenciaElaborada/VistaPdfDocumento"));
-const EnviadaModal = lazy(() => import("../data/correspondencia/correspondenciaEnviada/enviadaModal"));
+const RegistroEnviado = lazy(() => import("../data/correspondencia/correspondenciaEnviada/RegistroEnviado"));
 const EditEnviada = lazy(() => import("../data/correspondencia/correspondenciaEnviada/editEnviada"));
 export const correspondenciaRoutes = [
   // rutas de correspondencia
@@ -75,10 +72,6 @@ export const correspondenciaRoutes = [
     element: <DetailDocSaliente />,
   },
   {
-    path: "/createDocSaliente",
-    element: <CreateDocSaliente />,
-  },
-  {
     path: "/editRecibida/:id",
     element: <EditRecibida />,
   },
@@ -111,8 +104,8 @@ export const correspondenciaRoutes = [
     element: <VistaPdfDocumento />,
   },
   {
-    path: "/enviadaModal",
-    element: <EnviadaModal />,
+    path: "/registroEnviado",
+    element: <RegistroEnviado />,
   },
   {
     path: "/editEnviada/:id",

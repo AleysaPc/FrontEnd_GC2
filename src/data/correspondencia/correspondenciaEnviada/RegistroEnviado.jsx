@@ -1,7 +1,7 @@
 import EntityList from "../../../components/shared/EntityList";
-import { useCorrespondenciaEnviadas } from "../../../hooks/useEntities";
+import { useCorrespondenciaElaboradas} from "../../../hooks/useEntities";
 
-export default function EnviadaModal() {
+export default function RegistroEnviado() {
     const useFields = () => [
         { key: "index", label: "#" },
         { key: "cite", label: "CITE" },
@@ -29,7 +29,7 @@ export default function EnviadaModal() {
         subTitle: "Registrar documentos enviados",
         loadingMessage: "Cargando documentos aprobados y enviados...",
         errorMessage: "Error al obtener los documentos aprobados y enviados",
-        fetchDataHook: useCorrespondenciaEnviadas,
+        fetchDataHook: useCorrespondenciaElaboradas,
         all_data: false, // true para obtener todos los datos, false para paginación
         itemKey: "id_correspondencia", //Debe ser igual al modelo
         entityFields: useFields,

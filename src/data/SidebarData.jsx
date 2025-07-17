@@ -8,18 +8,17 @@ export const menus = [
     icon: FaFileMedical,
     items: [
       { label: "Recibido", path: "/createRecibida" },
-      { label: "Enviado", path: "/createDocSaliente" },
-      { label: "Enviado2", path: "/enviadaModal" },
+      { label: "Enviado", path: "/registroEnviado" },
     ],
-    roleRequired: "Cajero",
+   //roleRequired: "Cajero",
   },
   {
     title: "Registros",
     icon: RiArchiveDrawerFill,
     items: [
-      { label: "Correspondencia", path: "/correspondenciaList" },
-      { label: "Bandeja de Entrada", path: "/correspondenciaRecibidaList" },
-      { label: "Bandeja de Salida", path: "/correspondenciaEnviadaList" },
+      { label: "Correspondencias", path: "/correspondenciaList" },
+      { label: "Recibidos", path: "/correspondenciaRecibidaList" },
+      { label: "Enviados", path: "/correspondenciaEnviadaList" },
       
     ],
   },

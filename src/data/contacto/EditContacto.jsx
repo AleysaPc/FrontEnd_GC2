@@ -14,14 +14,21 @@ export default function EditContacto() {
   const logicaNegocio = {
     idUsuario: obtenerIdUser(),
   };
-//Hace referencia al modelo institucion
-  const institucionOptions = () =>
-    paraSelectsdestructuringYMap(
-      useInstituciones,
-      true,
-      "id_institucion",
-      "razon_social"
-    );
+
+  const {
+      data: institucionData,
+      isLoading: loadingInstituciones,
+      error: errorInstituciones,
+    } = useInstituciones({ all_data: true });
+    const institucionesArray = institucionData?.data || [];
+  
+    const { options } = useFormEntity();
+  
+    const institucionOptions = () =>
+      institucionesArray
+        ? options(institucionesArray, "id_institucion", "razon_social")
+        : [];
+
 
 //Hace referencia al modelo contacto
   const configuracionFormulario = (entidad) => ({

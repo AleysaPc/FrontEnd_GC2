@@ -1,5 +1,5 @@
 import {
-  useCorrespondenciaEnviadas,
+  useCorrespondenciaElaboradas,
 } from "../../../hooks/useEntities";
 import EntityList from "../../../components/shared/EntityList";
 import  FormattedDate  from "../../../components/shared/FormattedDate";
@@ -50,7 +50,7 @@ function CorrespondenciaEnviadaList() {
     subTitle: "Listado de correspondencias enviadas",
     loadingMessage: "Cargando correspondencias enviadas...",
     errorMessage: "Error al obtener las correspondencias enviadas",
-    fetchDataHook: useCorrespondenciaEnviadas,
+    fetchDataHook: useCorrespondenciaElaboradas,
     all_data: false, // true para obtener todos los datos, false para paginación
     itemKey: "id_doc_saliente", //Debe ser igual al modelo
     entityFields: useFields,

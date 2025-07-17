@@ -8,6 +8,7 @@ export default function ElaboradaList() {
     { key: "cite", label: "CITE" },
     { key: "fecha_envio", label: "Fecha de Envio" },
     { key: "referencia", label: "Referencia" },
+    { key: "estado", label: "Estado" },
     {
         key: "acciones",
         label: "Acciones",
@@ -27,6 +28,12 @@ export default function ElaboradaList() {
             >
               Ver PDF
             </a>
+            <a
+                  href={`/editEnviada/${item.id_correspondencia}`}
+                  className="bg-orange-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded"
+                >
+                  Registrar
+                </a>
           </div>
         ),
       }
