@@ -1,21 +1,26 @@
 import { useParams } from "react-router-dom";
-import { useCorrespondenciaEnviada } from "../../../hooks/useEntities";
+import { useCorrespondenciaElaborada } from "../../../hooks/useEntities";
 import { Navigation } from "../../../components/shared/Navigation";
-import { FaFile, FaFileArchive, FaFilePrescription, FaFileSignature, FaHistory } from "react-icons/fa";
+import {
+  FaFile,
+  FaFileArchive,
+  FaFilePrescription,
+  FaFileSignature,
+  FaHistory,
+} from "react-icons/fa";
 import VisorPDF from "../../../components/shared/VisorPdf";
 import { ActionButton } from "../../../components/shared/ActionButton";
 import { useState, useEffect } from "react";
-import  FormattedDate from "../../../components/shared/FormattedDate";
-
-function DetailDocEnviada() {
+import FormattedDate from "../../../components/shared/FormattedDate";
+function DetailEnviada() {
   const { id } = useParams(); //use params para recuperar el ID
 
-  const { data: response = {}, isLoading } = useCorrespondenciaEnviada(id);
+  const { data: response = {}, isLoading } = useCorrespondenciaElaborada(id);
 
   const items = response.data || [];
-  console.log("docSoliente", items.cite);
 
-  const documentos = items.correspondencia?.documentos || [];
+
+  const documentos = items.documentos || [];
 
   const [documentoActivo, setDocumentoActivo] = useState("");
 
@@ -35,21 +40,14 @@ function DetailDocEnviada() {
         title="Correspondencia Enviada"
         actions={[
           {
-            to : `/correspondencia-saliente/${id}/historial`, //Historial del documento 
+            to: `/correspondencia-enviada/${id}/historial`, //Historial del documento
             label: "Historial",
             icon: FaHistory,
             estilos:
               "bg-green-600 hover:bg-purple-800 text-white px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",
           },
-          {
-            to : `/correspondenciaEnviadaList`, //Historial del documento 
-            label: "Atras",
-            icon: FaHistory,
-            estilos:
-              "bg-red-800 hover:bg-purple-800 text-white px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",
-          },
         ]}
-        subTitle={`Información del Documento: ${items.cite}`}
+        subTitle={`Información del Documento: ${items.cite} - Respuesta a ${items.nro_registro_respuesta}`}
         icon={FaFileSignature}
       />
 
@@ -64,45 +62,33 @@ function DetailDocEnviada() {
           </div>
           <div>
             <span className="font-medium">Fecha de Envio:</span>{" "}
-           <FormattedDate date={items.fecha_envio} />
-            
-          </div>
-          <div>
-            <span className="font-medium">Fecha de Recepción:</span>{" "}
-           <FormattedDate date={items.fecha_recepcion} />
-            
+            <FormattedDate date={items.fecha_envio} />
           </div>
           <div>
             <span className="font-medium">Fecha de Seguimiento:</span>{" "}
-          <FormattedDate date={items.fecha_seguimiento} />
+            <FormattedDate date={items.fecha_seguimiento} />
           </div>
           <div>
-            <span className="font-medium">Referencia:</span>{" "}
-            {items.referencia}
+            <span className="font-medium">Referencia:</span> {items.referencia}
           </div>
           <div>
             <span className="font-medium">Descripción:</span>{" "}
             {items.descripcion}
           </div>
           <div>
-            <span className="font-medium">Páginas:</span>{" "}
-            {items.paginas}
+            <span className="font-medium">Páginas:</span> {items.paginas}
           </div>
           <div>
-            <span className="font-medium">Prioridad:</span>{" "}
-            {items.prioridad}
+            <span className="font-medium">Prioridad:</span> {items.prioridad}
           </div>
           <div>
-            <span className="font-medium">Estado:</span>{" "}
-            {items.estado}
+            <span className="font-medium">Estado:</span> {items.estado}
           </div>
           <div className="md:col-span-2">
-            <span className="font-medium">Comentario:</span>{" "}
-            {items.comentario}
+            <span className="font-medium">Comentario:</span> {items.comentario}
           </div>
           <div className="md:col-span-2">
-            <span className="font-medium">Remitente:</span>{" "}
-            {items.contacto}
+            <span className="font-medium">Remitente:</span> {items.contacto}
           </div>
           <div className="md:col-span-2">
             <span className="font-medium">Nombre documento:</span>{" "}
@@ -118,7 +104,7 @@ function DetailDocEnviada() {
             {documentos.map((doc, index) => (
               <ActionButton
                 key={doc.id_documento}
-                label={doc.nombre_documento || `Documento ${index + 1}`}
+                label={doc.archivo || `Documento ${index + 1}`}
                 icon={FaFile}
                 onClick={() => setDocumentoActivo(doc.archivo)}
                 estilos={`px-4 py-2 border rounded-md ${
@@ -143,4 +129,4 @@ function DetailDocEnviada() {
   );
 }
 
-export default DetailDocEnviada;
+export default DetailEnviada;

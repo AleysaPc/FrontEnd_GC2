@@ -29,7 +29,7 @@ function CorrespondenciaEnviadaList() {
       render: (item) => (
         <div className="flex gap-2">
           <a
-            href={`detailDocSaliente/${item.id_correspondencia}`}
+            href={`detailEnviada/${item.id_correspondencia}`}
             className="bg-green-800 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
           >
             Ver
@@ -57,7 +57,7 @@ function CorrespondenciaEnviadaList() {
     clavesBusqueda: ["referencia"],
     actions: [
       {
-        to: "/createDocSaliente",
+        to: "/createEnviada",
         label: "Crear",
         estilos:
           "bg-red-800 hover:bg-green-800 text-white px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",

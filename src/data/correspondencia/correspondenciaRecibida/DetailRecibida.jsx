@@ -46,6 +46,13 @@ function DetailRecibida() {
             estilos:
               "bg-green-600 hover:bg-purple-800 text-white px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",
           },
+          {
+            to: `/createElaborada?respuesta_a=${id}`,
+            label: "Generar respuesta",
+            icon: FaFile,
+            estilos:
+              "bg-orange-600 hover:bg-purple-800 text-white px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",
+          }
         ]}
         subTitle={`Información del Documento: ${items.nro_registro}`}
         icon={FaFileSignature}

@@ -3,17 +3,11 @@ import { lazy } from "react";
 const CorrespondenciaList = lazy(() =>
   import("../data/correspondencia/correspondencia/CorrespondenciaList")
 );
-const CreateCorrespondencia = lazy(() =>
-  import("../data/correspondencia/correspondenciaRecibida/CreateRecibida")
-);
 const CorrespondenciaRecibidaList = lazy(() =>
   import("../data/correspondencia/correspondenciaRecibida/CorrespondenciaRecibidaList")
 );
 const CorrespondenciaEnviadaList = lazy(() =>
   import("../data/correspondencia/correspondenciaEnviada/CorrespondenciaEnviadaList")
-);
-const EditCorrespondencia = lazy(() =>
-  import("../data/correspondencia/correspondenciaRecibida/EditRecibida")
 );
 const CreateRecibida = lazy(() =>
   import("../data/correspondencia/correspondenciaRecibida/CreateRecibida")
@@ -22,8 +16,8 @@ const DetailRecibida = lazy(() =>
   import("../data/correspondencia/correspondenciaRecibida/DetailRecibida")
 );
 //Sería registroDocEnviado
-const DetailDocSaliente = lazy(() =>
-  import("../data/correspondencia/correspondenciaEnviada/DetailDocSaliente")
+const DetailEnviada = lazy(() =>
+  import("../data/correspondencia/correspondenciaEnviada/DetailEnviada")
 );
 const EditRecibida = lazy(() =>
   import("../data/correspondencia/correspondenciaRecibida/EditRecibida")
@@ -52,12 +46,8 @@ export const correspondenciaRoutes = [
     element: <CorrespondenciaEnviadaList />,
   },
   {
-    path: "/createCorrespondencia",
-    element: <CreateCorrespondencia />,
-  },
-  {
-    path: "/editCorrespondencia/:id",
-    element: <EditCorrespondencia />,
+    path: "/editEnviada/:id",
+    element: <EditEnviada />,
   },
   {
     path: "/createRecibida",
@@ -67,13 +57,13 @@ export const correspondenciaRoutes = [
     path: "/detailRecibida/:id",
     element: <DetailRecibida />,
   },
+ {
+  path: "/detailEnviada/:id",
+  element: <DetailEnviada />,
+ },
   {
-    path: "/detailDocSaliente/:id",
-    element: <DetailDocSaliente />,
-  },
-  {
-    path: "/editRecibida/:id",
-    element: <EditRecibida />,
+    path: "/editEnviada/:id",
+    element: <EditEnviada />,
   },
   {
     path: "/createContacto",
@@ -110,5 +100,9 @@ export const correspondenciaRoutes = [
   {
     path: "/editEnviada/:id",
     element: <EditEnviada />,
+  },
+  {
+    path:"editRecibida/:id",
+    element:<EditRecibida/>
   }
 ];

@@ -1,15 +1,34 @@
 import { useFormEntity } from "../../../utils/useFormEntity";
-import { usePlantillaDocumentos, useCorrespondenciaElaboradaMutations, useContactos, useUsers } from "../../../hooks/useEntities";
+import { 
+  usePlantillaDocumentos, 
+  useCorrespondenciaElaboradaMutations, 
+  useContactos, 
+  useUsers,
+  useCorrespondenciaRecibida // Add this import
+} from "../../../hooks/useEntities";
 import { InputField } from "../../../components/shared/InputField";
 import { SelectField } from "../../../components/shared/SelectField";
 import { FaPlus, FaBackspace, FaEye } from "react-icons/fa";
 import CreateEntity from "../../../components/shared/CreateEntity";
 import { UserCheckboxList } from "../../../components/shared/UserCheckboxList";
 import InputView from "../../../components/shared/InputView";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 
 export default function CreateElaborada() {
   const { paraSelectsdestructuringYMap, options } = useFormEntity();
+  const [searchParams] = useSearchParams();
+  const respuestaAId = searchParams.get("respuesta_a");
+  const [nroRegistroRespuesta, setNroRegistroRespuesta] = useState("");
+
+  // Fetch the response document if respuestaAId is provided
+  const { data: respuestaData, isLoading: isLoadingRespuesta } = useCorrespondenciaRecibida(respuestaAId);
+  
+  useEffect(() => {
+    if (respuestaData?.data?.nro_registro) {
+      setNroRegistroRespuesta(respuestaData.data.nro_registro);
+    }
+  }, [respuestaData]);
 
   const { data: plantillasData, isLoading: loadingPlantillas, error: errorPlantillas } = usePlantillaDocumentos({ all_data: true });
   const { data: contactosData, isLoading: loadingContactos, error: errorContactos } = useContactos({ all_data: true });
@@ -50,6 +69,8 @@ export default function CreateElaborada() {
     return <div className="text-red-500 text-center">Error al cargar datos</div>;
   }
 
+
+
   const opcionPrioridad = [
     { id: "alta", nombre: "Alta" },
     { id: "media", nombre: "Media" },
@@ -74,6 +95,8 @@ export default function CreateElaborada() {
     plantilla_id: "",
     usuarios: [],
     cite: "",
+    respuesta_a: respuestaAId || "",
+    
   };
 
   const camposExtras = (formValues) => ({
@@ -89,6 +112,7 @@ export default function CreateElaborada() {
       ? formValues.usuarios.map(Number)
       : [],
     cite: formValues.cite,
+    respuesta_a: respuestaAId ? Number(respuestaAId) : null,
   });
 
   const paraEnvio = (formValues) => ({
@@ -97,11 +121,11 @@ export default function CreateElaborada() {
   });
 
   const construirCampos = (formValues, manejarEntradas) => [
-    {
-      component: InputView,
-      label: "CITE generado",
-      name: "cite",
-    },  
+    //{
+    //  component: InputView,
+    //  label: "CITE generado",
+    //  name: "cite",
+    //},  
     {
       component: InputField,
       label: "Referencia",
@@ -184,7 +208,7 @@ export default function CreateElaborada() {
 
   const paraNavegacion = {
     title: "Elaborar Documento",
-    subTitle: "Correspondencia Interna/Externa",
+    subTitle: `Correspondencia Interna/Externa${nroRegistroRespuesta ? ` - Respuesta a: ${nroRegistroRespuesta}` : ''}`,
     icon: FaPlus,
     actions: [
       {
