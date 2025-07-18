@@ -8,7 +8,7 @@ const Sidebar = ({ isVisible }) => {
 
   return (
     <div
-      className={`sticky z-50 shadow border-red-500 border-2 w-64 transition-all duration-300 ${
+      className={`sticky z-50 shadow border-2 w-64 transition-all duration-300 ${
         isVisible ? 'flex flex-col' : 'hidden'
       } h-[calc(100vh)]`}
     >

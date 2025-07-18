@@ -1,58 +1,57 @@
-import { InputField } from "../../../components/shared/InputField"
+import {
+  useCorrespondenciaRecibidaMutations,
+  useCorrespondenciaRecibida,
+} from "../../../hooks/useEntities";
+import { useContactos } from "../../../hooks/useEntities";
+import { useFormEntity } from "../../../utils/useFormEntity";
+import { obtenerIdUser } from "../../../utils/auth";
+import { InputField } from "../../../components/shared/InputField";
 import { SelectField } from "../../../components/shared/SelectField";
 import EditEntity from "../../../components/shared/EditEntity";
-import { useCorrespondenciaRecibidaMutations, useContactos, useCorrespondenciaRecibida } from "../../../hooks/useEntities";
 import { FaBackspace, FaEye, FaPencilAlt, FaPlus } from "react-icons/fa";
-import { useFormEntity } from "../../../utils/useFormEntity";
-import {  obtenerIdUser } from "../../../utils/auth";
+import { MultipleInputs } from "../../../components/shared/MultipleInputs";
 
-export default function editRecibida() {
-
+export default function editEnviada() {
   const { paraSelectsdestructuringYMap } = useFormEntity();
 
+  const {
+    data: contactosData,
+    isLoading: loadingContactos,
+    error: errorContactos,
+  } = useContactos({ all_data: true });
+  const contactosArray = contactosData?.data || [];
+
+  const { options } = useFormEntity();
+
+  const contactoOptions = () =>
+    contactosArray
+      ? options(contactosArray, "id_contacto", "nombre_completo")
+      : [];
+
+  const estadoOptions = [
+    { id: "enviado", nombre: "Enviado" },
+    { id: "en_revision", nombre: "En revisión" },
+    { id: "aprobado", nombre: "Aprobado" },
+    { id: "rechazado", nombre: "Rechazado" },
+  ];
   const logicaNegocio = {
     idUsuario: obtenerIdUser(),
   };
 
-  const contactoOptions = ()  => //Modelo 2
-    paraSelectsdestructuringYMap(
-      useContactos,
-      true, //maneja la logica de la paginacion
-      "id_contacto",
-      "nombre_completo",
-      
-    );
-    
-  const opcionesTipo = [
-    { id: "enviado", nombre: "Enviado" },
-    { id: "recibido", nombre: "Recibido" },
-  ];
-  
-  const opcionPrioridad = [
-    { id: "alta", nombre: "Alta" },
-    { id: "media", nombre: "Media" },
-    { id: "baja", nombre: "Baja" },
-  ];
-
-  const opcionEstado = [
-    { id: "borrador", nombre: "Borrador" },
-    { id: "en revision", nombre: "En revisión" },
-    { id: "aprobado", nombre: "Aprobado" },
-    { id: "rechazado", nombre: "Rechazado" },
-
-  ];
-
-  const configuracionFormulario = (entidad) => ({ //Modelo 3 - Correspondencia
+  const configuracionFormulario = (entidad) => ({
+    //Modelo 3 - Correspondencia
     fecha_recepcion: entidad?.data?.fecha_recepcion || "",
-    fecha_respuesta: entidad?.data?.fecha_respuesta || "",
     referencia: entidad?.data?.referencia || "",
     descripcion: entidad?.data?.descripcion || "",
+    contacto: entidad?.data?.contacto || "", //Es el nombre del FK que tiene conectado con la correspondencia
     paginas: entidad?.data?.paginas || "",
     prioridad: entidad?.data?.prioridad || "",
     estado: entidad?.data?.estado || "",
-    documento: entidad?.data?.documento || "",
-    contacto: entidad?.data?.contacto || "", //Es el nombre del FK que tiene conectado con la correspondencia
- });
+    fecha_respuesta: entidad?.data?.fecha_respuesta || "",
+    documentos: Array.isArray(entidad?.data?.documentos)
+      ? entidad.data.documentos
+      : [],
+  });
 
   const camposExtras = (formValues) => ({
     contacto: Number(formValues.contacto),
@@ -62,27 +61,17 @@ export default function editRecibida() {
 
   const paraEnvio = (formValues) => ({
     entityId: formValues.id_correspondencia, //del modelo correspondencia
-    link: "/correspondenciaEntranteList",
+    link: "/correspondenciaRecibidaList",
     params: camposExtras(formValues),
   });
 
-  const construirCampos = (formValues, manejarEntradas) => [ //formValues es para el manejo de los estados
-
+  const construirCampos = (formValues, manejarEntradas) => [
     {
-      component : InputField,
-      label : "Fecha de Recepción",
-      name : "fecha_recepcion",
-      type : "date",
-      required : true,
-      onChange : manejarEntradas.handleInputChange,
-    },
-    {
-        component : InputField,
-        label : "Fecha de Respuesta",
-        name : "fecha_respuesta",
-        type : "date",
-        required : true,
-        onChange : manejarEntradas.handleInputChange,
+      component: InputField,
+      label: "Fecha de Recepcion",
+      name: "fecha_recepcion",
+      required: true,
+      onChange: manejarEntradas.handleInputChange,
     },
     {
       component: InputField,
@@ -92,42 +81,18 @@ export default function editRecibida() {
       onChange: manejarEntradas.handleInputChange,
     },
     {
-      component : InputField,
-      label : "Descripción",
-      name : "descripcion",
-      required : true,
-      onChange : manejarEntradas.handleInputChange,
+      component: InputField,
+      label: "Descripción",
+      name: "descripcion",
+      required: true,
+      onChange: manejarEntradas.handleInputChange,
     },
     {
-      component : InputField,
-      label : "Paginas",
-      name : "paginas",
-      type : "number",
-      required : true,
-      onChange : manejarEntradas.handleInputChange,
-    },
-    {
-      component : SelectField,
-      label : "Prioridad",
-      name : "prioridad",
-      options : opcionPrioridad,
-      onChange : manejarEntradas.handleInputChange,
-      required : true,
-    },
-    {
-      component : SelectField,
-      label : "Estado",
-      name : "estado",
-      options : opcionEstado,
-      onChange : manejarEntradas.handleInputChange,
-      required : true,
-    },
-    {
-      component : SelectField,
-      label : "Contacto",
-      name : "contacto", //Hace referencia al modelo correspondencia
-      options : contactoOptions(),
-      onChange : manejarEntradas.handleInputChange,
+      component: SelectField,
+      label: "Contacto",
+      name: "contacto",
+      options: contactoOptions(),
+      onChange: manejarEntradas.handleInputChange,
       actionButtons: [
         {
           to: "/editUsuario",
@@ -145,43 +110,65 @@ export default function editRecibida() {
           estilos: "text-blue-600 hover:bg-blue-600 hover:text-white p-1",
         },
       ],
-        
+    },
+    { 
+      component: InputField,
+      label: "Paginas",
+      name: "paginas",
+      required: true,
+      onChange: manejarEntradas.handleInputChange,
     },
     {
       component: InputField,
+      label: "Prioridad",
+      name: "prioridad",
+      required: true,
+      onChange: manejarEntradas.handleInputChange,
+    },
+    {
+      component: SelectField,
+      label: "Estado",
+      name: "estado",
+      options: estadoOptions,
+      onChange: manejarEntradas.handleInputChange,
+    },
+    {
+      component: InputField,
+      label: "Fecha de Respuesta",
+      name: "fecha_respuesta",
+      required: true,
+      onChange: manejarEntradas.handleInputChange,
+    },
+    {
+      component: MultipleInputs,
       label: "Documento",
-      name: "documento",
+      name: "documentos",
       type: "file",
       onChange: manejarEntradas.handleInputChange,
-      required: false,
-    },
-
-  ]; 
-  
+    },  
+  ];
   const paraNavegacion = {
-    title : "Editar Correspondencia Recibida",
-    subTitle : "Formulario para editar correspondencia Recibida",
-    icon : FaPlus,
-    actions : [
-        {
-            to : "/correspondenciaRecibidaList",
-            label : "Volver",
-            icon : FaBackspace,
-            estilos : "bg-gray-500 hover:bg-gray-800 text-white px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",
-        },
-    ]
-
-  }
-  
+    title: "Editar Correspondencia Enviada",
+    subTitle: "Formulario para editar correspondencia Enviada",
+    icon: FaPlus,
+    actions: [
+      {
+        to: "/correspondenciaEnviadaList",
+        label: "Volver",
+        icon: FaBackspace,
+        estilos:
+          "bg-gray-500 hover:bg-gray-800 text-white px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",
+      },
+    ],
+  };
   return (
     <EditEntity
-        useEntityMutations={useCorrespondenciaRecibidaMutations}
-        useEntity={useCorrespondenciaRecibida}
-        configForm={configuracionFormulario}
-        paraEnvio={paraEnvio}
-        construirCampos={construirCampos}
-        paraNavegacion={paraNavegacion}
+      useEntityMutations={useCorrespondenciaRecibidaMutations}
+      useEntity={useCorrespondenciaRecibida}
+      configForm={configuracionFormulario}
+      paraEnvio={paraEnvio}
+      construirCampos={construirCampos}
+      paraNavegacion={paraNavegacion}
     />
-
   );
 }

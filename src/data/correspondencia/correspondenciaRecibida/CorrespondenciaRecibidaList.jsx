@@ -47,7 +47,7 @@ function CorrespondenciaRecibidaList() {
             Ver
           </a>
           <a
-            href={`/editEnviada/${item.id_correspondencia}`}
+            href={`/editRecibida/${item.id_correspondencia}`}
             className="bg-green-800 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded"
           >
             Editar

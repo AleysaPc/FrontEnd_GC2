@@ -26,46 +26,69 @@ export const MultipleInputs = ({ value = [], onChange }) => {
 
   return (
     <div className="space-y-4">
-      {Array.isArray(value) && value.map((doc, index) => (  // ✅ Validación segura
-        <div key={index} className="border p-4 rounded-md shadow-sm space-y-2">
-          {/* Campo: Nombre del documento */}
-          <div>
-            <label className="block font-medium">Nombre del documento:</label>
-            <input
-              type="text"
-              value={doc.nombre_documento || ""}
-              onChange={(e) =>
-                handleChange(index, "nombre_documento", e.target.value)
-              }
-              className="w-full border border-gray-300 rounded px-2 py-1"
-              placeholder="Ej: Contrato, Informe..."
-            />
-          </div>
-
-          {/* Campo: Archivo */}
-          <div>
-            <label className="block font-medium">Archivo:</label>
-            <input
-              type="file"
-              onChange={(e) =>
-                handleChange(index, "archivo", e.target.files[0])
-              }
-              className="w-full"
-            />
-          </div>
-
-          {/* Botón: Eliminar */}
-          <button
-            type="button"
-            onClick={() => handleRemove(index)}
-            className="text-red-600 hover:underline"
+      {Array.isArray(value) &&
+        value.map((doc, index) => (
+          <div
+            key={index}
+            className="border p-4 rounded-md shadow-sm space-y-2"
           >
-            Eliminar documento
-          </button>
-        </div>
-      ))}
+            {/* Nombre del documento */}
+            <div>
+              <label className="block font-medium">Nombre del documento:</label>
+              <input
+                type="text"
+                value={doc.nombre_documento || ""}
+                onChange={(e) =>
+                  handleChange(index, "nombre_documento", e.target.value)
+                }
+                className="w-full border border-gray-300 rounded px-2 py-1"
+                placeholder="Ej: Contrato, Informe..."
+              />
+            </div>
 
-      {/* Botón: Agregar otro documento */}
+            {/* Archivo actual (si existe como string/URL) */}
+            {doc.archivo && typeof doc.archivo === "string" && (
+              <div>
+                <span className="block text-sm text-gray-700">Documento actual:</span>
+                <a
+                  href={doc.archivo}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600 hover:underline text-sm"
+                >
+                  Ver documento
+                </a>
+              </div>
+            )}
+
+            {/* Input para subir nuevo archivo */}
+            <div>
+              <label className="block font-medium">
+                {doc.archivo && typeof doc.archivo === "string"
+                  ? "Cambiar documento"
+                  : "Subir documento"}
+              </label>
+              <input
+                type="file"
+                onChange={(e) =>
+                  handleChange(index, "archivo", e.target.files[0])
+                }
+                className="w-full"
+                accept=".pdf,.doc,.docx"
+              />
+            </div>
+
+            {/* Eliminar */}
+            <button
+              type="button"
+              onClick={() => handleRemove(index)}
+              className="text-red-600 hover:underline"
+            >
+              Eliminar documento
+            </button>
+          </div>
+        ))}
+
       <button
         type="button"
         onClick={handleAdd}
