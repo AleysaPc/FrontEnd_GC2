@@ -5,7 +5,7 @@ import '@react-pdf-viewer/default-layout/lib/styles/index.css';
 
 const VisorPDF = ({ url }) => {
   return (
-    <div style={{ height: '900px', width: '100%' }} className='border-2 border-gray-400'>
+    <div style={{ height: '500px', width: '100%' }} className='border-2 border-gray-400'>
       <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.min.js">
         <Viewer fileUrl={url} />
       </Worker>

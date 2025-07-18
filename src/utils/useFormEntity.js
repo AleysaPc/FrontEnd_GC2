@@ -59,13 +59,13 @@ export const useFormEntity = () => {
   ) => {
     event.preventDefault(); // Prevenir acción por defecto del formulario
 
-    // Combinar formValues con params
+    // Combinar formValues con params adicionales
     const dataToSend = {
       ...formValues,
       ...params,
     };
 
-    // Filtrar valores válidos
+    // Filtrar valores válidos y excluir URLs de archivos ya existentes (no se envían como archivos)
     const filteredData = {};
     Object.entries(dataToSend).forEach(([key, value]) => {
       if (
@@ -77,29 +77,53 @@ export const useFormEntity = () => {
         typeof value === "string" &&
         (value.startsWith("http") || value.startsWith("blob:"))
       ) {
-        // omitimos archivos existentes representados como URLs
+        // No enviar URL de archivos como archivos
+        // En cambio, enviaremos su id en la transformación posterior
       } else if (value !== null && value !== undefined) {
         filteredData[key] = value;
       }
     });
 
-    // 🔧 Transformar array de archivos (si vienen como solo files) a objetos tipo { archivo: File }
+    // Transformar documentos para que incluyan id (si es documento existente) o archivo (si es nuevo)
     if (Array.isArray(filteredData.documentos)) {
-      const documentosTransformados = filteredData.documentos.map((archivo) => {
-        // Si ya es objeto con campo archivo, lo dejamos igual
-        if (archivo?.archivo) return archivo;
-        return { archivo };
-      });
-      filteredData.documentos = documentosTransformados;
+      filteredData.documentos = filteredData.documentos
+        .filter((doc) => doc.archivo || doc.id) // evita enviar documentos vacíos
+        .map((doc) => {
+          if (
+            doc?.archivo &&
+            (doc.archivo instanceof File || doc.archivo instanceof Blob)
+          ) {
+            return {
+              archivo: doc.archivo,
+              nombre_documento: doc.nombre_documento || "",
+            };
+          } else if (typeof doc.archivo === "string" && doc.id) {
+            return {
+              id: doc.id,
+              nombre_documento: doc.nombre_documento || "",
+            };
+          } else if (doc.id) {
+            return {
+              id: doc.id,
+              nombre_documento: doc.nombre_documento || "",
+            };
+          } else {
+            return null; // no tiene archivo ni id, no se envía
+          }
+        })
+        .filter(Boolean); // elimina nulls
     }
 
-    // 📦 Crear FormData si contiene archivos
+    // Detectar si hay archivos para enviar multipart/form-data
     const contieneArchivo = Object.values(filteredData).some(
       (value) =>
         value instanceof File ||
         value instanceof Blob ||
         (Array.isArray(value) &&
-          value.some((item) => item.archivo instanceof File))
+          value.some(
+            (item) =>
+              item.archivo instanceof File || item.archivo instanceof Blob
+          ))
     );
 
     let data;
@@ -110,8 +134,14 @@ export const useFormEntity = () => {
       Object.entries(filteredData).forEach(([key, value]) => {
         if (key === "documentos" && Array.isArray(value)) {
           value.forEach((doc, index) => {
-            if (doc?.archivo) {
+            if (
+              doc?.archivo &&
+              (doc.archivo instanceof File || doc.archivo instanceof Blob)
+            ) {
               data.append(`documentos[${index}][archivo]`, doc.archivo);
+            }
+            if (doc?.id) {
+              data.append(`documentos[${index}][id]`, doc.id);
             }
             if (doc?.nombre_documento) {
               data.append(
@@ -122,24 +152,28 @@ export const useFormEntity = () => {
           });
         } else if (key === "usuarios" && Array.isArray(value)) {
           value.forEach((userId) => {
-            data.append("usuarios", userId); // ⬅ esto es clave
+            data.append("usuarios", userId);
           });
         } else {
+          // Para otros campos
           data.append(key, value);
         }
       });
     } else {
-      data = filteredData; // Enviar como JSON si no hay archivos
+      // Enviar como JSON si no hay archivos
+      data = filteredData;
     }
 
-    // 🚀 Enviar
+    // Ejecutar la mutación adecuada (crear o actualizar)
     const mutation = entityId ? updateMutation : createMutation;
-    // Log data based on its type
+
+    // Logs para depuración
     if (data instanceof FormData) {
       console.log("FormData entries:", [...data.entries()]);
     } else {
       console.log("Plain object data:", data);
     }
+
     mutation.mutate(
       { id: entityId || undefined, data },
       {
@@ -165,15 +199,19 @@ export const useFormEntity = () => {
 
   const paraSelectsdestructuringYMap = (hook, all_data, keyId, keyNombre) => {
     const { data: response = {} } = hook(all_data);
-    
+
     // Verificar si hay datos válidos
-    const items = response?.data ? (Array.isArray(response.data) ? response.data : [response.data]) : [];
-    
+    const items = response?.data
+      ? Array.isArray(response.data)
+        ? response.data
+        : [response.data]
+      : [];
+
     return items
-      .filter(item => item) // Eliminar items undefined o null
+      .filter((item) => item) // Eliminar items undefined o null
       .map((item) => ({
-        id: item?.[keyId] || '', // Usar operador opcional y valor por defecto
-        nombre: item?.[keyNombre] || '',
+        id: item?.[keyId] || "", // Usar operador opcional y valor por defecto
+        nombre: item?.[keyNombre] || "",
       }));
   };
 
