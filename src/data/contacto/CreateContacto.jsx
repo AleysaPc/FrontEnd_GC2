@@ -23,9 +23,6 @@ export default function CreateContacto() {
 
   const { options } = useFormEntity();
 
-  const contactoOptions = () =>
-    contactosArray ? options(contactosArray, "id_contacto", "nombre_completo") : [];
-
   const institucionOptions = () =>
     institucionesArray ? options(institucionesArray, "id_institucion", "razon_social") : [];
 
