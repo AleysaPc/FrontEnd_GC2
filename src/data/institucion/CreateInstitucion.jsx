@@ -4,6 +4,7 @@ import { FaBackspace, FaPlus } from "react-icons/fa";
 import { obtenerIdUser } from "../../utils/auth";
 import CreateEntity from "../../components/shared/CreateEntity";
 import { useInstitucion } from "../../hooks/useEntities";
+import FormattedDate from "../../components/shared/FormattedDate";
 
 export default function CreateInstitucion() {
     
@@ -47,6 +48,7 @@ export default function CreateInstitucion() {
             component: InputField,
             label: "Fecha Fundacion",
             name: "fecha_fundacion",
+            type: "date",
             required: true,
             onChange: manejarEntradas.handleInputChange,
         },

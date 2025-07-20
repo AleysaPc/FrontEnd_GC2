@@ -4,7 +4,6 @@ import ErrorMessage from "../../components/shared/ErrorMessaje";
 import Pagination from "../../components/shared/Pagination";
 import { Navigation } from "../../components/shared/Navigation";
 import { useFormEntity } from "../../utils/useFormEntity";
-import BarraBusqueda from "../../components/shared/BarraBusqueda";
 import FiltroBusquedaOrden from "../../components/shared/FiltroBusquedaOrden";
 import { useState } from "react";
 
@@ -19,6 +18,8 @@ function EntityList({ entityData }) {
     itemKey,
     actions = [],
     icon,
+    filtros,
+    ordenes,
   } = entityData;
  
   //Los set son para modificar los estados de las variables
@@ -30,30 +31,6 @@ function EntityList({ entityData }) {
   const [filters, setFilters] = useState({});
   const [ordering, setOrdering] = useState("");
 
-  
-  //Para filtros y ordenamiento compuesto
-  const filtros=[
-    { name: "referencia", placeholder: "Referencia contiene..." },
-    { name: "contacto__nombre_contacto", placeholder: "Nombre contacto..." },
-    { name: "contacto__apellido_pat_contacto", placeholder: "Apellido paterno..." },
-    { name: "contacto__apellido_mat_contacto", placeholder: "Apellido materno..." },
-    { name: "contacto__institucion__razon_social", placeholder: "Institución..." },
-  ];
-  const ordenes=[
-    { name: "referencia", label: "Referencia" },
-    { name: "contacto__nombre_contacto", label: "Nombre contacto" },
-    { name: "contacto__apellido_pat_contacto", label: "Apellido paterno" },
-    { name: "contacto__apellido_mat_contacto", label: "Apellido materno" },
-    { name: "contacto__institucion__razon_social", label: "Institución" },
-  ]
-  const orderFields = ordenes;
-  const filterFields = filtros;
-
-  const manejarBusqueda = (termino) => {
-    setSearch(termino); // Actualiza el estado para disparar la búsqueda
-    setPage(1); //resetea la pagina a 1
-  };
-
   // Función para actualizar filtros específicos
   const manejarFiltro = (nuevosValores) => {
     // Extraemos los valores desde el objeto combinado que viene desde FiltroBusquedaOrden
@@ -62,12 +39,6 @@ function EntityList({ entityData }) {
     setOrdering(ordering || '');
     setFilters(restFilters || {});
     setPage(1);
-  };
-  
-
-  // Función para actualizar orden
-  const manejarOrden = (campoOrden) => {
-    setOrdering(campoOrden);
   };
 
   const { todosDatosOpaginacion } = useFormEntity();
@@ -130,8 +101,7 @@ function EntityList({ entityData }) {
   };
 
   return (
-    <div className="space-y-1 p-4">
-      {" "}
+    <div className="">
       {/* este es el div principal*/}
       <Navigation
         title={title}
@@ -149,33 +119,12 @@ function EntityList({ entityData }) {
           total_pages={total_pages}
         />
       )}
-      <BarraBusqueda onSearch={manejarBusqueda} placeholder="Buscar por cite" />
       <FiltroBusquedaOrden
         onChange={manejarFiltro}
-        filtros={filterFields}
-        ordenes={orderFields}
-        placeholderSearch="Buscar por cite"
+        filtros={filtros}
+        ordenes={ordenes}
+        pleholderSearacch="Search"
       />
-      
-      {/* Aquí podrías renderizar inputs/selects para filtros */}
-      {/* Select para ordenar */}
-      <div>
-        <label>Ordenar por:</label>
-        <select
-          value={ordering}
-          onChange={(e) => manejarOrden(e.target.value)}
-          className="border px-2 py-1 rounded"
-        >
-          <option value="">-- Ninguno --</option>
-          <option value="precio">Precio</option>
-          <option value="fecha_creacion">Fecha de creación</option>
-          <option value="nombre">Nombre</option>
-          <option value="-precio">Precio (desc)</option>
-          <option value="-fecha_creacion">Fecha de creación (desc)</option>
-          <option value="-nombre">Nombre (desc)</option>
-        </select>
-      </div>
-
       <SelectPerPage
         perPage={perPage}
         setPerPage={setPerPage}

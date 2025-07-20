@@ -32,8 +32,9 @@ const MainLayout = () => {
       <div className="flex-1 flex flex-col h-screen">
         <Navbar toggleSidebar={toggleSidebar} />
         
-        <main className="flex-1 overflow-y-auto bg-gray-100 p-4">
-          <div className="max-w-7xl mx-auto bg-white border-2 rounded-lg shadow-sm min-h-full">
+        <main className="flex-1 overflow-y-auto bg-gray-100 p-4 md:p-6">
+        {/* bg-white border-2 rounded-lg shadow-sm   para una mejor referencia si hay algo vacio */}
+          <div className="max-w-7xl mx-auto w-full min-h-[200px]">
             <Outlet />
           </div>
         </main>

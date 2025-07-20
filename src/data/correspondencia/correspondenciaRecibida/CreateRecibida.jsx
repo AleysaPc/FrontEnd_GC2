@@ -20,8 +20,16 @@ export default function createRecibida() {
     idUsuario: obtenerIdUser(),
   };
 
-  const { data: contactosData, isLoading: loadingContactos, error: errorContactos } = useContactos({ all_data: true });
-  const { data: usuariosData, isLoading: loadingUsuarios, error: errorUsuarios } = useUsers({ all_data: true });
+  const {
+    data: contactosData,
+    isLoading: loadingContactos,
+    error: errorContactos,
+  } = useContactos({ all_data: true });
+  const {
+    data: usuariosData,
+    isLoading: loadingUsuarios,
+    error: errorUsuarios,
+  } = useUsers({ all_data: true });
 
   // Asegurarnos de que los datos sean arrays
   const contactosArray = contactosData?.data || [];
@@ -30,18 +38,20 @@ export default function createRecibida() {
   const { options } = useFormEntity();
 
   const contactoOptions = () =>
-    contactosArray ? options(contactosArray, "id_contacto", "nombre_completo") : [];
+    contactosArray
+      ? options(contactosArray, "id_contacto", "nombre_completo")
+      : [];
 
   const usuarioOptions = () =>
-    usuariosArray ? options(usuariosArray, "id", "email") : []; 
+    usuariosArray ? options(usuariosArray, "id", "email") : [];
 
   // Manejo de errores
   useEffect(() => {
     if (errorContactos) {
-      console.error('Error al cargar contactos:', errorContactos);
+      console.error("Error al cargar contactos:", errorContactos);
     }
     if (errorUsuarios) {
-      console.error('Error al cargar usuarios:', errorUsuarios);
+      console.error("Error al cargar usuarios:", errorUsuarios);
     }
   }, [errorContactos, errorUsuarios]);
 
@@ -50,7 +60,9 @@ export default function createRecibida() {
   }
 
   if (errorContactos || errorUsuarios) {
-    return <div className="text-red-500 text-center">Error al cargar datos</div>;
+    return (
+      <div className="text-red-500 text-center">Error al cargar datos</div>
+    );
   }
 
   const opcionPrioridad = [
@@ -204,10 +216,10 @@ export default function createRecibida() {
     actions: [
       {
         to: "/correspondenciaList",
-        label: "Volver",
+        label: "Cancelar",
         icon: FaBackspace,
         estilos:
-          "bg-red-800 hover:bg-gray-800 text-white px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",
+          "border-2 border-gray-700 rounded-lg bg-gray-600 text-white p-2 hover:bg-gray-100 hover:text-gray-600",
       },
     ],
   };

@@ -1,79 +1,92 @@
-import React, { useState } from 'react';
+import { useState } from "react";
 
-export const FiltroBusquedaOrden = ({
+function FiltroBusquedaOrden({
   onChange,
-  filtros = [],       // Array de filtros: [{ name, placeholder }]
-  ordenes = [],       // Array de órdenes: [{ name, label }]
-  placeholderSearch = "Buscar...",
-}) => {
-  const [search, setSearch] = useState('');
-  const [orden, setOrden] = useState('');
-  const [valoresFiltro, setValoresFiltro] = useState({});
+  filtros = [],
+  ordenes = [],
+  placeholderSearch,
+}) {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [ordering, setOrdering] = useState("");
+  const [filterValues, setFilterValues] = useState({});
 
-  const handleSearchChange = (e) => {
-    setSearch(e.target.value);
+  const manejarCambioFiltro = (e, name) => {
+    const value = e.target.value;
+    setFilterValues((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleInputChange = (e, name) => {
-    setValoresFiltro({ ...valoresFiltro, [name]: e.target.value });
+  const manejarEnterFiltro = (e, name) => {
+    if (e.key === "Enter") {
+      onChange({
+        search: searchTerm,
+        ordering,
+        ...filterValues,
+        [name]: e.target.value,
+      });
+    }
   };
 
-  const handleOrdenChange = (e) => {
-    setOrden(e.target.value);
+  const manejarCambioBusqueda = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  const manejarEnterBusqueda = (e) => {
+    if (e.key === "Enter") {
+      onChange({
+        search: searchTerm,
+        ordering,
+        ...filterValues,
+      });
+    }
+  };
+
+  const manejarCambioOrden = (e) => {
+    const value = e.target.value;
+    setOrdering(value);
     onChange({
-      ...valoresFiltro,
-      search,
-      ordering: e.target.value,
-    });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onChange({
-      ...valoresFiltro,
-      search,
-      ordering: orden,
+      search: searchTerm,
+      ordering: value,
+      ...filterValues,
     });
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="grid grid-cols-1 md:grid-cols-3 gap-3 p-3 bg-white shadow rounded-xl"
-    >
+    <div className="flex flex-wrap gap-2 my-2">
       <input
         type="text"
-        className="border p-2 rounded col-span-1"
-        placeholder={placeholderSearch}
-        value={search}
-        onChange={handleSearchChange}
+        placeholder={placeholderSearch || "Buscar..."}
+        value={searchTerm}
+        onChange={manejarCambioBusqueda}
+        onKeyDown={manejarEnterBusqueda}
+        className="border px-2 py-1 rounded w-64"
       />
 
       {filtros.map((filtro) => (
         <input
           key={filtro.name}
           type="text"
-          className="border p-2 rounded"
           placeholder={filtro.placeholder}
-          value={valoresFiltro[filtro.name] || ''}
-          onChange={(e) => handleInputChange(e, filtro.name)}
+          value={filterValues[filtro.name] || ""}
+          onChange={(e) => manejarCambioFiltro(e, filtro.name)}
+          onKeyDown={(e) => manejarEnterFiltro(e, filtro.name)}
+          className="border px-2 py-1 rounded w-48"
         />
       ))}
 
       <select
-        className="border p-2 rounded"
-        value={orden}
-        onChange={handleOrdenChange}
+        value={ordering}
+        onChange={manejarCambioOrden}
+        className="border px-2 py-1 rounded"
       >
-        <option value="">Ordenar por...</option>
-        {ordenes.map((o) => (
-          <React.Fragment key={o.name}>
-            <option value={o.name}>{o.label} ⬆️</option>
-            <option value={`-${o.name}`}>{o.label} ⬇️</option>
-          </React.Fragment>
+        <option value="">-- Ordenar por --</option>
+        {ordenes.map((orden) => (
+          <option key={orden.name} value={orden.name}>
+            {orden.label}
+          </option>
         ))}
       </select>
-    </form>
+    </div>
   );
-};
+}
+
 export default FiltroBusquedaOrden;

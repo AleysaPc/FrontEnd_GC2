@@ -7,7 +7,7 @@ const Navbar = ({ toggleSidebar }) => {
   const logoutUser = useLogout()
 
   return (
-    <nav className="sticky z-5 border-2 flex justify-between p-4"> {/* Modificacion del borde color */}
+    <nav className="sticky z-5 flex justify-between p-4 text-white bg-gray-500">
       <ActionButton icon={FaBars} onClick={toggleSidebar} estilos="p-1" />
       <ActionButton label={'Navbar'} to={'/home'} />
 

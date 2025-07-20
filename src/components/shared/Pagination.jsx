@@ -1,8 +1,9 @@
 import { ActionButton } from "./ActionButton";
 
 const Pagination = ({
-  currentPage = 1,
-  count = 0,
+  current_page = 1,
+  total = 0,
+  total_pages = 0,
   nextPage = null,
   prevPage = null,
   onPageChange,
@@ -19,20 +20,18 @@ const Pagination = ({
   return (
     <div className="flex justify-center space-x-2 bg-whites border-2 border-gray-400 rounded-lg items-center p-1">
       <ActionButton
-        onClick={() => handlePageChange(currentPage - 1)}
+        onClick={() => handlePageChange(current_page - 1)}
         label="<<<"
         estilos={styleBtn}
         disabled={!prevPage} // Deshabilita si está en la primera página
       />
 
       <span className="px-4 py-1 border rounded bg-gray-100 text-sm">
-        {`Página ${currentPage} de ${
-          count === 0 ? 1 : Math.ceil(count / 10)
-        } de ${count}`}
+        {`Página ${current_page} de ${total_pages} de ${total}`}
       </span>
 
       <ActionButton
-        onClick={() => handlePageChange(currentPage + 1)}
+        onClick={() => handlePageChange(current_page + 1)}
         label=">>>"
         estilos={styleBtn}
         disabled={!nextPage} // Deshabilita si está en la última página
