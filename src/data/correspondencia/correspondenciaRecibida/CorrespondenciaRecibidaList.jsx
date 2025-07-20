@@ -1,6 +1,7 @@
 import { useCorrespondenciaRecibidas } from "../../../hooks/useEntities";
 import EntityList from "../../../components/shared/EntityList";
 import FormattedDate from "../../../components/shared/FormattedDate";
+import BuscarDocumentos from "../../../components/shared/BuscarDocumentos";
 
 function CorrespondenciaRecibidaList() {
   const useFields = () => [
@@ -63,8 +64,8 @@ function CorrespondenciaRecibidaList() {
     loadingMessage: "Cargando correspondencias recibidas...",
     errorMessage: "Error al obtener las correspondencias recibidas",
     fetchDataHook: useCorrespondenciaRecibidas,
-    all_data: false, // true para obtener todos los datos, false para paginación
-    itemKey: "id_doc_entrante", //Debe ser igual al modelo
+    all_data: false,
+    itemKey: "id_doc_entrante",
     entityFields: useFields,
     clavesBusqueda: ["referencia"],
     actions: [
@@ -77,6 +78,12 @@ function CorrespondenciaRecibidaList() {
     ],
   };
 
-  return <EntityList entityData={entityData} />;
+  return (
+    <div className="space-y-4">
+      <BuscarDocumentos /> {/* Aquí insertas el componente correctamente */}
+      <EntityList entityData={entityData} />
+    </div>
+  );
 }
+
 export default CorrespondenciaRecibidaList;
