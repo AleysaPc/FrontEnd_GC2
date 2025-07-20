@@ -5,6 +5,7 @@ import Pagination from "../../components/shared/Pagination";
 import { Navigation } from "../../components/shared/Navigation";
 import { useFormEntity } from "../../utils/useFormEntity";
 import BarraBusqueda from "../../components/shared/BarraBusqueda";
+import FiltroBusquedaOrden from "../../components/shared/FiltroBusquedaOrden";
 import { useState } from "react";
 
 function EntityList({ entityData }) {
@@ -19,14 +20,34 @@ function EntityList({ entityData }) {
     actions = [],
     icon,
   } = entityData;
-
+ 
+  //Los set son para modificar los estados de las variables
   const [page, setPage] = useState(1);
-  const [perPage, setPerPage] = useState(10);
+  const [perPage, setPerPage] = useState(10); //Estado inicial
   const [allData, setAllData] = useState(false);
 
   const [search, setSearch] = useState("");
   const [filters, setFilters] = useState({});
   const [ordering, setOrdering] = useState("");
+
+  
+  //Para filtros y ordenamiento compuesto
+  const filtros=[
+    { name: "referencia", placeholder: "Referencia contiene..." },
+    { name: "contacto__nombre_contacto", placeholder: "Nombre contacto..." },
+    { name: "contacto__apellido_pat_contacto", placeholder: "Apellido paterno..." },
+    { name: "contacto__apellido_mat_contacto", placeholder: "Apellido materno..." },
+    { name: "contacto__institucion__razon_social", placeholder: "Institución..." },
+  ];
+  const ordenes=[
+    { name: "referencia", label: "Referencia" },
+    { name: "contacto__nombre_contacto", label: "Nombre contacto" },
+    { name: "contacto__apellido_pat_contacto", label: "Apellido paterno" },
+    { name: "contacto__apellido_mat_contacto", label: "Apellido materno" },
+    { name: "contacto__institucion__razon_social", label: "Institución" },
+  ]
+  const orderFields = ordenes;
+  const filterFields = filtros;
 
   const manejarBusqueda = (termino) => {
     setSearch(termino); // Actualiza el estado para disparar la búsqueda
@@ -34,10 +55,15 @@ function EntityList({ entityData }) {
   };
 
   // Función para actualizar filtros específicos
-  const manejarFiltro = (campo, valor) => {
-    setFilters((prev) => ({ ...prev, [campo]: valor }));
-    setPage(1); //resetea la pagina a 1
+  const manejarFiltro = (nuevosValores) => {
+    // Extraemos los valores desde el objeto combinado que viene desde FiltroBusquedaOrden
+    const { search, ordering, ...restFilters } = nuevosValores;
+    setSearch(search || '');
+    setOrdering(ordering || '');
+    setFilters(restFilters || {});
+    setPage(1);
   };
+  
 
   // Función para actualizar orden
   const manejarOrden = (campoOrden) => {
@@ -46,13 +72,13 @@ function EntityList({ entityData }) {
 
   const { todosDatosOpaginacion } = useFormEntity();
 
-  const paginacion = todosDatosOpaginacion(fetchDataHook, {
+  const paginacion = todosDatosOpaginacion(fetchDataHook, { //Enviar lo que ser requiere
     all_data: allData,
     page: page,
     per_page: perPage,
     search: search,
     filters: filters,
-    ordering: ordering,
+    ordering: ordering, //El azul es el estado inicial y posiblemente el celeste sea el nombre
   });
 
   const {
@@ -124,20 +150,14 @@ function EntityList({ entityData }) {
         />
       )}
       <BarraBusqueda onSearch={manejarBusqueda} placeholder="Buscar por cite" />
+      <FiltroBusquedaOrden
+        onChange={manejarFiltro}
+        filtros={filterFields}
+        ordenes={orderFields}
+        placeholderSearch="Buscar por cite"
+      />
       
       {/* Aquí podrías renderizar inputs/selects para filtros */}
-      {/* Ejemplo para filtro precio mínimo */}
-      <div>
-        <label>Precio mínimo:</label>
-        <input
-          type="number"
-          value={filters.precio_min || ""}
-          onChange={(e) => manejarFiltro("precio_min", e.target.value)}
-          placeholder="Ej: 10"
-          className="border px-2 py-1 rounded"
-        />
-        {/* Agrega otros filtros similares según filterFields */}
-      </div>
       {/* Select para ordenar */}
       <div>
         <label>Ordenar por:</label>

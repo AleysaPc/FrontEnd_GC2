@@ -2,8 +2,14 @@ import { useCorrespondenciaRecibidas } from "../../../hooks/useEntities";
 import EntityList from "../../../components/shared/EntityList";
 import FormattedDate from "../../../components/shared/FormattedDate";
 import BuscarDocumentos from "../../../components/shared/BuscarDocumentos";
-
+import { useState } from "react";
+import FiltroBusquedaOrden from "../../../components/shared/FiltroBusquedaOrden";
 function CorrespondenciaRecibidaList() {
+  const [params, setParams] = useState({}); // Aquí se guardan los filtros dinámicos
+  const handleFiltroChange = (valores) => {
+    setParams(valores); // Cambia los parámetros que se envían al hook
+  };
+
   const useFields = () => [
     { key: "index", label: "#" },
     {
@@ -63,27 +69,18 @@ function CorrespondenciaRecibidaList() {
     subTitle: "Listado de correspondencias recibidas",
     loadingMessage: "Cargando correspondencias recibidas...",
     errorMessage: "Error al obtener las correspondencias recibidas",
-    fetchDataHook: useCorrespondenciaRecibidas,
-    all_data: false,
+    fetchDataHook: useCorrespondenciaRecibidas, //No enviar parametros en el hook, enviar params aparte
     itemKey: "id_doc_entrante",
     entityFields: useFields,
-    clavesBusqueda: ["referencia"],
-    actions: [
-      {
-        to: "/createRecibida",
-        label: "Crear",
-        estilos:
-          "bg-red-800 hover:bg-red-800 text-white px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",
-      },
-    ],
   };
 
   return (
-    <div className="space-y-4">
-      <BuscarDocumentos /> {/* Aquí insertas el componente correctamente */}
-      <EntityList entityData={entityData} />
-    </div>
+    <EntityList entityData={entityData} />
+
+
   );
 }
+
+
 
 export default CorrespondenciaRecibidaList;

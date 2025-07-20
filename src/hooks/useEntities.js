@@ -99,7 +99,7 @@ export const useCorrespondenciaRecibidas = (
     search: "",
   };
 
-  const mergedParams =
+  const mergedParams = //merged es fución
     //params sobreescribe defaultParams si hay campos repetidos
     { ...defaultParams, ...params };
   return useData(
