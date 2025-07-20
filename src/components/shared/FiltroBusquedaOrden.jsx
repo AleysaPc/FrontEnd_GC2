@@ -54,6 +54,14 @@ function FiltroBusquedaOrden({
     <div className="flex flex-wrap gap-2 my-2">
       <input
         type="text"
+        placeholder="Buscar por contenido del documento..."
+        value={filterValues["consulta_semantica"] || ""}
+        onChange={(e) => manejarCambioFiltro(e, "consulta_semantica")}
+        onKeyDown={(e) => manejarEnterFiltro(e, "consulta_semantica")}
+        className="border px-2 py-1 rounded w-64"
+      />
+      <input
+        type="text"
         placeholder={placeholderSearch || "Buscar..."}
         value={searchTerm}
         onChange={manejarCambioBusqueda}

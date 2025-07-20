@@ -27,6 +27,20 @@ function CorrespondenciaRecibidaList() {
       ),
     },
     {
+      key: "similitud",
+      label: "Similitud (%)",
+      render: (item) => {
+        // Por si no llega similitud, mostrar 0 o --
+        if (!item.similitud) return "--";
+        // La similitud viene de backend como CosineDistance, que puede ser 0 a 2,
+        // pero si usas CosineSimilarity o la normalizas, ajusta esta lógica.
+        // Supongamos que viene como valor de distancia: mientras más bajo, más parecido.
+        // Entonces podemos convertirlo así:
+        const similPercent = ((1 - item.similitud) * 100).toFixed(2);
+        return `${similPercent}%`;
+      }
+    },
+    {
       key: "nro_registro",
       label: "Nro. Registro",
     },
