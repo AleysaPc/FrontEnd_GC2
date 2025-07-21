@@ -60,14 +60,14 @@ function FiltroBusquedaOrden({
         onKeyDown={(e) => manejarEnterFiltro(e, "consulta_semantica")}
         className="border px-2 py-1 rounded w-64"
       />
-      <input
+      {/* <input
         type="text"
         placeholder={placeholderSearch || "Buscar..."}
         value={searchTerm}
         onChange={manejarCambioBusqueda}
         onKeyDown={manejarEnterBusqueda}
         className="border px-2 py-1 rounded w-64"
-      />
+      /> */}
 
       {filtros.map((filtro) => (
         <input

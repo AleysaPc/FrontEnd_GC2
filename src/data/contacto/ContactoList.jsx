@@ -1,10 +1,30 @@
 import EntityList from "../../components/shared/EntityList"
 import { useContactos } from "../../hooks/useEntities"
 import FormattedDate from "../../components/shared/FormattedDate"
+import { FaEdit, FaHistory } from "react-icons/fa";
+import { ActionButton } from "../../components/shared/ActionButton";
 
 export default function ContactoList() {
     const useFields = () => [
         { key: "index", label: "#" },
+        {
+            key: "actions",
+            label: "Acciones",
+            render: (item) => (
+              <div className="flex gap-2">
+                <ActionButton
+                  to={`/editContacto/${item.id_contacto}`}
+                  icon={FaEdit}
+                  estilos="hover:bg-gray-600 hover:text-gray-100 text-gray-500 rounded-md flex items-center gap-2 transition duration-200 p-1"
+                />
+                <ActionButton
+                  to={`/historialContacto/${item.id_contacto}`}
+                  icon={FaHistory}
+                  estilos="hover:bg-gray-600 hover:text-gray-100 text-gray-500 rounded-md flex items-center gap-2 transition duration-200 p-1"
+                />
+              </div>
+            ),
+          },
         {
             key: "nombre_contacto",
             label: "Nombre",
@@ -29,26 +49,6 @@ export default function ContactoList() {
             key: "email",
             label: "Email",
         },
-        {
-            key: "acciones",
-            label: "Acciones",
-            render: (item) => (
-              <div className="flex gap-2">
-                <a
-                  //href={`detailDocEntrante/${item.id_correspondencia}`}
-                  className="bg-red-800 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                >
-                  Ver
-                </a>
-                <a
-                  href={`/editContacto/${item.id_contacto}`}
-                  className="bg-green-800 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded"
-                >
-                  Editar
-                </a>
-              </div>
-            ),
-          },
     
     ];
 

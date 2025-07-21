@@ -7,9 +7,9 @@ const Navbar = ({ toggleSidebar }) => {
   const logoutUser = useLogout()
 
   return (
-    <nav className="sticky z-5 flex justify-between p-4 text-white bg-gray-500">
+    <nav className="sticky z-5 flex justify-between p-4 text-white bg-red-700">
       <ActionButton icon={FaBars} onClick={toggleSidebar} estilos="p-1" />
-      <ActionButton label={'Navbar'} to={'/home'} />
+      <ActionButton label={'Bienvenido al Sistema de Gestión de Correspondencia'} to={'/home'} />
 
       {/* {sidebarToggle && (
         <div>

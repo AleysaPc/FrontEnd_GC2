@@ -9,6 +9,7 @@ export function ActionButton({
   onClick,
   disabled = false,
   to,
+  title
 }) {
   const buttonClasses = `flex items-center transition duration-200 ${estilos}`;
 
@@ -29,6 +30,7 @@ export function ActionButton({
       className={buttonClasses}
       onClick={onClick}
       disabled={disabled}
+      title={title}
     >
       {content}
     </button>

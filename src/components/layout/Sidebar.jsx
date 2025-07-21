@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import SidebarMenu from './SidebarMenu'
 import { menus } from '../../data/SidebarData'
-import { FaCrown } from 'react-icons/fa'
+import { FaBuilding, FaCrown } from 'react-icons/fa'
 
 const Sidebar = ({ isVisible }) => {
   const [openMenu, setOpenMenu] = useState(null)
@@ -13,25 +13,25 @@ const Sidebar = ({ isVisible }) => {
       } h-[calc(100vh)]`}
     >
       {/* titulo */}
-      <div className="p-4 px-6 text-center flex items-center gap-2 bg-red-500">
-        <FaCrown className="text-white text-2xl" />
-        <h1 className="text-white text-xl font-bold">Conquistador</h1>
+      <div className="p-4 px-6 bg-red-700 flex items-center justify-center gap-2">
+        <FaBuilding className="text-white text-2xl" />
+        <h1 className="text-white text-xl font-bold">FDLP</h1>
       </div>
 
       {/* Sección de Perfil de Usuario */}
-      <div className="px-4 py-6 border-b flex flex-col items-center justify-center text-center bg-orange-500">
+      <div className="px-4 py-6 border-b flex flex-col items-center justify-center text-center bg-green-700">
         {/* Avatar */}
         <div className="mb-3">
-          <div className="w-16 h-16 rounded-full bg-blue-500 flex items-center justify-center text-white font-semibold text-xl">
-            WF
+          <div className="w-16 h-16 rounded-full bg-red-700 flex items-center justify-center text-white font-semibold text-xl">
+            APC
           </div>
         </div>
         {/* Información del usuario */}
         <div className="text-center">
-          <p className="text-sm font-medium text-white">
-            William Fabricio Tito Vargas
+          <p className="text-xl font-medium text-white">
+            Aleysa
           </p>
-          <p className="text-xs text-white">wil.fabri777@gmail.com</p>
+          <p className="text-xl text-white">aleysa@gmail.com</p>
         </div>
       </div>
 

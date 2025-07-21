@@ -71,6 +71,7 @@ export default function editEnviada() {
       label: "Fecha de Recepcion",
       name: "fecha_recepcion",
       required: true,
+      type: "date",
       onChange: manejarEntradas.handleInputChange,
     },
     {
@@ -95,17 +96,17 @@ export default function editEnviada() {
       onChange: manejarEntradas.handleInputChange,
       actionButtons: [
         {
-          to: "/editUsuario",
+          to: `/editContacto/${formValues.contacto}`,
           icon: FaPencilAlt,
           estilos: "text-yellow-600 hover:bg-yellow-600 hover:text-white p-1",
         },
         {
-          to: "/addCategory",
+          to: "/createContacto",
           icon: FaPlus,
           estilos: "text-green-600 hover:bg-green-600 hover:text-white p-1",
         },
         {
-          to: "/categoryList",
+          to: "/contactoList",
           icon: FaEye,
           estilos: "text-blue-600 hover:bg-blue-600 hover:text-white p-1",
         },
@@ -136,7 +137,8 @@ export default function editEnviada() {
       component: InputField,
       label: "Fecha de Respuesta",
       name: "fecha_respuesta",
-      required: true,
+      type: "date",
+      required: false,
       onChange: manejarEntradas.handleInputChange,
     },
     {
@@ -153,7 +155,7 @@ export default function editEnviada() {
     icon: FaPlus,
     actions: [
       {
-        to: "/correspondenciaEnviadaList",
+        to: "/correspondenciaRecibidaList",
         label: "Volver",
         icon: FaBackspace,
         estilos:

@@ -1,34 +1,34 @@
 import EntityList from "../../components/shared/EntityList"
 import { useInstituciones } from "../../hooks/useEntities"
 import FormattedDate from "../../components/shared/FormattedDate"
+import { FaEdit, FaHistory, FaBackspace } from "react-icons/fa";
+import { ActionButton } from "../../components/shared/ActionButton";
 
 export default function InstitucionList() {
     const useFields = () => [
-      { key: "index", label: "#" },  
+      { key: "index", label: "#" }, 
+      {
+            key: "actions",
+            label: "Acciones",
+            render: (item) => (
+              <div className="flex gap-2">
+                <ActionButton
+                  to={`/editInstitucion/${item.id_institucion}`}
+                  icon={FaEdit}
+                  estilos="hover:bg-gray-600 hover:text-gray-100 text-gray-500 rounded-md flex items-center gap-2 transition duration-200 p-1"
+                />
+                <ActionButton
+                  to={`/historialInstitucion/${item.id_institucion}`}
+                  icon={FaHistory}
+                  estilos="hover:bg-gray-600 hover:text-gray-100 text-gray-500 rounded-md flex items-center gap-2 transition duration-200 p-1"
+                />
+              </div>
+            ),
+          }, 
       { key: "razon_social", label: "Razon Social" },
       { key: "direccion", label: "Direccion" },
       { key: "telefono", label: "Telefono" },
       { key: "fecha_fundacion", label: "Fecha Fundacion" },
-      //{
-      //key: "acciones",
-      //label: "Acciones",
-      //render: (item) => (
-      //  <div className="flex gap-2">
-      //    <a
-      //      //href={`detailDocEntrante/${item.id_correspondencia}`}
-      //      className="bg-red-800 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-      //    >
-      //      Ver
-      //    </a>
-      //    <a
-      //      href={`/editInstitucion/${item.id_institucion}`}
-      //      className="bg-green-800 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded"
-      //    >
-      //      Editar
-      //    </a>
-      //  </div>
-      //),
-      //},
     ];   
 
     const entityData = {
@@ -47,6 +47,13 @@ export default function InstitucionList() {
                 label: "Crear",
                 estilos:
                     "bg-red-800 hover:bg-red-800 text-white px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",
+            },
+            {
+                to: -1,
+                label: "Volver",
+                icon: FaBackspace,
+                estilos:
+                    "bg-gray-500 hover:bg-gray-800 text-white px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",
             },
         ],
     };

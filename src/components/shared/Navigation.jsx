@@ -2,7 +2,7 @@ import { ActionButton } from "./ActionButton";
 
 export function Navigation({ title, actions = [], subTitle = "", icon: Icon }) {
   return (
-    <div className="flex flex-col bg-gray-400">
+    <div className="flex flex-col bg-gray-700">
       <div className="flex justify-between rounded-lg p-4">
         {/* Enlace al listado */}
         <div className="flex items-center gap-2">

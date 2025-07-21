@@ -24,6 +24,11 @@ function CorrespondenciaEnviadaList() {
       render: (item) => item.referencia,
     },  
     {
+      key: "datos_contacto",
+      label: "Remitente",
+      render: (item) => `${item.datos_contacto || "Sin remitente"}`,
+    },
+    {
       key: "acciones",
       label: "Acciones",
       render: (item) => (
@@ -46,8 +51,8 @@ function CorrespondenciaEnviadaList() {
   ];
 
   const entityData = {
-    title: "Gestión de Correspondencias Enviadas",
-    subTitle: "Listado de correspondencias enviadas",
+    title: "Correspondencias Enviadas",
+    subTitle: "Listado de correspondencias oficialmente enviadas",
     loadingMessage: "Cargando correspondencias enviadas...",
     errorMessage: "Error al obtener las correspondencias enviadas",
     fetchDataHook: useCorrespondenciaElaboradas,
@@ -57,11 +62,37 @@ function CorrespondenciaEnviadaList() {
     clavesBusqueda: ["referencia"],
     actions: [
       {
-        to: "/createEnviada",
+        to: `/createElaborada`,
         label: "Crear",
         estilos:
           "bg-red-800 hover:bg-green-800 text-white px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",
       },
+    
+    ],
+    filtros: [
+      { name: "cite", placeholder: "CITE " },
+      { name: "referencia", placeholder: "Referencia" },
+      { name: "contacto__nombre_contacto", placeholder: "Nombre contacto" },
+      {
+        name: "contacto__apellido_pat_contacto",
+        placeholder: "Apellido paterno",
+      },
+      {
+        name: "contacto__apellido_mat_contacto",
+        placeholder: "Apellido materno",
+      },
+      {
+        name: "contacto__institucion__razon_social",
+        placeholder: "Institución",
+      },
+    ],
+    ordenes: [
+      { name: "cite", label: "CITE" },
+      { name: "referencia", label: "Referencia" },
+      { name: "contacto__nombre_contacto", label: "Nombre contacto" },
+      { name: "contacto__apellido_pat_contacto", label: "Apellido paterno" },
+      { name: "contacto__apellido_mat_contacto", label: "Apellido materno" },
+      { name: "contacto__institucion__razon_social", label: "Institución" },
     ],
   };
 

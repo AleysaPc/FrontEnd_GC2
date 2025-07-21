@@ -51,6 +51,7 @@ export default function EditInstitucion() {
       component: InputField,
       label: "Fecha Fundacion",
       name: "fecha_fundacion",
+      type: "date",
       required: true,
       onChange: manejarEntradas.handleInputChange,
     },

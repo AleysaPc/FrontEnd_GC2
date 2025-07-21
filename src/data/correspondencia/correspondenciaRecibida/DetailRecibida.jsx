@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 import { useCorrespondenciaRecibida } from "../../../hooks/useEntities";
 import { Navigation } from "../../../components/shared/Navigation";
 import {
+  FaArrowLeft,
   FaFile,
   FaFileArchive,
   FaFilePrescription,
@@ -44,15 +45,22 @@ function DetailRecibida() {
             label: "Historial",
             icon: FaHistory,
             estilos:
-              "bg-green-600 hover:bg-purple-800 text-white px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",
+              "bg-green-600 hover:bg-red-800 text-white px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",
           },
           {
             to: `/createElaborada?respuesta_a=${id}`,
             label: "Generar respuesta",
             icon: FaFile,
             estilos:
-              "bg-orange-600 hover:bg-purple-800 text-white px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",
-          }
+              "bg-orange-600 hover:bg-red-800 text-white px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",
+          },
+          {
+            to: -1,
+            label: "Volver",
+            icon: FaArrowLeft,
+            estilos:
+              "bg-blue-600 hover:bg-red-800 text-white px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",
+          },
         ]}
         subTitle={`Información del Documento: ${items.nro_registro}`}
         icon={FaFileSignature}

@@ -10,6 +10,7 @@ import { SelectField } from "../../../components/shared/SelectField";
 import EditEntity from "../../../components/shared/EditEntity";
 import { FaBackspace, FaEye, FaPencilAlt, FaPlus } from "react-icons/fa";
 import { MultipleInputs } from "../../../components/shared/MultipleInputs";
+import { TextAreaField } from "../../../components/shared/TextAreaField";
 
 export default function editEnviada() {
   const { paraSelectsdestructuringYMap } = useFormEntity();
@@ -69,6 +70,7 @@ export default function editEnviada() {
       component: InputField,
       label: "Fecha de Envio",
       name: "fecha_envio",
+      type: "date",
       required: true,
       onChange: manejarEntradas.handleInputChange,
     },
@@ -76,6 +78,7 @@ export default function editEnviada() {
       component: InputField,
       label: "Fecha de Recepcion",
       name: "fecha_recepcion",
+      type: "date",
       required: true,
       onChange: manejarEntradas.handleInputChange,
     },
@@ -83,7 +86,8 @@ export default function editEnviada() {
       component: InputField,
       label: "Fecha de Seguimiento",
       name: "fecha_seguimiento",
-      required: true,
+      type: "date",
+      required: false,
       onChange: manejarEntradas.handleInputChange,
     },
     {
@@ -94,7 +98,7 @@ export default function editEnviada() {
       onChange: manejarEntradas.handleInputChange,
     },
     {
-      component: InputField,
+      component: TextAreaField,
       label: "Descripción",
       name: "descripcion",
       required: true,
@@ -123,17 +127,17 @@ export default function editEnviada() {
       onChange: manejarEntradas.handleInputChange,
       actionButtons: [
         {
-          to: "/editUsuario",
+          to: `/editContacto/${formValues.contacto}`,
           icon: FaPencilAlt,
           estilos: "text-yellow-600 hover:bg-yellow-600 hover:text-white p-1",
         },
         {
-          to: "/addCategory",
+          to: "/createContacto",
           icon: FaPlus,
           estilos: "text-green-600 hover:bg-green-600 hover:text-white p-1",
         },
         {
-          to: "/categoryList",
+          to: "/contactoList",
           icon: FaEye,
           estilos: "text-blue-600 hover:bg-blue-600 hover:text-white p-1",
         },
@@ -155,12 +159,12 @@ export default function editEnviada() {
     },
   ];
   const paraNavegacion = {
-    title: "Editar Correspondencia Enviada",
-    subTitle: "Formulario para editar correspondencia Enviada",
+    title: "Registrar Correspondencia Enviada",
+    subTitle: "Formulario para registrar correspondencia Enviada",
     icon: FaPlus,
     actions: [
       {
-        to: "/correspondenciaEnviadaList",
+        to: "/ElaboradaList",
         label: "Volver",
         icon: FaBackspace,
         estilos:

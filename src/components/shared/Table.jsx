@@ -21,7 +21,7 @@ const Table = ({
     <div className="overflow-hidden shadow-lg border border-gray-200">
       <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-200">
-          <thead className="">
+          <thead className="bg-gray-200">
             <tr>{headers}</tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">

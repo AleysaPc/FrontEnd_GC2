@@ -8,12 +8,12 @@ import {
 } from "../../../hooks/useEntities";
 import { InputField } from "../../../components/shared/InputField";
 import { SelectField } from "../../../components/shared/SelectField";
-import { FaPlus, FaBackspace, FaEye } from "react-icons/fa";
+import { FaPlus, FaBackspace, FaEye, FaArrowLeft } from "react-icons/fa";
 import CreateEntity from "../../../components/shared/CreateEntity";
 import { UserCheckboxList } from "../../../components/shared/UserCheckboxList";
-import InputView from "../../../components/shared/InputView";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
+import { TextAreaField } from "../../../components/shared/TextAreaField";
 
 export default function CreateElaborada() {
   const { paraSelectsdestructuringYMap, options } = useFormEntity();
@@ -134,7 +134,7 @@ export default function CreateElaborada() {
       onChange: manejarEntradas.handleInputChange,
     },
     {
-      component: InputField,
+      component: TextAreaField,
       label: "Descripción",
       name: "descripcion",
       required: true,
@@ -217,6 +217,13 @@ export default function CreateElaborada() {
         icon: FaBackspace,
         estilos:
           "bg-red-800 hover:bg-gray-800 text-white px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",
+      },
+      {
+        to: -1,
+        label: "Atras",
+        icon: FaArrowLeft,
+        estilos:
+          "bg-blue-800 hover:bg-gray-800 text-white px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",
       },
     ],
   };

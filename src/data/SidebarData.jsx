@@ -35,7 +35,9 @@ export const menus = [
     icon: RiContactsBookFill,
     items: [
       { label: "Lista de contactos", path: "/contactoList" },
-      { label: "Nuevo Contacto", path: "/createContacto" },
+      { label: "Crear Contacto", path: "/createContacto" },
+      { label: "Lista de instituciones", path: "/institucionList" },
+      { label: "Crear institucion", path: "/createInstitucion" },
     ],
   },
   {
