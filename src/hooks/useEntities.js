@@ -80,7 +80,6 @@ export const useCorrespondencias = (
 export const useCorrespondencia = (id) =>
   useData(CorrespondenciaApi, "correspondencias", id, {}, 1000 * 60 * 5, !!id);
 
-
 export const useCorrespondenciaMutations = () =>
   useEntityMutations(CorrespondenciaApi, "correspondencia");
 
@@ -99,7 +98,8 @@ export const useCorrespondenciaRecibidas = (
     search: "",
   };
 
-  const mergedParams = //merged es fución
+  const mergedParams =
+    //merged es fución
     //params sobreescribe defaultParams si hay campos repetidos
     { ...defaultParams, ...params };
   return useData(
@@ -176,7 +176,14 @@ export const useCorrespondenciaElaboradas = (
   );
 };
 export const useCorrespondenciaElaborada = (id) =>
-  useData(ElaboradaApi, "correspondenciaElaborada", id, {}, 1000 * 60 * 5, !!id); //Singular
+  useData(
+    ElaboradaApi,
+    "correspondenciaElaborada",
+    id,
+    {},
+    1000 * 60 * 5,
+    !!id
+  ); //Singular
 export const useCorrespondenciaElaboradaMutations = () =>
   useEntityMutations(ElaboradaApi, "correspondenciaElaborada");
 
@@ -200,7 +207,7 @@ export const useAccionCorrespondencias = (
     { ...defaultParams, ...params };
   return useData(
     AccionCorrespondenciaApi,
-    "accionCorrespondencias",
+    "acciones",
     null,
     mergedParams,
     staleTime,
@@ -208,9 +215,23 @@ export const useAccionCorrespondencias = (
   );
 };
 export const useAccionCorrespondencia = (id) =>
-  useData(AccionCorrespondenciaApi, "accionCorrespondencia", id, {}, 1000 * 60 * 5, !!id); //Singular
+  useData(AccionCorrespondenciaApi, "acciones", id, {}, 1000 * 60 * 5, !!id); //Singular
 export const useAccionCorrespondenciaMutations = () =>
-  useEntityMutations(AccionCorrespondenciaApi, "accionCorrespondencia");
+  useEntityMutations(AccionCorrespondenciaApi, "acciones");
+
+// Hook personalizado para obtener solo las acciones de una correspondencia
+export const useAccionesPorCorrespondencia = (correspondenciaId) => {
+  const params = correspondenciaId ? { correspondencia_id: correspondenciaId } : {};
+  console.log("Params para acciones:", params);
+  return useData(
+    AccionCorrespondenciaApi,
+    "acciones",
+    null,
+    params,
+    1000 * 60 * 5,
+    !!correspondenciaId
+  );
+};
 
 //users
 export const useUsers = (
@@ -239,7 +260,8 @@ export const useUsers = (
     enable
   );
 };
-export const useUser = (id) => useData(CustomUsersAPI, "user", id, {}, 1000 * 60 * 5, !!id);
+export const useUser = (id) =>
+  useData(CustomUsersAPI, "user", id, {}, 1000 * 60 * 5, !!id);
 export const useUserMutations = () =>
   useEntityMutations(CustomUsersAPI, "Usuario");
 
@@ -263,7 +285,8 @@ export const useRoles = (
     { ...defaultParams, ...params };
   return useData(RolesApi, "roles", null, mergedParams, staleTime, enable);
 };
-export const useRol = (id) => useData(RolesApi, "rol", id, {}, 1000 * 60 * 5, !!id);
+export const useRol = (id) =>
+  useData(RolesApi, "rol", id, {}, 1000 * 60 * 5, !!id);
 export const useRolMutations = () => useEntityMutations(RolesApi, "Rol");
 
 // password reset
@@ -285,7 +308,7 @@ export const usePasswordResetRequest = () => {
 };
 
 //Departamentos
-export const useDepartamentos = ( 
+export const useDepartamentos = (
   params = {},
   enable = true,
   staleTime = 1000 * 60 * 5
@@ -344,12 +367,13 @@ export const useContactos = (
   );
 };
 
-export const useContacto = (id) => useData(ContactoApi, "contactos", id, {}, 1000 * 60 * 5, !!id);
+export const useContacto = (id) =>
+  useData(ContactoApi, "contactos", id, {}, 1000 * 60 * 5, !!id);
 export const useContactoMutations = () =>
   useEntityMutations(ContactoApi, "contacto");
 
 //Institucion
-export const useInstituciones = ( 
+export const useInstituciones = (
   params = {},
   enable = true,
   staleTime = 1000 * 60 * 5
@@ -407,7 +431,8 @@ export const useDocumentos = (
     enable
   );
 };
-export const useDocumento = (id) => useData(DocumentoApi, "documentos", id, {}, 1000 * 60 * 5, !!id);
+export const useDocumento = (id) =>
+  useData(DocumentoApi, "documentos", id, {}, 1000 * 60 * 5, !!id);
 export const useDocumentoMutations = () =>
   useEntityMutations(DocumentoApi, "documento");
 
@@ -439,7 +464,14 @@ export const usePlantillaDocumentos = (
   );
 };
 export const usePlantillaDocumento = (id) =>
-  useData(PlantillaDocumentoApi, "plantillaDocumentos", id, {}, 1000 * 60 * 5, !!id);
+  useData(
+    PlantillaDocumentoApi,
+    "plantillaDocumentos",
+    id,
+    {},
+    1000 * 60 * 5,
+    !!id
+  );
 
 export const usePlantillaDocumentoMutations = () =>
   useEntityMutations(PlantillaDocumentoApi, "plantillaDocumento");

@@ -3,9 +3,26 @@ import EntityList from "../../../components/shared/EntityList";
 import FormattedDate from "../../../components/shared/FormattedDate";
 import { FaPlus, FaEdit, FaHistory, FaEye } from "react-icons/fa";
 import { ActionButton } from "../../../components/shared/ActionButton";
+import HistorialDocumentoModal from "../../../components/shared/HistorialModal"; // Ajusté el nombre aquí
 import { FaFileInvoice } from "react-icons/fa";
+import { useState } from "react";
 
 function CorrespondenciaRecibidaList() {
+  const [modalVisible, setModalVisible] = useState(false);
+  const [correspondenciaId, setCorrespondenciaId] = useState(null);
+
+  const { data, isLoading, error } = useCorrespondenciaRecibidas({ all_data: true });
+
+  const handleOpenModal = (idCorrespondencia) => {
+    setCorrespondenciaId(idCorrespondencia);
+    setModalVisible(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalVisible(false);
+    setCorrespondenciaId(null);
+  };
+
   const useFields = () => [
     { key: "index", label: "#" },
     {
@@ -18,11 +35,13 @@ function CorrespondenciaRecibidaList() {
             icon={FaEdit}
             estilos="hover:bg-gray-600 hover:text-gray-100 text-gray-500 rounded-md flex items-center gap-2 transition duration-200 p-1"
           />
-          <ActionButton
-            to={`/historialRecibida/${item.id_correspondencia}`}
-            icon={FaHistory}
-            estilos="hover:bg-gray-600 hover:text-gray-100 text-gray-500 rounded-md flex items-center gap-2 transition duration-200 p-1"
-          />
+          <button
+            onClick={() => handleOpenModal(item.id_correspondencia)} // Abre modal con ID
+            className="hover:bg-gray-600 hover:text-gray-100 text-gray-500 rounded-md flex items-center gap-2 transition duration-200 p-1"
+            aria-label="Ver historial"
+          >
+            <FaHistory />
+          </button>
           <ActionButton
             to={`/detailRecibida/${item.id_correspondencia}`}
             icon={FaEye}
@@ -35,15 +54,10 @@ function CorrespondenciaRecibidaList() {
       key: "similitud",
       label: "Similitud (%)",
       render: (item) => {
-        // Por si no llega similitud, mostrar 0 o --
         if (!item.similitud) return "--";
-        // La similitud viene de backend como CosineDistance, que puede ser 0 a 2,
-        // pero si usas CosineSimilarity o la normalizas, ajusta esta lógica.
-        // Supongamos que viene como valor de distancia: mientras más bajo, más parecido.
-        // Entonces podemos convertirlo así:
         const similPercent = ((1 - item.similitud) * 100).toFixed(2);
         return `${similPercent}%`;
-      }
+      },
     },
     {
       key: "nro_registro",
@@ -52,16 +66,12 @@ function CorrespondenciaRecibidaList() {
     {
       key: "fecha_recepcion",
       label: "Fecha Recepción",
-      render: (item) => (
-        <FormattedDate date={item.fecha_recepcion} format="DD/MMM/YYYY" />
-      ),
+      render: (item) => <FormattedDate date={item.fecha_recepcion} format="DD/MMM/YYYY" />,
     },
     {
       key: "fecha_respuesta",
       label: "Fecha Respuesta",
-      render: (item) => (
-        <FormattedDate date={item.fecha_respuesta} format="DD/MMM/YYYY" />
-      ),
+      render: (item) => <FormattedDate date={item.fecha_respuesta} format="DD/MMM/YYYY" />,
     },
     {
       key: "referencia",
@@ -82,7 +92,7 @@ function CorrespondenciaRecibidaList() {
     subTitle: "",
     loadingMessage: "Cargando correspondencias recibidas...",
     errorMessage: "Error al obtener las correspondencias recibidas",
-    fetchDataHook: useCorrespondenciaRecibidas, //No enviar parametros en el hook, enviar params aparte
+    fetchDataHook: useCorrespondenciaRecibidas,
     itemKey: "id_doc_entrante",
     entityFields: useFields,
     icon: FaFileInvoice,
@@ -97,18 +107,9 @@ function CorrespondenciaRecibidaList() {
       { name: "nro_registro", placeholder: "Nro. Registro" },
       { name: "referencia", placeholder: "Referencia" },
       { name: "contacto__nombre_contacto", placeholder: "Nombre contacto" },
-      {
-        name: "contacto__apellido_pat_contacto",
-        placeholder: "Apellido paterno",
-      },
-      {
-        name: "contacto__apellido_mat_contacto",
-        placeholder: "Apellido materno",
-      },
-      {
-        name: "contacto__institucion__razon_social",
-        placeholder: "Institución",
-      },
+      { name: "contacto__apellido_pat_contacto", placeholder: "Apellido paterno" },
+      { name: "contacto__apellido_mat_contacto", placeholder: "Apellido materno" },
+      { name: "contacto__institucion__razon_social", placeholder: "Institución" },
     ],
     ordenes: [
       { name: "referencia", label: "Referencia" },
@@ -119,7 +120,16 @@ function CorrespondenciaRecibidaList() {
     ],
   };
 
-  return <EntityList entityData={entityData} />;
+  return (
+    <>
+      <EntityList entityData={entityData} />
+      <HistorialDocumentoModal
+        visible={modalVisible}
+        onClose={handleCloseModal}
+        correspondenciaId={correspondenciaId}
+      />
+    </>
+  );
 }
 
 export default CorrespondenciaRecibidaList;

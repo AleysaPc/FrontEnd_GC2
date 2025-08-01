@@ -15,14 +15,8 @@ export function Navigation({ title, actions = [], subTitle = "", icon: Icon }) {
 
         {/* Botones de acciones */}
         <div className="flex items-center text-sm gap-3">
-          {actions.map(({ to, label, icon, estilos }, index) => (
-            <ActionButton
-              key={index}
-              to={to}
-              label={label}
-              icon={icon}
-              estilos={estilos}
-            />
+          {actions.map((action, index) => (
+            <ActionButton key={index} {...action} />
           ))}
         </div>
       </div>

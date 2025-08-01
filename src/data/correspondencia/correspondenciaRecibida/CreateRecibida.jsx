@@ -90,6 +90,7 @@ export default function createRecibida() {
     estado: "",
     comentario: "",
     contacto: "",
+    comentario_derivacion: "",
     documentos: [],
     usuarios: [], // Changed from usuario to usuarios and made it an array
   };
@@ -98,11 +99,15 @@ export default function createRecibida() {
     usuarios: Array.isArray(formValues.usuarios)
       ? formValues.usuarios.map(Number)
       : [],
+    comentario_derivacion: formValues.comentario_derivacion || "",
   });
 
   const paraEnvio = (formValues) => ({
     link: "/correspondenciaRecibidaList",
-    params: camposExtras(formValues),
+    data: {
+      ...camposExtras(formValues),
+      comentario_derivacion: formValues.comentario_derivacion || ""
+    }
   });
 
   const construirCampos = (formValues, manejarEntradas) => [
@@ -131,9 +136,9 @@ export default function createRecibida() {
     },
     {
       component: InputField,
-      label: "Descripción",
+      label: "Descripción del Documento (Opcional)",
       name: "descripcion",
-      required: true,
+      required: false,
       onChange: manejarEntradas.handleInputChange,
     },
     {
@@ -206,6 +211,13 @@ export default function createRecibida() {
         manejarEntradas.handleToggleChange(name)(value),
       isLoading: loadingUsuarios,
       error: errorUsuarios,
+    },
+    {
+      component: InputField,
+      label: "Comentario",
+      name: "comentario_derivacion",
+      required: false,
+      onChange: manejarEntradas.handleInputChange,
     },
   ];
 

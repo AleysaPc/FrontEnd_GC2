@@ -7,4 +7,4 @@ export const CorrespondenciaApi = createCrudOperations(ApiCorrespondencia, "corr
 export const RecibidaApi = createCrudOperations(ApiCorrespondencia, "recibida")
 export const EnviadaApi = createCrudOperations(ApiCorrespondencia, "enviada")
 export const ElaboradaApi = createCrudOperations(ApiCorrespondencia, "elaborada")
-export const AccionCorrespondenciaApi = createCrudOperations(ApiCorrespondencia, "accionCorrespondencia")
+export const AccionCorrespondenciaApi = createCrudOperations(ApiCorrespondencia, "acciones")

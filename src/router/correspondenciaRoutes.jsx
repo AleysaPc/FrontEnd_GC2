@@ -22,7 +22,7 @@ const DetailEnviada = lazy(() =>
 const EditRecibida = lazy(() =>
   import("../data/correspondencia/correspondenciaRecibida/EditRecibida")
 );
-const CreateContacto = lazy(() => import("../data/contacto/createContacto"));
+const CreateContacto = lazy(() => import("../data/contacto/CreateContacto"));
 const ContactoList = lazy(() => import("../data/contacto/ContactoList"));
 const EditContacto = lazy(() => import("../data/contacto/EditContacto"));
 const CreateElaborada = lazy(() => import("../data/correspondencia/correspondenciaElaborada/CreateElaborada"));
@@ -30,7 +30,9 @@ const ElaboradaList = lazy(() => import("../data/correspondencia/correspondencia
 const VistaPreviaDocumento = lazy(() => import("../data/correspondencia/correspondenciaElaborada/VistaPreviaDocumento"));
 const VistaPdfDocumento = lazy(() => import("../data/correspondencia/correspondenciaElaborada/VistaPdfDocumento"));
 const RegistroEnviado = lazy(() => import("../data/correspondencia/correspondenciaEnviada/RegistroEnviado"));
-const EditEnviada = lazy(() => import("../data/correspondencia/correspondenciaEnviada/editEnviada"));
+const EditEnviada = lazy(() => import("../data/correspondencia/correspondenciaEnviada/EditEnviada"));
+const Derivar = lazy(() => import("../data/correspondencia/correspondencia/Derivar"));
+const TestDerivar = lazy(() => import("../data/correspondencia/correspondencia/TestDerivar"));
 export const correspondenciaRoutes = [
   // rutas de correspondencia
   {
@@ -104,5 +106,13 @@ export const correspondenciaRoutes = [
   {
     path:"editRecibida/:id",
     element:<EditRecibida/>
+  },
+  {
+    path:"derivar/:id",
+    element:<Derivar/>
+  },
+  {
+    path:"testDerivar/:id",
+    element:<TestDerivar/>
   }
 ];

@@ -8,18 +8,23 @@ import {
   FaFilePrescription,
   FaFileSignature,
   FaHistory,
+  FaArrowRight,
 } from "react-icons/fa";
 import VisorPDF from "../../../components/shared/VisorPdf";
 import { ActionButton } from "../../../components/shared/ActionButton";
 import { useState, useEffect } from "react";
 import FormattedDate from "../../../components/shared/FormattedDate";
+import TestDerivar from "../correspondencia/TestDerivar";
+
 function DetailRecibida() {
+  const [mostrarModalDerivar, setMostrarModalDerivar] = useState(false);
+
   const { id } = useParams(); //use params para recuperar el ID
 
   const { data: response = {}, isLoading } = useCorrespondenciaRecibida(id);
 
   const items = response.data || [];
-  console.log("docEntrante", items.nro_registro);
+  console.log("Nro. Registro", items.nro_registro);
 
   const documentos = items.documentos || [];
 
@@ -58,6 +63,20 @@ function DetailRecibida() {
             to: -1,
             label: "Volver",
             icon: FaArrowLeft,
+            estilos:
+              "bg-blue-600 hover:bg-red-800 text-white px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",
+          },
+          {
+            to:`/derivar/${id}`,
+            label:"Derivar",
+            icon:FaArrowRight,
+            estilos:
+              "bg-blue-600 hover:bg-red-800 text-white px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",
+          },
+          {
+            label: "Test Derivar",
+            icon: FaArrowRight,
+            onClick: () => setMostrarModalDerivar(true),
             estilos:
               "bg-blue-600 hover:bg-red-800 text-white px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",
           },
@@ -140,6 +159,7 @@ function DetailRecibida() {
           )}
         </div>
       </div>
+      <TestDerivar isOpen={mostrarModalDerivar} onClose={() => setMostrarModalDerivar(false)} id={id} />
     </div>
   );
 }
