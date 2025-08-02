@@ -1,167 +1,204 @@
 import { useParams } from "react-router-dom";
 import { useCorrespondenciaRecibida } from "../../../hooks/useEntities";
+import { useState, useEffect } from "react";
+import { ActionButton } from "../../../components/shared/ActionButton";
+import VisorPDF from "../../../components/shared/VisorPdf";
 import { Navigation } from "../../../components/shared/Navigation";
 import {
   FaArrowLeft,
   FaFile,
-  FaFileArchive,
-  FaFilePrescription,
   FaFileSignature,
-  FaHistory,
   FaArrowRight,
+  FaFly,
+  FaSeedling,
+  FaShare,
+  FaFileUpload,
+  FaPlus,
+  FaFileMedical,
 } from "react-icons/fa";
-import VisorPDF from "../../../components/shared/VisorPdf";
-import { ActionButton } from "../../../components/shared/ActionButton";
-import { useState, useEffect } from "react";
-import FormattedDate from "../../../components/shared/FormattedDate";
 import TestDerivar from "../correspondencia/TestDerivar";
+import { useNavigate } from "react-router-dom";
 
-function DetailRecibida() {
+export default function DetailRecibida() {
+  const { id } = useParams();
   const [mostrarModalDerivar, setMostrarModalDerivar] = useState(false);
 
-  const { id } = useParams(); //use params para recuperar el ID
-
-  const { data: response = {}, isLoading } = useCorrespondenciaRecibida(id);
-
-  const items = response.data || [];
-  console.log("Nro. Registro", items.nro_registro);
-
-  const documentos = items.documentos || [];
-
+  const navigate = useNavigate();
+  const [comentarioRespuesta, setComentarioRespuesta] = useState("");
   const [documentoActivo, setDocumentoActivo] = useState("");
 
+  const { data: response, isLoading: isLoadingCorrespondencia } =
+    useCorrespondenciaRecibida(id);
+
+  const correspondencia = response?.data;
+  const documentos = correspondencia?.documentos || [];
+
   useEffect(() => {
-    // Establecer el primer documento como el activo al cargar los documentos
     if (documentos.length > 0) {
       setDocumentoActivo(documentos[0].archivo);
     }
   }, [documentos]);
 
-  // Validar si la URL es válida antes de pasarla al visor
   const isUrlValid = documentoActivo && documentoActivo.startsWith("http");
 
+  // 👉 hooks ya están definidos: ahora puedes hacer returns condicionales
+  if (isLoadingCorrespondencia) {
+    return <div>Cargando...</div>;
+  }
+
+  if (!correspondencia) {
+    return <div>No se encontró la correspondencia solicitada</div>;
+  }
+
+  const tieneAcciones =
+    correspondencia.acciones && correspondencia.acciones.length > 0;
+
   return (
-    <div className="p-4 space-y-4">
+    <div className="p-4">
       <Navigation
-        title="Correspondencia Recibida"
+        title="Detalle de Correspondencia"
         actions={[
-          {
-            to: `/correspondencia-recibida/${id}/historial`, //Historial del documento
-            label: "Historial",
-            icon: FaHistory,
-            estilos:
-              "bg-green-600 hover:bg-red-800 text-white px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",
-          },
           {
             to: `/createElaborada?respuesta_a=${id}`,
             label: "Generar respuesta",
-            icon: FaFile,
+            icon: FaFileMedical,
             estilos:
-              "bg-orange-600 hover:bg-red-800 text-white px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",
+              "bg-white hover:bg-orange-500 text-black px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",
+          },
+          {
+            label: "Derivar",
+            icon: FaShare,
+            onClick: () => setMostrarModalDerivar(true),
+            estilos:
+              "bg-white hover:bg-green-400 text-black px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",
           },
           {
             to: -1,
             label: "Volver",
             icon: FaArrowLeft,
             estilos:
-              "bg-blue-600 hover:bg-red-800 text-white px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",
-          },
-          {
-            to:`/derivar/${id}`,
-            label:"Derivar",
-            icon:FaArrowRight,
-            estilos:
-              "bg-blue-600 hover:bg-red-800 text-white px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",
-          },
-          {
-            label: "Test Derivar",
-            icon: FaArrowRight,
-            onClick: () => setMostrarModalDerivar(true),
-            estilos:
-              "bg-blue-600 hover:bg-red-800 text-white px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",
+              "bg-white hover:bg-red-800 text-black px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",
           },
         ]}
-        subTitle={`Información del Documento: ${items.nro_registro}`}
+        subTitle={`Información del Documento: ${correspondencia.nro_registro}`}
         icon={FaFileSignature}
       />
-
-      <div className="bg-white shadow rounded-2xl p-6 grid grid-cols-2">
-        <div>
-          <h2 className="text-xl font-semibold mb-4 text-gray-800">
-            Detalle del Documento Recibido
-          </h2>
-          <div>
-            <span className="font-medium">Nro Registro:</span>{" "}
-            {items.nro_registro}
-          </div>
-          <div>
-            <span className="font-medium">Fecha de Recepción:</span>{" "}
-            <FormattedDate date={items.fecha_recepcion} />
-          </div>
-          <div>
-            <span className="font-medium">Fecha de Respuesta:</span>{" "}
-            <FormattedDate date={items.fecha_respuesta} />
-          </div>
-          <div>
-            <span className="font-medium">Referencia:</span> {items.referencia}
-          </div>
-          <div>
-            <span className="font-medium">Descripción:</span>{" "}
-            {items.descripcion}
-          </div>
-          <div>
-            <span className="font-medium">Páginas:</span> {items.paginas}
-          </div>
-          <div>
-            <span className="font-medium">Prioridad:</span> {items.prioridad}
-          </div>
-          <div>
-            <span className="font-medium">Estado:</span> {items.estado}
-          </div>
-          <div className="md:col-span-2">
-            <span className="font-medium">Comentario:</span> {items.comentario}
-          </div>
-          <div className="md:col-span-2">
-            <span className="font-medium">Remitente:</span> {items.contacto}
-          </div>
-          <div className="md:col-span-2">
-            <span className="font-medium">Nombre documento:</span>{" "}
-            {items.nombre_documento}
-          </div>
-          <div className="md:col-span-2">
-            <span className="font-medium">Documento:</span>{" "}
-            {items.tipo_documento}
+      <div className="bg-white p-6 rounded-lg shadow-md mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+          <div className="space-y-1 w-4/5">
+            {" "}
+            {/* Primera Columna */}
+            <p className="font-medium text-gray-700">Nro Registro:</p>
+            <p className="text-gray-900">{correspondencia.nro_registro}</p>
+            <p className="font-medium text-gray-700">Referencia:</p>
+            <p className="text-gray-900">{correspondencia.referencia}</p>
+            <p className="font-medium text-gray-700 mt-4">
+              Fecha y hora de recepción:
+            </p>
+            <p className="text-gray-900">
+              {new Date(correspondencia.fecha_registro).toLocaleString()}
+            </p>
+            <p className="font-medium text-gray-700 mt-4">Contacto:</p>
+            <p className="text-gray-900">{correspondencia.datos_contacto}</p>
+            <p className="font-medium text-gray-700 mt-4">Descripción:</p>
+            <p className="text-gray-900">{correspondencia.descripcion}</p>
+            <hr />
+            <p className="font-medium text-gray-700">Estado:</p>
+            <p className="text-gray-900 capitalize">
+              {correspondencia.estado?.replace("_", " ")}
+            </p>
+            <p className="font-medium text-gray-700 mt-4">Prioridad:</p>
+            <p className="text-gray-900 capitalize">
+              {correspondencia.prioridad}
+            </p>
           </div>
 
-          {/* Botones dinámicos para documentos */}
-          <div className="mt-4 space-y-2">
-            {documentos.map((doc, index) => (
-              <ActionButton
-                key={doc.id_documento}
-                label={doc.archivo || `Documento ${index + 1}`}
-                icon={FaFile}
-                onClick={() => setDocumentoActivo(doc.archivo)}
-                estilos={`px-4 py-2 border rounded-md ${
-                  documentoActivo === doc.archivo
-                    ? "bg-blue-600 text-white"
-                    : "bg-white text-blue-600 border-blue-600"
-                }`}
-              />
-            ))}
+          <div className="space-y-1 w-9/10">
+            {" "}
+            {/* Segunda Columna */}
+            <div>
+              {isUrlValid ? (
+                <VisorPDF url={documentoActivo} />
+              ) : (
+                <div>Documento no disponible o URL no válida.</div>
+              )}
+            </div>
+            {/* Botones dinámicos para documentos */}
+            <div className="mt-4 space-y-2">
+              <div className="mt-4 space-y-2">
+                {documentos.map((doc, index) => (
+                  <ActionButton
+                    key={doc.id_documento}
+                    label=" Abrir PDF"
+                    //label={doc.archivo || `Documento ${index + 1}`}
+                    icon={FaFile}
+                    onClick={() => {
+                      if (doc.archivo) {
+                        window.open(doc.archivo, "_blank");
+                      } else {
+                        navigate(
+                          `/vistaPdfDocumento/${correspondencia.id_correspondencia}`
+                        );
+                      }
+                    }}
+                    estilos={`px-4 py-2 border rounded-md ${
+                      documentoActivo === doc.archivo
+                        ? "bg-blue-600 text-white"
+                        : "bg-white text-blue-600 border-blue-600"
+                    }`}
+                  />
+                ))}
+              </div>
+            </div>
           </div>
-        </div>
-
-        <div>
-          {isUrlValid ? (
-            <VisorPDF url={documentoActivo} />
-          ) : (
-            <div>Documento no disponible o URL no válida.</div>
-          )}
         </div>
       </div>
-      <TestDerivar isOpen={mostrarModalDerivar} onClose={() => setMostrarModalDerivar(false)} id={id} />
+
+      <h3 className="text-xl font-bold mb-4">Historial de Derivaciones</h3>
+      <div className="space-y-4">
+        {tieneAcciones ? (
+          correspondencia.acciones.map((accion, index) => (
+            <div
+              key={accion.id_accion || index}
+              className="bg-white p-6 rounded-lg shadow-md"
+            >
+              <h4 className="text-lg font-semibold mb-2">
+                Derivación #{index + 1}
+              </h4>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <p className="font-medium text-gray-700">Tipo de Acción:</p>
+                  <p className="text-gray-900">{accion.accion}</p>
+
+                  <p className="font-medium text-gray-700 mt-4">Fecha:</p>
+                  <p className="text-gray-900">
+                    {new Date(accion.fecha).toLocaleString()}
+                  </p>
+                </div>
+
+                <div className="space-y-2">
+                  <p className="font-medium text-gray-700">Usuario Destino:</p>
+                  <p className="text-gray-900">
+                    {accion.usuario_destino?.email || "No especificado"}
+                  </p>
+
+                  <p className="font-medium text-gray-700 mt-4">Comentario:</p>
+                  <p className="text-gray-900">
+                    {accion.comentario || "Sin comentarios"}
+                  </p>
+                </div>
+              </div>
+            </div>
+          ))
+        ) : (
+          <p>No hay acciones registradas para esta correspondencia.</p>
+        )}
+        <TestDerivar
+          isOpen={mostrarModalDerivar}
+          onClose={() => setMostrarModalDerivar(false)}
+          id={id}
+        />
+      </div>
     </div>
   );
 }
-
-export default DetailRecibida;

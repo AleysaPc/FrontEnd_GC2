@@ -79,8 +79,8 @@ export default function createRecibida() {
   ];
 
   const configuracionFormulario = {
-    fecha_recepción: "",
-    hora_recepción: "",
+    fecha_recepcion: "",
+    hora_recepcion: "",
     fecha_respuesta: "",
     tipo: "recibido",
     referencia: "",
@@ -114,7 +114,7 @@ export default function createRecibida() {
     {
       component: InputField,
       label: "Fecha Recepción",
-      name: "fecha_recepción",
+      name: "fecha_recepcion",
       type: "date",
       required: true,
       onChange: manejarEntradas.handleInputChange,
@@ -122,7 +122,7 @@ export default function createRecibida() {
     {
       component: InputField,
       label: "Hora Recepción",
-      name: "hora_recepción",
+      name: "hora_recepcion",
       type: "time",
       required: true,
       onChange: manejarEntradas.handleInputChange,
@@ -152,6 +152,7 @@ export default function createRecibida() {
       actionButtons: [
         {
           to: "/createContacto",
+          state: { from: "createRecibida" },
           icon: FaPlus,
           estilos: "text-green-600 hover:bg-green-600 hover:text-white p-1",
         },
@@ -223,12 +224,12 @@ export default function createRecibida() {
 
   const paraNavegacion = {
     title: "Registrar Correspondencia",
-    subTitle: "Correspondencia Entrante",
+    subTitle: "Correspondencia Recibida",
     icon: FaPlus,
     actions: [
       {
         to: "/correspondenciaList",
-        label: "Cancelar",
+        label: " Cancelar ",
         icon: FaBackspace,
         estilos:
           "border-2 border-gray-700 rounded-lg bg-gray-600 text-white p-2 hover:bg-gray-100 hover:text-gray-600",

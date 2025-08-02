@@ -1,7 +1,7 @@
 import { useCorrespondenciaRecibidas } from "../../../hooks/useEntities";
 import EntityList from "../../../components/shared/EntityList";
 import FormattedDate from "../../../components/shared/FormattedDate";
-import { FaPlus, FaEdit, FaHistory, FaEye } from "react-icons/fa";
+import { FaPlus, FaEdit, FaHistory, FaEye, FaStream } from "react-icons/fa";
 import { ActionButton } from "../../../components/shared/ActionButton";
 import HistorialDocumentoModal from "../../../components/shared/HistorialModal"; // Ajusté el nombre aquí
 import { FaFileInvoice } from "react-icons/fa";
@@ -40,7 +40,7 @@ function CorrespondenciaRecibidaList() {
             className="hover:bg-gray-600 hover:text-gray-100 text-gray-500 rounded-md flex items-center gap-2 transition duration-200 p-1"
             aria-label="Ver historial"
           >
-            <FaHistory />
+            <FaStream />
           </button>
           <ActionButton
             to={`/detailRecibida/${item.id_correspondencia}`}

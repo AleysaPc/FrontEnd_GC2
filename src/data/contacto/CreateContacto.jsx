@@ -7,15 +7,28 @@ import { obtenerIdUser } from "../../utils/auth";
 import { SelectField } from "../../components/shared/SelectField";
 import { useInstituciones, useContactos } from "../../hooks/useEntities";
 import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 
 export default function CreateContacto() {
+  // Dentro del componente
+  const location = useLocation();
+  const cameFrom = location.state?.from;
+
   const { paraSelectsdestructuringYMap } = useFormEntity();
 
   const logicaNegocio = {
     idUsuario: obtenerIdUser(),
   };
-  const { data: contactosData, isLoading: loadingContactos, error: errorContactos } = useContactos({ all_data: true });
-  const { data: institucionesData, isLoading: loadingInstituciones, error: errorInstituciones } = useInstituciones({ all_data: true });
+  const {
+    data: contactosData,
+    isLoading: loadingContactos,
+    error: errorContactos,
+  } = useContactos({ all_data: true });
+  const {
+    data: institucionesData,
+    isLoading: loadingInstituciones,
+    error: errorInstituciones,
+  } = useInstituciones({ all_data: true });
 
   // Asegurarnos de que los datos sean arrays
   const contactosArray = contactosData?.data || [];
@@ -24,15 +37,17 @@ export default function CreateContacto() {
   const { options } = useFormEntity();
 
   const institucionOptions = () =>
-    institucionesArray ? options(institucionesArray, "id_institucion", "razon_social") : [];
+    institucionesArray
+      ? options(institucionesArray, "id_institucion", "razon_social")
+      : [];
 
   // Manejo de errores
   useEffect(() => {
     if (errorContactos) {
-      console.error('Error al cargar contactos:', errorContactos);
+      console.error("Error al cargar contactos:", errorContactos);
     }
     if (errorInstituciones) {
-      console.error('Error al cargar instituciones:', errorInstituciones);
+      console.error("Error al cargar instituciones:", errorInstituciones);
     }
   }, [errorContactos, errorInstituciones]);
 
@@ -41,7 +56,9 @@ export default function CreateContacto() {
   }
 
   if (errorContactos || errorInstituciones) {
-    return <div className="text-red-500 text-center">Error al cargar datos</div>;
+    return (
+      <div className="text-red-500 text-center">Error al cargar datos</div>
+    );
   }
   const configuracionFormulario = {
     nombre_contacto: "",
@@ -54,7 +71,9 @@ export default function CreateContacto() {
     id_institucion: "",
   };
   const camposExtras = (formValues) => ({
-    institucion: formValues.id_institucion ? Number(formValues.id_institucion) : null,
+    institucion: formValues.id_institucion
+      ? Number(formValues.id_institucion)
+      : null,
   });
 
   const paraEnvio = (formValues) => ({
@@ -80,65 +99,65 @@ export default function CreateContacto() {
       onChange: manejarEntradas.handleInputChange,
     },
     {
-        component: InputField,
-        label: "Apellido Materno",
-        name: "apellido_mat_contacto",
-        type: "text",
-        required: true,
-        onChange: manejarEntradas.handleInputChange,
+      component: InputField,
+      label: "Apellido Materno",
+      name: "apellido_mat_contacto",
+      type: "text",
+      required: true,
+      onChange: manejarEntradas.handleInputChange,
     },
     {
-        component: InputField,
-        label:"Titulo Profesional",
-        name:"titulo_profesional",
-        type:"text",
-        required:true,
-        onChange: manejarEntradas.handleInputChange,
+      component: InputField,
+      label: "Titulo Profesional",
+      name: "titulo_profesional",
+      type: "text",
+      required: true,
+      onChange: manejarEntradas.handleInputChange,
     },
     {
-        component: InputField,
-        label:"Cargo",
-        name:"cargo",
-        type:"text",
-        required:true,
-        onChange: manejarEntradas.handleInputChange,
+      component: InputField,
+      label: "Cargo",
+      name: "cargo",
+      type: "text",
+      required: true,
+      onChange: manejarEntradas.handleInputChange,
     },
     {
-        component: InputField,
-        label:"Email",
-        name:"email",
-        type:"email",
-        required:true,
-        onChange: manejarEntradas.handleInputChange,
+      component: InputField,
+      label: "Email",
+      name: "email",
+      type: "email",
+      required: true,
+      onChange: manejarEntradas.handleInputChange,
     },
     {
-        component: InputField,
-        label:"Telefono",
-        name:"telefono",
-        type:"text",
-        required:true,
-        onChange: manejarEntradas.handleInputChange,
+      component: InputField,
+      label: "Telefono",
+      name: "telefono",
+      type: "text",
+      required: true,
+      onChange: manejarEntradas.handleInputChange,
     },
     {
-        component: SelectField,
-        label:"Institucion",
-        name:"id_institucion",
-        options: institucionOptions(),
-        onChange: manejarEntradas.handleInputChange,
-        isLoading: loadingInstituciones,
-        error: errorInstituciones,
-        actionButtons: [
-            {
-                to: "/CreateInstitucion",
-                icon: FaPlus,
-                estilos: "text-green-600 hover:bg-green-600 hover:text-white p-1",
-            },
-            {
-                to: "/institucionList",
-                icon: FaEye,
-                estilos: "text-blue-600 hover:bg-blue-600 hover:text-white p-1",
-            },
-        ],
+      component: SelectField,
+      label: "Institucion",
+      name: "id_institucion",
+      options: institucionOptions(),
+      onChange: manejarEntradas.handleInputChange,
+      isLoading: loadingInstituciones,
+      error: errorInstituciones,
+      actionButtons: [
+        {
+          to: "/CreateInstitucion",
+          icon: FaPlus,
+          estilos: "text-green-600 hover:bg-green-600 hover:text-white p-1",
+        },
+        {
+          to: "/institucionList",
+          icon: FaEye,
+          estilos: "text-blue-600 hover:bg-blue-600 hover:text-white p-1",
+        },
+      ],
     },
   ];
   const paraNavegacion = {
@@ -147,7 +166,7 @@ export default function CreateContacto() {
     icon: FaPlus,
     actions: [
       {
-        to: "/contactoList",
+        to: cameFrom === "CreateRecibida" ? "/createRecibida" : "/contactoList",
         label: "Volver",
         icon: FaBackspace,
         estilos:

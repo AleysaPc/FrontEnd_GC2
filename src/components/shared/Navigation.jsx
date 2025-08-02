@@ -8,8 +8,8 @@ export function Navigation({ title, actions = [], subTitle = "", icon: Icon }) {
         <div className="flex items-center gap-2">
           {Icon && <Icon className="w-7 h-7 text-white" />}
           <div>
-            <h1 className="font-bold text-base text-white">{title}</h1>
-            {subTitle && <p className="text-white text-sm">{subTitle}</p>}
+            <h1 className="font-bold text-white text-xl">{title}</h1>
+            {subTitle && <p className="text-white text-lg">{subTitle}</p>}
           </div>
         </div>
 
