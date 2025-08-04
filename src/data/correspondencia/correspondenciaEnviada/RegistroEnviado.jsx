@@ -1,6 +1,6 @@
 import EntityList from "../../../components/shared/EntityList";
 import { useCorrespondenciaElaboradas} from "../../../hooks/useEntities";
-
+import { FaAngleUp, FaFly } from "react-icons/fa";
 export default function RegistroEnviado() {
     const useFields = () => [
         { key: "index", label: "#" },
@@ -25,7 +25,7 @@ export default function RegistroEnviado() {
         
     ];
     const entityData = {
-        title: "Documentos Aprobados y Enviados",
+        title: "Documentos en revisión para envio",
         subTitle: "Registrar documentos enviados",
         loadingMessage: "Cargando documentos aprobados y enviados...",
         errorMessage: "Error al obtener los documentos aprobados y enviados",
@@ -33,6 +33,7 @@ export default function RegistroEnviado() {
         all_data: false, // true para obtener todos los datos, false para paginación
         itemKey: "id_correspondencia", //Debe ser igual al modelo
         entityFields: useFields,
+        icon: FaAngleUp,
         // actions: [
         //   {
         //     to: "/createCorrespondencia",

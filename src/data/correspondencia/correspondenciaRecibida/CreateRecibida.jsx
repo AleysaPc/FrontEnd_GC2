@@ -12,6 +12,7 @@ import { obtenerIdUser } from "../../../utils/auth";
 import { SelectField } from "../../../components/shared/SelectField";
 import { UserCheckboxList } from "../../../components/shared/UserCheckboxList";
 import { useEffect } from "react";
+import FormattedDate from "../../../components/shared/FormattedDate";
 
 export default function createRecibida() {
   const { paraSelectsdestructuringYMap } = useFormEntity();
@@ -80,7 +81,6 @@ export default function createRecibida() {
 
   const configuracionFormulario = {
     fecha_recepcion: "",
-    hora_recepcion: "",
     fecha_respuesta: "",
     tipo: "recibido",
     referencia: "",
@@ -121,7 +121,7 @@ export default function createRecibida() {
     },
     {
       component: InputField,
-      label: "Hora Recepción",
+      label: "Hora de recpción",    
       name: "hora_recepcion",
       type: "time",
       required: true,
@@ -195,7 +195,6 @@ export default function createRecibida() {
       required: false,
       onChange: manejarEntradas.handleInputChange,
     },
-
     {
       component: MultipleInputs,
       label: "Documento",

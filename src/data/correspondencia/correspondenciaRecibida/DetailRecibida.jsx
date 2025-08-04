@@ -88,28 +88,32 @@ export default function DetailRecibida() {
           <div className="space-y-1 w-4/5">
             {" "}
             {/* Primera Columna */}
-            <p className="font-medium text-gray-700">Nro Registro:</p>
+            <p className="font-medium text-blue-700">Nro Registro: </p>
             <p className="text-gray-900">{correspondencia.nro_registro}</p>
-            <p className="font-medium text-gray-700">Referencia:</p>
+            <p className="font-medium text-blue-700">Referencia:</p>
             <p className="text-gray-900">{correspondencia.referencia}</p>
-            <p className="font-medium text-gray-700 mt-4">
+            <p className="font-medium text-blue-700 mt-4">
               Fecha y hora de recepción:
             </p>
             <p className="text-gray-900">
               {new Date(correspondencia.fecha_registro).toLocaleString()}
             </p>
-            <p className="font-medium text-gray-700 mt-4">Contacto:</p>
+            <p className="font-medium text-blue-700 mt-4">Contacto:</p>
             <p className="text-gray-900">{correspondencia.datos_contacto}</p>
-            <p className="font-medium text-gray-700 mt-4">Descripción:</p>
+            <p className="font-medium text-blue-700 mt-4">Descripción:</p>
             <p className="text-gray-900">{correspondencia.descripcion}</p>
             <hr />
-            <p className="font-medium text-gray-700">Estado:</p>
+            <p className="font-medium text-blue-700">Estado:</p>
             <p className="text-gray-900 capitalize">
               {correspondencia.estado?.replace("_", " ")}
             </p>
-            <p className="font-medium text-gray-700 mt-4">Prioridad:</p>
+            <p className="font-medium text-blue-700 mt-4">Prioridad:</p>
             <p className="text-gray-900 capitalize">
               {correspondencia.prioridad}
+            </p>
+            <p className="font-medium text-blue-700 mt-4">Fecha de respuesta:</p>
+            <p className="text-gray-900 capitalize">
+              {correspondencia.fecha_respuesta}
             </p>
           </div>
 
