@@ -10,7 +10,7 @@ const Modal = ({ isOpen, onClose, children }) => {
       onClick={onClose}
     >
       <div
-        className="bg-white rounded-lg shadow-lg p-6 w-full sm:w-[800px] max-w-[90vw]"
+        className="bg-white-700 rounded-lg shadow-lg p-6 w-full sm:w-[800px] max-w-[90vw]"
         onClick={(e) => e.stopPropagation()} // Evitar que el click en el contenido cierre el modal
       >
         {children}

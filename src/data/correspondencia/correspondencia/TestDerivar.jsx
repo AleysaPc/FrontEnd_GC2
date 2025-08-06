@@ -8,8 +8,9 @@ import {
 import { useFormEntity } from "../../../utils/useFormEntity";
 import { UserCheckboxList } from "../../../components/shared/UserCheckboxList";
 import { InputField } from "../../../components/shared/InputField";
+import { SelectField } from "../../../components/shared/SelectField";
 import CreateEntity from "../../../components/shared/CreateEntity";
-import { FaArrowRight } from "react-icons/fa";
+import { FaShareSquare } from "react-icons/fa";
 
 export default function TestDerivar({ isOpen, onClose, id }) {
   const { paraSelectsdestructuringYMap } = useAccionCorrespondenciaMutations();
@@ -28,10 +29,18 @@ export default function TestDerivar({ isOpen, onClose, id }) {
   const usuarioOptions = () =>
     usuariosArray ? options(usuariosArray, "id", "email") : [];
 
+  const accionOptions = [
+    {id: "DERIVADO", nombre: "Derivado"},
+    {id: "VISTO", nombre: "Visto"},
+    {id: "OBSERVADO", nombre: "Observado"},
+    {id: "APROBADO", nombre: "Aprobado"},
+  ];
+
   const configuracionFormulario = {
     correspondencia_id: id,
     usuarios: [],
     comentario_derivacion: "",
+    accion: "",
   };
 
   const camposExtras = (formValues) => ({
@@ -39,6 +48,7 @@ export default function TestDerivar({ isOpen, onClose, id }) {
       ? formValues.usuarios.map(Number)
       : [],
     comentario_derivacion: formValues.comentario_derivacion || "",
+    nro_registro: formValues.nro_registro || "",
   });
 
   const paraEnvio = (formValues) => {
@@ -54,6 +64,13 @@ export default function TestDerivar({ isOpen, onClose, id }) {
   };
 
   const construirCampos = (formValues, manejarEntradas) => [
+    {
+      component: SelectField,
+      label: "Acción",
+      name: "accion",
+      options: accionOptions,
+      onChange: manejarEntradas.handleInputChange,
+    },
     {
       component: UserCheckboxList,
       label: "Derivar a:",
@@ -81,9 +98,9 @@ export default function TestDerivar({ isOpen, onClose, id }) {
         paraEnvio={paraEnvio}
         construirCampos={construirCampos}
         paraNavegacion={{
-          title: `Derivar ${id}`,
-          subTitle: "Formulario de derivación",
-          icon: FaArrowRight,
+          title: `Derivar`,
+          subTitle: "",
+          icon: FaShareSquare,
           actions: [], // No necesitas botones extra en el modal
         }}
       />

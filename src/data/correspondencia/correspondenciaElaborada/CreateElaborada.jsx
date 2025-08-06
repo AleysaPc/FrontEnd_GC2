@@ -78,10 +78,9 @@ export default function CreateElaborada() {
   ];
 
   const opcionEstado = [
-    { id: "registrado", nombre: "Registrado" },
     { id: "en_revision", nombre: "En revisión" },
+    { id: "borrador", nombre: "Borrador"},
     { id: "aprobado", nombre: "Aprobado" },
-    { id: "rechazado", nombre: "Rechazado" },
   ];
 
   const configuracionFormulario = {
@@ -90,12 +89,13 @@ export default function CreateElaborada() {
     descripcion: "",
     prioridad: "",
     estado: "",
-    comentario: "",
     contacto: "",
     plantilla_id: "",
     usuarios: [],
     cite: "",
     respuesta_a: respuestaAId || "",
+    comentario:"",
+    comentario_derivación:"",
     
   };
 
@@ -105,7 +105,6 @@ export default function CreateElaborada() {
     descripcion: formValues.descripcion,
     prioridad: formValues.prioridad,
     estado: formValues.estado,
-    comentario: formValues.comentario,
     contacto: Number(formValues.contacto),
     plantilla_id: Number(formValues.plantilla_id),
     usuarios: Array.isArray(formValues.usuarios)
@@ -113,11 +112,13 @@ export default function CreateElaborada() {
       : [],
     cite: formValues.cite,
     respuesta_a: respuestaAId ? Number(respuestaAId) : null,
+    comentario_derivación: formValues.comentario_derivación,
   });
 
   const paraEnvio = (formValues) => ({
     link: "/ElaboradaList",
     params: camposExtras(formValues),
+    comentario_derivación: formValues.comentario_derivación,
   });
 
   const construirCampos = (formValues, manejarEntradas) => [
@@ -157,15 +158,8 @@ export default function CreateElaborada() {
       required: true,
     },
     {
-      component: InputField,
-      label: "Comentario",
-      name: "comentario",
-      required: false,
-      onChange: manejarEntradas.handleInputChange,
-    },
-    {
       component: SelectField,
-      label: "Contacto",
+      label: "Destinatario",
       name: "contacto",
       options: contactoOptions(),
       onChange: manejarEntradas.handleInputChange,
@@ -203,6 +197,13 @@ export default function CreateElaborada() {
       onChange: (name, value) => manejarEntradas.handleToggleChange(name)(value),
       isLoading: loadingUsuarios,
       error: errorUsuarios,
+    },
+    {
+      component: TextAreaField,
+      label: "Comentario",
+      name: "comentario_derivación",
+      required: false,
+      onChange: manejarEntradas.handleInputChange,
     },
   ];
 

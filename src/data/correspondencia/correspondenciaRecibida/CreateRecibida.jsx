@@ -13,6 +13,7 @@ import { SelectField } from "../../../components/shared/SelectField";
 import { UserCheckboxList } from "../../../components/shared/UserCheckboxList";
 import { useEffect } from "react";
 import FormattedDate from "../../../components/shared/FormattedDate";
+import { TextAreaField } from "c:/Users/Admin/Desktop/SystemGC2/Frontend/src/components/shared/TextAreaField";
 
 export default function createRecibida() {
   const { paraSelectsdestructuringYMap } = useFormEntity();
@@ -106,26 +107,35 @@ export default function createRecibida() {
     link: "/correspondenciaRecibidaList",
     data: {
       ...camposExtras(formValues),
-      comentario_derivacion: formValues.comentario_derivacion || ""
-    }
+      comentario_derivacion: formValues.comentario_derivacion || "",
+    },
   });
 
   const construirCampos = (formValues, manejarEntradas) => [
     {
-      component: InputField,
-      label: "Fecha Recepción",
-      name: "fecha_recepcion",
-      type: "date",
-      required: true,
-      onChange: manejarEntradas.handleInputChange,
-    },
-    {
-      component: InputField,
-      label: "Hora de recpción",    
-      name: "hora_recepcion",
-      type: "time",
-      required: true,
-      onChange: manejarEntradas.handleInputChange,
+      component: ({ value, ...props }) => (
+        <div className="flex flex-col md:flex-row gap-4 w-full">
+          <InputField
+            label="Fecha Recepción"
+            name="fecha_recepcion"
+            type="date"
+            required={true}
+            value={formValues.fecha_recepcion || ""}
+            onChange={manejarEntradas.handleInputChange}
+            className="flex-1"
+          />
+          <InputField
+            label="Hora de recepción"
+            name="hora_recepcion"
+            type="time"
+            required={true}
+            value={formValues.hora_recepcion || ""}
+            onChange={manejarEntradas.handleInputChange}
+            className="flex-1"
+          />
+        </div>
+      ),
+      name: "fecha_hora_recepcion", // This is required but won't be used for form values
     },
     {
       component: InputField,
@@ -188,12 +198,29 @@ export default function createRecibida() {
       required: true,
     },
     {
-      component: InputField,
-      label: "Fecha Respuesta",
-      name: "fecha_respuesta",
-      type: "date",
-      required: false,
-      onChange: manejarEntradas.handleInputChange,
+      component: ({value, ...props}) => (
+        <div className="flex flex-col md:flex-row gap-4 w-full">
+          <InputField
+            label="Fecha Respuesta"
+            name="fecha_respuesta"
+            type="date"
+            required={false}
+            value={formValues.fecha_respuesta || ""}
+            onChange={manejarEntradas.handleInputChange}
+            className="flex-1"
+          />
+          <InputField
+            label="Hora de respuesta"
+            name="hora_respuesta"
+            type="time"
+            required={false}
+            value={formValues.hora_respuesta || ""}
+            onChange={manejarEntradas.handleInputChange}
+            className="flex-1"
+          />
+        </div>
+      ),
+      name: "fecha_hora_respuesta", // This is required but won't be used for form values
     },
     {
       component: MultipleInputs,
@@ -213,7 +240,7 @@ export default function createRecibida() {
       error: errorUsuarios,
     },
     {
-      component: InputField,
+      component: TextAreaField,
       label: "Comentario",
       name: "comentario_derivacion",
       required: false,
@@ -222,8 +249,8 @@ export default function createRecibida() {
   ];
 
   const paraNavegacion = {
-    title: "Registrar Correspondencia",
-    subTitle: "Correspondencia Recibida",
+    title: "Registrar",
+    subTitle: "Nueva correspondencia recibida",
     icon: FaPlus,
     actions: [
       {

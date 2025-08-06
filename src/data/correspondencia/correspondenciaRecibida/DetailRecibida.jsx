@@ -88,35 +88,57 @@ export default function DetailRecibida() {
           <div className="space-y-1 w-4/5">
             {" "}
             {/* Primera Columna */}
-            <p className="font-medium text-blue-700">Nro Registro: </p>
-            <p className="text-gray-900">{correspondencia.nro_registro}</p>
-            <p className="font-medium text-blue-700">Referencia:</p>
-            <p className="text-gray-900">{correspondencia.referencia}</p>
-            <p className="font-medium text-blue-700 mt-4">
-              Fecha y hora de recepción:
+            <p className="text-gray-900">
+              <span className="font-medium  text-blue-700">
+                Nro Registro :{" "}
+              </span>
+              {correspondencia.nro_registro}
             </p>
             <p className="text-gray-900">
+              <span className="font-medium text-blue-700">Referencia : </span>
+              {correspondencia.referencia}
+            </p>
+            <p className="text-gray-900">
+              <span className="font-medium text-blue-700">
+                {" "}
+                Fecha y hora de recepción :{" "}
+              </span>
               {new Date(correspondencia.fecha_registro).toLocaleString()}
             </p>
-            <p className="font-medium text-blue-700 mt-4">Contacto:</p>
-            <p className="text-gray-900">{correspondencia.datos_contacto}</p>
-            <p className="font-medium text-blue-700 mt-4">Descripción:</p>
-            <p className="text-gray-900">{correspondencia.descripcion}</p>
+            <p className="text-gray-900">
+              <span className="font-medium text-blue-700"> Contacto : </span>
+              {correspondencia.datos_contacto}
+            </p>
+            <p className="text-gray-900">
+              <span className="font-medium text-blue-700"> Descripción : </span>
+              {correspondencia.descripcion}
+            </p>
             <hr />
-            <p className="font-medium text-blue-700">Estado:</p>
-            <p className="text-gray-900 capitalize">
+            <p className="text-gray-900">
+              <span className="font-medium text-blue-700"> Estado : </span>
               {correspondencia.estado?.replace("_", " ")}
             </p>
-            <p className="font-medium text-blue-700 mt-4">Prioridad:</p>
-            <p className="text-gray-900 capitalize">
+            <p className="text-gray-900">
+              <span className="font-medium text-blue-700"> Prioridad : </span>
               {correspondencia.prioridad}
             </p>
-            <p className="font-medium text-blue-700 mt-4">Fecha de respuesta:</p>
-            <p className="text-gray-900 capitalize">
-              {correspondencia.fecha_respuesta}
+            <p className="text-gray-900">
+              <span className="font-medium text-blue-700">
+                Fecha y hora de respuesta:
+              </span>{" "}
+              {correspondencia.fecha_respuesta
+                ? new Date(correspondencia.fecha_respuesta).toLocaleString()
+                : "El documento no requiere respuesta"}
+            </p>
+            <p className="text-gray-900">
+              <span className="font-medium text-blue-700">
+                Registrado por:
+              </span>{" "}
+              {correspondencia.usuario?.email || "No especificado"}
             </p>
           </div>
 
+          {/* Segunda Columna DOCUMENTOS*/}
           <div className="space-y-1 w-9/10">
             {" "}
             {/* Segunda Columna */}
@@ -157,7 +179,7 @@ export default function DetailRecibida() {
           </div>
         </div>
       </div>
-
+      {/* Historial de Derivaciones */}
       <h3 className="text-xl font-bold mb-4">Historial de Derivaciones</h3>
       <div className="space-y-4">
         {tieneAcciones ? (
@@ -174,6 +196,11 @@ export default function DetailRecibida() {
                   <p className="font-medium text-gray-700">Tipo de Acción:</p>
                   <p className="text-gray-900">{accion.accion}</p>
 
+                  <p className="font-medium text-gray-700 mt-4">Derivado por:</p> {/* El operador ?. (encadenamiento opcional) evita errores si usuario_destino es undefined o null. */}
+                  <p className="text-gray-900">
+                    {accion.usuario?.email || "No especificado"}
+                  </p>
+
                   <p className="font-medium text-gray-700 mt-4">Fecha:</p>
                   <p className="text-gray-900">
                     {new Date(accion.fecha).toLocaleString()}
@@ -183,7 +210,7 @@ export default function DetailRecibida() {
                 <div className="space-y-2">
                   <p className="font-medium text-gray-700">Usuario Destino:</p>
                   <p className="text-gray-900">
-                    {accion.usuario_destino?.email || "No especificado"}
+                    {accion.usuario_destino?.email || "No especificado"} {" "}
                   </p>
 
                   <p className="font-medium text-gray-700 mt-4">Comentario:</p>

@@ -27,7 +27,7 @@ export default function ElaboradaList() {
           />
           <ActionButton
             to={`/editEnviada/${item.id_correspondencia}`}
-            icon={FaSave}
+            icon={FaEdit}
             estilos="hover:bg-gray-600 hover:text-gray-100 text-gray-500 rounded-md flex items-center gap-2 transition duration-200 p-1"
           />
         </div>

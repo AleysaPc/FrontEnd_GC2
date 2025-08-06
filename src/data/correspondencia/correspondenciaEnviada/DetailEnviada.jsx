@@ -8,12 +8,7 @@ import {
   FaArrowLeft,
   FaFile,
   FaFileSignature,
-  FaArrowRight,
-  FaFly,
-  FaSeedling,
   FaShare,
-  FaFileUpload,
-  FaPlus,
   FaFileMedical,
 } from "react-icons/fa";
 import TestDerivar from "../correspondencia/TestDerivar";

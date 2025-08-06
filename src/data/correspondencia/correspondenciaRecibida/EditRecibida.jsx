@@ -59,6 +59,7 @@ export default function editEnviada() {
     return {
       //Modelo 3 - Correspondencia
       fecha_recepcion: entidad?.data?.fecha_recepcion || "",
+      hora_recepcion: entidad?.data?.hora_recepcion || "",
       referencia: entidad?.data?.referencia || "",
       descripcion: entidad?.data?.descripcion || "",
       contacto: entidad?.data?.contacto || "", //Es el nombre del FK que tiene conectado con la correspondencia
@@ -94,12 +95,29 @@ export default function editEnviada() {
 
   const construirCampos = (formValues, manejarEntradas) => [
     {
-      component: InputField,
-      label: "Fecha de Recepcion",
-      name: "fecha_recepcion",
-      type: "date",
-      required: true,
-      onChange: manejarEntradas.handleInputChange,
+      component: ({ value, ...props }) => (
+        <div className="flex flex-col md:flex-row gap-4 w-full">
+          <InputField
+            label="Fecha Recepción"
+            name="fecha_recepcion"
+            type="date"
+            required={true}
+            value={formValues.fecha_recepcion || ""}
+            onChange={manejarEntradas.handleInputChange}
+            className="flex-1"
+          />
+          <InputField
+            label="Hora de recepción"
+            name="hora_recepcion"
+            type="time"
+            required={true}
+            value={formValues.hora_recepcion || ""}
+            onChange={manejarEntradas.handleInputChange}
+            className="flex-1"
+          />
+        </div>
+      ),
+      name: "fecha_hora_recepcion", // This is required but won't be used for form values
     },
     {
       component: InputField,
@@ -161,12 +179,29 @@ export default function editEnviada() {
       onChange: manejarEntradas.handleInputChange,
     },
     {
-      component: InputField,
-      label: "Fecha de Respuesta",
-      name: "fecha_respuesta",
-      type: "date",
-      required: false,
-      onChange: manejarEntradas.handleInputChange,
+      component: ({value, ...props}) => (
+        <div className="flex flex-col md:flex-row gap-4 w-full">
+          <InputField
+            label="Fecha Respuesta"
+            name="fecha_respuesta"
+            type="date"
+            required={false}
+            value={formValues.fecha_respuesta || ""}
+            onChange={manejarEntradas.handleInputChange}
+            className="flex-1"
+          />
+          <InputField
+            label="Hora de respuesta"
+            name="hora_respuesta"
+            type="time"
+            required={false}
+            value={formValues.hora_respuesta || ""} //formValues acceder al valor del campo y value le da ese valor del campo
+            onChange={manejarEntradas.handleInputChange}
+            className="flex-1"
+          />
+        </div>
+      ),
+      name: "fecha_hora_respuesta", // This is required but won't be used for form values
     },
     {
       component: MultipleInputs,
