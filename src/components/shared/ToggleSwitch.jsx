@@ -16,7 +16,7 @@ export function ToggleSwitch({ label, checked, onChange }) {
             }`}
           ></div>
         </div>
-        <span className="ml-3 text-sm text-gray-700">{checked ? "Activo" : "Inactivo"}</span>
+        <span className="ml-3 text-sm text-gray-700">{checked ? "Si" : "No"}</span>
       </div>
     );
   }

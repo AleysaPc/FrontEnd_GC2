@@ -1,7 +1,7 @@
 import EntityList from "../../../components/shared/EntityList";
 import { useCorrespondenciaElaboradas} from "../../../hooks/useEntities";
 import { FaAngleUp } from "react-icons/fa";
-export default function RegistroEnviado() {
+export default function ListEnviados() {
     const useFields = () => [
         { key: "index", label: "#" },
         { key: "cite", label: "CITE" },
@@ -14,7 +14,7 @@ export default function RegistroEnviado() {
             render: (item) => (
               <div className="flex gap-2">
                 <a
-                  href={`/editEnviada/${item.id_correspondencia}`}
+                  href={`/registerEnviada/${item.id_correspondencia}`}
                   className="bg-orange-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded"
                 >
                   Registrar
@@ -25,15 +25,15 @@ export default function RegistroEnviado() {
         
     ];
     const entityData = {
-        title: "Registrar",
-        subTitle: "Registrar documentos enviados",
-        loadingMessage: "Cargando documentos aprobados y enviados...",
-        errorMessage: "Error al obtener los documentos aprobados y enviados",
+        title: "Documentos enviados",
+        subTitle: "Listado de documentos enviados",
+        loadingMessage: "Cargando documentos enviados...",
+        errorMessage: "Error al obtener los documentos enviados",
         fetchDataHook: (params = {}) => useCorrespondenciaElaboradas({
             ...params,
             filters: {
                 ...params.filters,
-                estado: 'enviado'  // Filtro para mostrar solo documentos enviados
+                estado: 'aprobado'  // Filtro para mostrar solo documentos enviados
             }
         }),
         all_data: false, // true para obtener todos los datos, false para paginación

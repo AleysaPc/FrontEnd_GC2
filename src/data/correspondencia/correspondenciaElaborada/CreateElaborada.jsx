@@ -95,7 +95,7 @@ export default function CreateElaborada() {
     cite: "",
     respuesta_a: respuestaAId || "",
     comentario:"",
-    comentario_derivación:"",
+    comentario_derivacion:"",
     
   };
 
@@ -112,13 +112,13 @@ export default function CreateElaborada() {
       : [],
     cite: formValues.cite,
     respuesta_a: respuestaAId ? Number(respuestaAId) : null,
-    comentario_derivación: formValues.comentario_derivación,
+    comentario_derivacion: formValues.comentario_derivacion || "",
   });
 
   const paraEnvio = (formValues) => ({
     link: "/ElaboradaList",
     params: camposExtras(formValues),
-    comentario_derivación: formValues.comentario_derivación,
+    comentario_derivacion: formValues.comentario_derivacion || "",
   });
 
   const construirCampos = (formValues, manejarEntradas) => [
@@ -194,6 +194,7 @@ export default function CreateElaborada() {
       label: "Derivar a:",
       name: "usuarios",
       options: usuarioOptions(),
+      required: false,
       onChange: (name, value) => manejarEntradas.handleToggleChange(name)(value),
       isLoading: loadingUsuarios,
       error: errorUsuarios,
@@ -201,7 +202,7 @@ export default function CreateElaborada() {
     {
       component: TextAreaField,
       label: "Comentario",
-      name: "comentario_derivación",
+      name: "comentario_derivacion",
       required: false,
       onChange: manejarEntradas.handleInputChange,
     },

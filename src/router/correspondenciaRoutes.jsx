@@ -4,10 +4,14 @@ const CorrespondenciaList = lazy(() =>
   import("../data/correspondencia/correspondencia/CorrespondenciaList")
 );
 const CorrespondenciaRecibidaList = lazy(() =>
-  import("../data/correspondencia/correspondenciaRecibida/CorrespondenciaRecibidaList")
+  import(
+    "../data/correspondencia/correspondenciaRecibida/CorrespondenciaRecibidaList"
+  )
 );
 const CorrespondenciaEnviadaList = lazy(() =>
-  import("../data/correspondencia/correspondenciaEnviada/CorrespondenciaEnviadaList")
+  import(
+    "../data/correspondencia/correspondenciaEnviada/CorrespondenciaEnviadaList"
+  )
 );
 const CreateRecibida = lazy(() =>
   import("../data/correspondencia/correspondenciaRecibida/CreateRecibida")
@@ -25,13 +29,33 @@ const EditRecibida = lazy(() =>
 const CreateContacto = lazy(() => import("../data/contacto/CreateContacto"));
 const ContactoList = lazy(() => import("../data/contacto/ContactoList"));
 const EditContacto = lazy(() => import("../data/contacto/EditContacto"));
-const CreateElaborada = lazy(() => import("../data/correspondencia/correspondenciaElaborada/CreateElaborada"));
-const ElaboradaList = lazy(() => import("../data/correspondencia/correspondenciaElaborada/ElaboradaList"));
-const VistaPreviaDocumento = lazy(() => import("../data/correspondencia/correspondenciaElaborada/VistaPreviaDocumento"));
-const VistaPdfDocumento = lazy(() => import("../data/correspondencia/correspondenciaElaborada/VistaPdfDocumento"));
-const RegistroEnviado = lazy(() => import("../data/correspondencia/correspondenciaEnviada/RegistroEnviado"));
-const EditEnviada = lazy(() => import("../data/correspondencia/correspondenciaEnviada/EditEnviada"));
-const TestDerivar = lazy(() => import("../data/correspondencia/correspondencia/TestDerivar"));
+const CreateElaborada = lazy(() =>
+  import("../data/correspondencia/correspondenciaElaborada/CreateElaborada")
+);
+const ElaboradaList = lazy(() =>
+  import("../data/correspondencia/correspondenciaElaborada/ElaboradaList")
+);
+const VistaPreviaDocumento = lazy(() =>
+  import(
+    "../data/correspondencia/correspondenciaElaborada/VistaPreviaDocumento"
+  )
+);
+const VistaPdfDocumento = lazy(() =>
+  import("../data/correspondencia/correspondenciaElaborada/VistaPdfDocumento")
+);
+const ListEnviados = lazy(() =>
+  import("../data/correspondencia/correspondenciaEnviada/ListEnviados")
+);
+const EditElaborada = lazy(() =>
+  import("../data/correspondencia/correspondenciaElaborada/EditElaborada")
+);
+const TestDerivar = lazy(() =>
+  import("../data/correspondencia/correspondencia/TestDerivar")
+);
+const RegisterEnviada = lazy(() =>
+  import("../data/correspondencia/correspondenciaEnviada/RegisterEnviada")
+);
+
 export const correspondenciaRoutes = [
   // rutas de correspondencia
   {
@@ -47,8 +71,8 @@ export const correspondenciaRoutes = [
     element: <CorrespondenciaEnviadaList />,
   },
   {
-    path: "/editEnviada/:id",
-    element: <EditEnviada />,
+    path: "/registerEnviada/:id",
+    element: <RegisterEnviada />,
   },
   {
     path: "/createRecibida",
@@ -58,13 +82,13 @@ export const correspondenciaRoutes = [
     path: "/detailRecibida/:id",
     element: <DetailRecibida />,
   },
- {
-  path: "/detailEnviada/:id",
-  element: <DetailEnviada />,
- },
   {
-    path: "/editEnviada/:id",
-    element: <EditEnviada />,
+    path: "/detailEnviada/:id",
+    element: <DetailEnviada />,
+  },
+  {
+    path: "/editElaborada/:id",
+    element: <EditElaborada />,
   },
   {
     path: "/createContacto",
@@ -95,19 +119,19 @@ export const correspondenciaRoutes = [
     element: <VistaPdfDocumento />,
   },
   {
-    path: "/registroEnviado",
-    element: <RegistroEnviado />,
+    path: "/listEnviados",
+    element: <ListEnviados />,
   },
   {
-    path: "/editEnviada/:id",
-    element: <EditEnviada />,
+    path: "/editElaborada/:id",
+    element: <EditElaborada />,
   },
   {
-    path:"editRecibida/:id",
-    element:<EditRecibida/>
+    path: "editRecibida/:id",
+    element: <EditRecibida />,
   },
   {
-    path:"testDerivar/:id",
-    element:<TestDerivar/>
-  }
+    path: "testDerivar/:id",
+    element: <TestDerivar />,
+  },
 ];

@@ -46,6 +46,12 @@ export default function editEnviada() {
     { id: "aprobado", nombre: "Aprobado" },
     { id: "rechazado", nombre: "Rechazado" },
   ];
+
+  const prioridadOptions = [
+    { id: "alta", nombre: "Alta" },
+    { id: "media", nombre: "Media" },
+    { id: "baja", nombre: "Baja" },
+  ];
   const logicaNegocio = {
     idUsuario: obtenerIdUser(),
   };
@@ -165,10 +171,11 @@ export default function editEnviada() {
       onChange: manejarEntradas.handleInputChange,
     },
     {
-      component: InputField,
+      component: SelectField,
       label: "Prioridad",
       name: "prioridad",
       required: true,
+      options: prioridadOptions,
       onChange: manejarEntradas.handleInputChange,
     },
     {

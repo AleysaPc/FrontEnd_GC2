@@ -88,14 +88,14 @@ function CorrespondenciaRecibidaList() {
   ];
 
   const entityData = {
-    title: "Gestión de Correspondencias Recibidas",
-    subTitle: "",
+    title: "Correspondencias recibidas",
+    subTitle: "Listado oficial de correspondencias recibidas",
     loadingMessage: "Cargando correspondencias recibidas...",
     errorMessage: "Error al obtener las correspondencias recibidas",
     fetchDataHook: useCorrespondenciaRecibidas,
     itemKey: "id_doc_entrante",
     entityFields: useFields,
-    icon: FaFileInvoice,
+    //icon: FaFileInvoice,
     actions: [
       {
         to: "/createRecibida",

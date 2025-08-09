@@ -1,53 +1,75 @@
-import {
-  useCorrespondenciaElaboradas,
-} from "../../../hooks/useEntities";
+import { useCorrespondenciaElaboradas } from "../../../hooks/useEntities";
 import EntityList from "../../../components/shared/EntityList";
-import  FormattedDate  from "../../../components/shared/FormattedDate";
+import FormattedDate from "../../../components/shared/FormattedDate";
+import { FaEdit, FaEye, FaStream } from "react-icons/fa";
+import { ActionButton } from "../../../components/shared/ActionButton";
+import HistorialDocumentoModal from "../../../components/shared/HistorialModal";
+import { useState } from "react";
 
 function CorrespondenciaEnviadaList() {
+
+  const [modalVisible, setModalVisible] = useState(false);
+    const [correspondenciaId, setCorrespondenciaId] = useState(null);
+  
+    const { data, isLoading, error } = useCorrespondenciaElaboradas({ all_data: true });
+  
+    const handleOpenModal = (idCorrespondencia) => {
+      setCorrespondenciaId(idCorrespondencia);
+      setModalVisible(true);
+    };
+  
+    const handleCloseModal = () => {
+      setModalVisible(false);
+      setCorrespondenciaId(null);
+    };
   const useFields = () => [
     { key: "index", label: "#" },
     {
+      key: "actions",
+      label: "Acciones",
+      render: (item) => (
+        <div className="flex gap-2">
+          <ActionButton
+            to={`/editElaborada/${item.id_correspondencia}`}
+            icon={FaEdit}
+            estilos="hover:bg-gray-600 hover:text-gray-100 text-gray-500 rounded-md flex items-center gap-2 transition duration-200 p-1"
+          />
+          <button
+            onClick={() => handleOpenModal(item.id_correspondencia)} // Abre modal con ID
+            className="hover:bg-gray-600 hover:text-gray-100 text-gray-500 rounded-md flex items-center gap-2 transition duration-200 p-1"
+            aria-label="Ver historial"
+          >
+            <FaStream />
+          </button>
+          <ActionButton
+            to={`/detailEnviada/${item.id_correspondencia}`}
+            icon={FaEye}
+            estilos="hover:bg-gray-600 hover:text-gray-100 text-gray-500 rounded-md flex items-center gap-2 transition duration-200 p-1"
+          />
+        </div>
+      ),
+    },
+    {
       key: "cite",
       label: "CITE",
-    }, 
+    },
     {
       key: "fecha_envio",
       label: "Fecha de Envio",
       render: (item) => (
         <FormattedDate date={item.fecha_envio} format="DD/MMM/YYYY" />
-      )
+      ),
     },
     {
       key: "referencia",
       label: "Referencia",
       render: (item) => item.referencia,
-    },  
+    },
     {
       key: "datos_contacto",
       label: "Remitente",
       render: (item) => `${item.datos_contacto || "Sin remitente"}`,
     },
-    {
-      key: "acciones",
-      label: "Acciones",
-      render: (item) => (
-        <div className="flex gap-2">
-          <a
-            href={`detailEnviada/${item.id_correspondencia}`}
-            className="bg-green-800 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-          >
-            Ver
-          </a>
-          <a
-            href={`/editEnviada/${item.id_correspondencia}`}
-            className="bg-red-800 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded"
-          >
-            Editar
-          </a>
-        </div>
-      ),
-    }
   ];
 
   const entityData = {
@@ -55,8 +77,18 @@ function CorrespondenciaEnviadaList() {
     subTitle: "Listado de correspondencias oficialmente enviadas",
     loadingMessage: "Cargando correspondencias enviadas...",
     errorMessage: "Error al obtener las correspondencias enviadas",
-    fetchDataHook: useCorrespondenciaElaboradas,
-    all_data: false, // true para obtener todos los datos, false para paginación
+
+    // Filtro para estado "estado=enviado"
+    fetchDataHook: (params = {}) =>
+      useCorrespondenciaElaboradas({
+        ...params,
+        filters: {
+          ...params.filters,
+          estado: "enviado", // filtro por estado enviado
+        },
+      }),
+    //
+    all_data: false,
     itemKey: "id_doc_saliente", //Debe ser igual al modelo
     entityFields: useFields,
     clavesBusqueda: ["referencia"],
@@ -67,7 +99,6 @@ function CorrespondenciaEnviadaList() {
         estilos:
           "bg-red-800 hover:bg-green-800 text-white px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",
       },
-    
     ],
     filtros: [
       { name: "cite", placeholder: "CITE " },
@@ -96,6 +127,15 @@ function CorrespondenciaEnviadaList() {
     ],
   };
 
-  return <EntityList entityData={entityData} />;
+  return (
+    <>
+      <EntityList entityData={entityData} />
+      <HistorialDocumentoModal
+        visible={modalVisible}
+        onClose={handleCloseModal}
+        correspondenciaId={correspondenciaId}
+      />
+    </>
+  );
 }
 export default CorrespondenciaEnviadaList;

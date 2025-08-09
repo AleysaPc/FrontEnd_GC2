@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { Navigation } from "../../../components/shared/Navigation";
-import { FaArrowLeft, FaFileSignature } from "react-icons/fa";
+import { FaArrowLeft, FaFileSignature, FaFilePdf } from "react-icons/fa";
 import { useCorrespondenciaElaborada } from "../../../hooks/useEntities";
 
 export default function VistaPreviaDocumento() {
@@ -40,6 +40,13 @@ export default function VistaPreviaDocumento() {
             to: -1,
             label: "Volver",
             icon: FaArrowLeft,
+            estilos:
+              "bg-white hover:bg-red-800 text-black px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",
+          },
+          {
+            to: `http://localhost:8000/api/v1/correspondencia/elaborada/${id_correspondencia}/pdf/`,
+            label: "Ver PDF",
+            icon: FaFilePdf,
             estilos:
               "bg-white hover:bg-red-800 text-black px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",
           },
