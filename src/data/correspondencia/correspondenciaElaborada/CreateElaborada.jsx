@@ -14,6 +14,7 @@ import { UserCheckboxList } from "../../../components/shared/UserCheckboxList";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { TextAreaField } from "../../../components/shared/TextAreaField";
+import { CKEditorField } from "../../../components/shared/CKEditorField";
 
 export default function CreateElaborada() {
   const { paraSelectsdestructuringYMap, options } = useFormEntity();
@@ -135,11 +136,12 @@ export default function CreateElaborada() {
       onChange: manejarEntradas.handleInputChange,
     },
     {
-      component: TextAreaField,
+      component: CKEditorField,    // Aquí cambias TextAreaField por CKEditorField
       label: "Descripción",
       name: "descripcion",
       required: true,
       onChange: manejarEntradas.handleInputChange,
+      value: formValues.descripcion, // pasa el valor para que el editor lo cargue
     },
     {
       component: SelectField,

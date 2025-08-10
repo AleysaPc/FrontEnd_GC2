@@ -1,6 +1,7 @@
 import EntityList from "../../../components/shared/EntityList";
 import { useCorrespondenciaElaboradas} from "../../../hooks/useEntities";
 import { FaAngleUp } from "react-icons/fa";
+import GenerarDocumentoButton from "../../../components/documentos/GenerarDocumentoButton";
 export default function ListEnviados() {
     const useFields = () => [
         { key: "index", label: "#" },
@@ -19,6 +20,7 @@ export default function ListEnviados() {
                 >
                   Registrar
                 </a>
+                <GenerarDocumentoButton id={item.id_correspondencia} />
               </div>
             ),
           },

@@ -1,0 +1,68 @@
+import React from 'react';
+import { toast } from 'react-toastify';
+import axios from 'axios';
+
+const GenerarDocumentoButton = ({ id, className = "" }) => {
+    const handleGenerateWord = async () => {
+        try {
+            const apiUrl = `http://localhost:8000/api/v1/correspondencia/generar_documento/${id}/`;
+            console.log('Intentando descargar desde:', apiUrl);
+            
+            // Eliminamos credentials: 'include' ya que parece que no se necesitan
+            const response = await fetch(apiUrl);
+            
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error('Error en la respuesta:', response.status, errorText);
+                throw new Error(`Error HTTP! estado: ${response.status}`);
+            }
+    
+            const blob = await response.blob();
+            console.log('Tamaño del archivo:', blob.size, 'bytes');
+            
+            if (blob.size === 0) {
+                throw new Error('El archivo está vacío');
+            }
+    
+            // Obtener el nombre del archivo del header o usar uno por defecto
+            const contentDisposition = response.headers.get('content-disposition');
+            let filename = `documento_${id}.docx`;
+            
+            if (contentDisposition) {
+                const filenameMatch = contentDisposition.match(/filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/);
+                if (filenameMatch && filenameMatch[1]) {
+                    filename = filenameMatch[1].replace(/['"]/g, '');
+                }
+            }
+    
+            if (!filename.toLowerCase().endsWith('.docx')) {
+                filename += '.docx';
+            }
+    
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+        } catch (error) {
+            console.error('Error al generar el documento:', error);
+            toast.error(`Error al generar el documento: ${error.message}`);
+        }
+    };
+      
+
+    return (
+        <button
+            onClick={handleGenerateWord}
+            className={`bg-orange-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded ${className}`}
+        >
+            Generar Word
+        </button>
+    );
+};
+
+export default GenerarDocumentoButton;

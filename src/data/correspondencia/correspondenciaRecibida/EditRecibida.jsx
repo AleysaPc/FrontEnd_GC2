@@ -12,6 +12,7 @@ import { FaBackspace, FaEye, FaPencilAlt, FaPlus } from "react-icons/fa";
 import { MultipleInputs } from "../../../components/shared/MultipleInputs";
 import { UserCheckboxList } from "../../../components/shared/UserCheckboxList";
 import { useUsers } from "../../../hooks/useEntities";
+import { TextAreaField } from "../../../components/shared/TextAreaField";
 
 export default function editEnviada() {
   const { paraSelectsdestructuringYMap } = useFormEntity();
@@ -228,7 +229,7 @@ export default function editEnviada() {
       error: errorUsuarios,
     },
     {
-      component: InputField,
+      component: TextAreaField,
       label: "Comentario",
       name: "comentario_derivacion",
       required: false,
