@@ -219,19 +219,6 @@ export const useAccionCorrespondencia = (id) =>
 export const useAccionCorrespondenciaMutations = () =>
   useEntityMutations(AccionCorrespondenciaApi, "acciones");
 
-// Hook personalizado para obtener solo las acciones de una correspondencia
-export const useAccionesPorCorrespondencia = (correspondenciaId) => {
-  const params = correspondenciaId ? { correspondencia_id: correspondenciaId } : {};
-  console.log("Params para acciones:", params);
-  return useData(
-    AccionCorrespondenciaApi,
-    "acciones",
-    null,
-    params,
-    1000 * 60 * 5,
-    !!correspondenciaId
-  );
-};
 
 //users
 export const useUsers = (

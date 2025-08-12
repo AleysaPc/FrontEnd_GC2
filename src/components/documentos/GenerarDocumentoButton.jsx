@@ -1,6 +1,7 @@
 import React from 'react';
 import { toast } from 'react-toastify';
 import axios from 'axios';
+import { FaFileWord } from 'react-icons/fa';
 
 const GenerarDocumentoButton = ({ id, className = "" }) => {
     const handleGenerateWord = async () => {
@@ -58,9 +59,10 @@ const GenerarDocumentoButton = ({ id, className = "" }) => {
     return (
         <button
             onClick={handleGenerateWord}
-            className={`bg-orange-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded ${className}`}
+            title="Generar Documento Word"
+            className={`hover:bg-gray-600 hover:text-gray-100 text-gray-500 rounded-md flex items-center gap-2 transition duration-200 p-1 ${className}`}
         >
-            Generar Word
+            <FaFileWord className="text-blue-500" size={20} />
         </button>
     );
 };

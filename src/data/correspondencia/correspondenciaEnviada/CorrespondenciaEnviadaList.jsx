@@ -30,20 +30,23 @@ function CorrespondenciaEnviadaList() {
       render: (item) => (
         <div className="flex gap-2">
           <ActionButton
-            to={`/editElaborada/${item.id_correspondencia}`}
-            icon={FaEdit}
+            to={`/detailEnviada/${item.id_correspondencia}`}
+            icon={FaEye}
+            title="Ver detalles del documento"
             estilos="hover:bg-gray-600 hover:text-gray-100 text-gray-500 rounded-md flex items-center gap-2 transition duration-200 p-1"
           />
           <button
             onClick={() => handleOpenModal(item.id_correspondencia)} // Abre modal con ID
+            title="Ver historial"
             className="hover:bg-gray-600 hover:text-gray-100 text-gray-500 rounded-md flex items-center gap-2 transition duration-200 p-1"
             aria-label="Ver historial"
           >
             <FaStream />
           </button>
           <ActionButton
-            to={`/detailEnviada/${item.id_correspondencia}`}
-            icon={FaEye}
+            to={`/editElaborada/${item.id_correspondencia}`}
+            icon={FaEdit}
+            title="Editar"
             estilos="hover:bg-gray-600 hover:text-gray-100 text-gray-500 rounded-md flex items-center gap-2 transition duration-200 p-1"
           />
         </div>

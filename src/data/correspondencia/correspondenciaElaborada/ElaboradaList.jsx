@@ -32,12 +32,13 @@ export default function ElaboradaList() {
           <ActionButton
             to={`/vistaPreviaDocumento/${item.id_correspondencia}`}
             icon={FaEye}
-            title="Vista previa"
+            title="Vista previa de documento"
             estilos="hover:bg-gray-600 hover:text-gray-100 text-gray-500 rounded-md flex items-center gap-2 p-1"
           />
 
           <button
             onClick={() => handleOpenModal(item.id_correspondencia)} // Abre modal con ID
+            title="Ver historial"
             className="hover:bg-gray-600 hover:text-gray-100 text-gray-500 rounded-md flex items-center gap-2 transition duration-200 p-1"
             aria-label="Ver historial"
           >
@@ -46,6 +47,7 @@ export default function ElaboradaList() {
           <ActionButton
             to={`/editElaborada/${item.id_correspondencia}`}
             icon={FaEdit}
+            title="Editar"
             estilos="hover:bg-gray-600 hover:text-gray-100 text-gray-500 rounded-md flex items-center gap-2 transition duration-200 p-1"
           />
         </div>

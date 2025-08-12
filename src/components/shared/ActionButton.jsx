@@ -21,7 +21,7 @@ export function ActionButton({
   );
 
   return to ? (
-    <Link to={to} className={buttonClasses}>
+    <Link to={to} className={buttonClasses} title={title}>
       {content}
     </Link>
   ) : (

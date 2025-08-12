@@ -6,14 +6,11 @@ import { useContactos } from "../../../hooks/useEntities";
 import { useFormEntity } from "../../../utils/useFormEntity";
 import { obtenerIdUser } from "../../../utils/auth";
 import { InputField } from "../../../components/shared/InputField";
-import { SelectField } from "../../../components/shared/SelectField";
 import EditEntity from "../../../components/shared/EditEntity";
-import { FaBackspace, FaEye, FaPencilAlt, FaPlus } from "react-icons/fa";
+import { FaBackspace, FaPlus } from "react-icons/fa";
 import { MultipleInputs } from "../../../components/shared/MultipleInputs";
-import { TextAreaField } from "../../../components/shared/TextAreaField";
 import { useParams } from "react-router-dom";
 import { ToggleSwitch } from "../../../components/shared/ToggleSwitch";
-import { CheckBox } from "../../../components/shared/CheckBox";
 
 export default function RegisterEnviada() {
   const { paraSelectsdestructuringYMap } = useFormEntity();
@@ -174,7 +171,7 @@ export default function RegisterEnviada() {
     icon: FaPlus,
     actions: [
       {
-        to: "/ElaboradaList",
+        to: "/listEnviados",
         label: "Volver",
         icon: FaBackspace,
         estilos:

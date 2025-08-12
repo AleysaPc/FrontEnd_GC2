@@ -164,11 +164,13 @@ export default function createRecibida() {
           to: "/createContacto",
           state: { from: "createRecibida" },
           icon: FaPlus,
+          title: "Agregar Contacto",
           estilos: "text-green-600 hover:bg-green-600 hover:text-white p-1",
         },
         {
           to: "/contactoList",
           icon: FaEye,
+          title: "Ver lista de contactos",
           estilos: "text-blue-600 hover:bg-blue-600 hover:text-white p-1",
         },
       ],
