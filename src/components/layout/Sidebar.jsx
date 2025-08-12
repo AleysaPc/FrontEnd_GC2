@@ -1,15 +1,22 @@
-import { useState } from 'react'
-import SidebarMenu from './SidebarMenu'
-import { menus } from '../../data/SidebarData'
-import { FaBuilding, FaCrown } from 'react-icons/fa'
+import { useState } from "react";
+import SidebarMenu from "./SidebarMenu";
+import { menus } from "../../data/SidebarData";
+import { FaBuilding } from "react-icons/fa";
+import { useUser } from "../../hooks/useEntities";
+import { obtenerIdUser } from "../../utils/auth";
 
 const Sidebar = ({ isVisible }) => {
-  const [openMenu, setOpenMenu] = useState(null)
+  const [openMenu, setOpenMenu] = useState(null);
+
+  const userId = obtenerIdUser();
+  const { data: user } = useUser(userId);
+
+  console.log("user", user);
 
   return (
     <div
       className={`sticky z-50 shadow w-64 transition-all duration-300 ${
-        isVisible ? 'flex flex-col' : 'hidden'
+        isVisible ? "flex flex-col" : "hidden"
       } h-[calc(100vh)]`}
     >
       {/* titulo */}
@@ -23,15 +30,17 @@ const Sidebar = ({ isVisible }) => {
         {/* Avatar */}
         <div className="mb-3">
           <div className="w-16 h-16 rounded-full bg-red-700 flex items-center justify-center text-white font-semibold text-xl">
-            APC
+            {user?.data?.first_name?.substring(0, 2).toUpperCase() || "US"}
           </div>
         </div>
         {/* Información del usuario */}
         <div className="text-center">
           <p className="text-xl font-medium text-white">
-            Aleysa
+            {user?.data?.first_name + " " + user?.data?.last_name || "Usuario"}
           </p>
-          <p className="text-xl text-white">aleysa@gmail.com</p>
+          <p className="text-xl text-white">
+            {user?.data?.email || "correo@ejemplo.com"}
+          </p>
         </div>
       </div>
 
@@ -53,7 +62,7 @@ const Sidebar = ({ isVisible }) => {
         </ul>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Sidebar
+export default Sidebar;

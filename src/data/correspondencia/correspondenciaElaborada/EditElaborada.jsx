@@ -181,8 +181,8 @@ export default function editElaborada() {
     },
   ];
   const paraNavegacion = {
-    title: "Registrar Correspondencia Enviada",
-    subTitle: "Formulario para registrar correspondencia Enviada",
+    title: "Editar Correspondencia Enviada",
+    subTitle: "Formulario para editar correspondencia Enviada",
     icon: FaPlus,
     actions: [
       {

@@ -9,15 +9,15 @@ export function NotificacionCampana({ count, onClick }) {
       role="button"
       tabIndex={0}
       onKeyDown={(e) => e.key === "Enter" && onClick()}
-      className="text-white"
+      className="text-white-600"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
         viewBox="0 0 24 24"
         stroke="currentColor"
-        width="24"
-        height="24"
+        width="32"
+        height="32"
       >
         <path
           strokeLinecap="round"
@@ -27,7 +27,7 @@ export function NotificacionCampana({ count, onClick }) {
         />
       </svg>
       {count > 0 && (
-        <span className="absolute -top-1 -right-2 bg-red-600 text-white rounded-full text-xs w-5 h-5 flex items-center justify-center font-bold">
+        <span className="absolute -top-1 -right-2 bg-green-700 text-white rounded-full text-sm w-6 h-6 flex items-center justify-center font-bold">
           {count}
         </span>
       )}
