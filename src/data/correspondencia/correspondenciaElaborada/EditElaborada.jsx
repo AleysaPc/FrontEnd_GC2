@@ -1,8 +1,10 @@
 import {
   useCorrespondenciaElaboradaMutations,
   useCorrespondenciaElaborada,
+  useContactos,
+  useUsers,
+  usePlantillaDocumentos,
 } from "../../../hooks/useEntities";
-import { useContactos } from "../../../hooks/useEntities";
 import { useFormEntity } from "../../../utils/useFormEntity";
 import { obtenerIdUser } from "../../../utils/auth";
 import { InputField } from "../../../components/shared/InputField";
@@ -12,157 +14,182 @@ import { FaBackspace, FaEye, FaPencilAlt, FaPlus } from "react-icons/fa";
 import { MultipleInputs } from "../../../components/shared/MultipleInputs";
 import { UserCheckboxList } from "../../../components/shared/UserCheckboxList";
 import { TextAreaField } from "../../../components/shared/TextAreaField";
-import { useUsers } from "../../../hooks/useEntities";
+import { CKEditorField } from "../../../components/shared/CKEditorField";
+import { useEffect, useState } from "react";
 
-export default function editElaborada() {
-  const { paraSelectsdestructuringYMap } = useFormEntity();
+export default function EditElaborada() {
+  const { options } = useFormEntity();
+  const logicaNegocio = { idUsuario: obtenerIdUser() };
 
+  // --- Estado para guardar tipo de plantilla ---
+  const [tipoPlantillaSeleccionada, setTipoPlantillaSeleccionada] = useState("");
+
+  // Datos necesarios
   const {
     data: contactosData,
     isLoading: loadingContactos,
     error: errorContactos,
   } = useContactos({ all_data: true });
-  const contactosArray = contactosData?.data || [];
-
   const {
     data: usuariosData,
     isLoading: loadingUsuarios,
     error: errorUsuarios,
   } = useUsers({ all_data: true });
-  const usuariosArray = usuariosData?.data || [];
+  const {
+    data: plantillasData,
+    isLoading: loadingPlantillas,
+    error: errorPlantillas,
+  } = usePlantillaDocumentos({ all_data: true });
 
-  const { options } = useFormEntity();
+  const contactosArray = contactosData?.data || [];
+  const usuariosArray = usuariosData?.data || [];
+  const plantillasArray = plantillasData?.data || [];
 
   const contactoOptions = () =>
     contactosArray
       ? options(contactosArray, "id_contacto", "nombre_completo")
       : [];
-
   const usuarioOptions = () =>
     usuariosArray ? options(usuariosArray, "id", "email") : [];
+  const plantillaOptions = () =>
+    plantillasArray
+      ? options(plantillasArray, "id_plantilla", "nombre_plantilla")
+      : [];
 
-  const estadoOptions = [
+  const opcionPrioridad = [
+    { id: "alta", nombre: "Alta" },
+    { id: "media", nombre: "Media" },
+    { id: "baja", nombre: "Baja" },
+  ];
+
+  const opcionEstado = [
     { id: "en_revision", nombre: "En revisión" },
+    { id: "borrador", nombre: "Borrador" },
     { id: "aprobado", nombre: "Aprobado" },
     { id: "rechazado", nombre: "Rechazado" },
-    { id: "borrador", nombre: "Borrador" },
   ];
-  const logicaNegocio = {
-    idUsuario: obtenerIdUser(),
-  };
 
+  // --- Configuración del formulario con datos existentes ---
   const configuracionFormulario = (entidad) => {
-    // Asegurarse de que los usuarios sean un array de números
+    if (entidad?.data?.plantilla?.tipo) {
+      setTipoPlantillaSeleccionada(entidad.data.plantilla.tipo);
+    }
+
     const usuarios = Array.isArray(entidad?.data?.usuarios)
       ? entidad.data.usuarios.map((user) =>
           typeof user === "object" ? user.id : Number(user)
         )
       : [];
 
+    // Si es informe, intentar separar descripción
+    let descripcion_introduccion = "";
+    let descripcion_desarrollo = "";
+    let descripcion_conclusion = "";
+
+    if (entidad?.data?.plantilla?.tipo === "informe" && entidad?.data?.descripcion) {
+      const partes = entidad.data.descripcion.split("\n\n");
+      descripcion_introduccion = partes[0] || "";
+      descripcion_desarrollo = partes[1] || "";
+      descripcion_conclusion = partes[2] || "";
+    }
+
     return {
-      //Modelo 3 - Correspondencia
       referencia: entidad?.data?.referencia || "",
       descripcion: entidad?.data?.descripcion || "",
+      descripcion_introduccion,
+      descripcion_desarrollo,
+      descripcion_conclusion,
       paginas: entidad?.data?.paginas || "",
       comentario: entidad?.data?.comentario || "",
-      contacto: entidad?.data?.contacto || "", //Es el nombre del FK que tiene conectado con la correspondencia
+      contacto: entidad?.data?.contacto || "",
       documentos: Array.isArray(entidad?.data?.documentos)
         ? entidad.data.documentos
         : [],
       estado: entidad?.data?.estado || "",
+      prioridad: entidad?.data?.prioridad || "",
       usuarios: usuarios,
       comentario_derivacion: entidad?.data?.comentario_derivacion || "",
+      plantilla_id: entidad?.data?.plantilla?.id_plantilla || "",
     };
   };
 
-  const camposExtras = (formValues) => ({
-    contacto: Number(formValues.contacto),
-    usuario: logicaNegocio.idUsuario,
-    usuarios: Array.isArray(formValues.usuarios)
-      ? formValues.usuarios.map(Number)
-      : [],
-    comentario_derivacion: formValues.comentario_derivacion || "",
-  });
+  // --- Campos extras para el envío ---
+  const camposExtras = (formValues) => {
+    let descripcionFinal = "";
+
+    if (tipoPlantillaSeleccionada === "informe") {
+      descripcionFinal = [
+        formValues.descripcion_introduccion || "",
+        formValues.descripcion_desarrollo || "",
+        formValues.descripcion_conclusion || "",
+      ]
+        .filter(Boolean)
+        .join("\n\n");
+    } else {
+      descripcionFinal = formValues.descripcion || "";
+    }
+
+    return {
+      referencia: formValues.referencia,
+      descripcion: descripcionFinal,
+      paginas: formValues.paginas,
+      comentario: formValues.comentario,
+      contacto: formValues.contacto ? Number(formValues.contacto) : null,
+      estado: formValues.estado,
+      prioridad: formValues.prioridad,
+      plantilla_id: Number(formValues.plantilla_id),
+      usuarios: Array.isArray(formValues.usuarios)
+        ? formValues.usuarios.map(Number)
+        : [],
+      comentario_derivacion: formValues.comentario_derivacion || "",
+      usuario: logicaNegocio.idUsuario,
+    };
+  };
 
   const paraEnvio = (formValues) => ({
-    entityId: formValues.id_correspondencia, //del modelo correspondencia
+    entityId: formValues.id_correspondencia,
     link: "/ElaboradaList",
-    data: {
-      ...camposExtras(formValues),
-      comentario_derivacion: formValues.comentario_derivacion || "",
-    },
+    data: camposExtras(formValues),
   });
 
-  const construirCampos = (formValues, manejarEntradas) => [
-    {
-      component: InputField,
-      label: "Referencia",
-      name: "referencia",
-      required: true,
-      onChange: manejarEntradas.handleInputChange,
-    },
-    {
-      component: TextAreaField,
-      label: "Descripción",
-      name: "descripcion",
-      required: true,
-      onChange: manejarEntradas.handleInputChange,
-    },
-    {
-      component: InputField,
-      label: "Paginas",
-      name: "paginas",
-      type: "number",
-      required: true,
-      onChange: manejarEntradas.handleInputChange,
-    },
-    {
-      component: InputField,
-      label: "Comentario",
-      name: "comentario",
-      required: false,
-      onChange: manejarEntradas.handleInputChange,
-    },
-    {
+  // --- Construcción de campos dinámicos ---
+  const construirCampos = (formValues, manejarEntradas) => {
+    const campoPlantilla = {
       component: SelectField,
-      label: "Contacto",
-      name: "contacto",
-      options: contactoOptions(),
+      label: "Plantilla",
+      name: "plantilla_id",
+      options: plantillaOptions(),
+      onChange: (e) => {
+        manejarEntradas.handleInputChange(e);
+        const seleccionada = plantillasArray.find(
+          (p) => p.id_plantilla === Number(e.target.value)
+        );
+        setTipoPlantillaSeleccionada(seleccionada?.tipo || "");
+      },
+      required: true,
+      isLoading: loadingPlantillas,
+      error: errorPlantillas,
+    };
+
+    const campoPrioridad = {
+      component: SelectField,
+      label: "Prioridad",
+      name: "prioridad",
+      options: opcionPrioridad,
       onChange: manejarEntradas.handleInputChange,
-      actionButtons: [
-        {
-          to: `/editContacto/${formValues.contacto}`,
-          icon: FaPencilAlt,
-          estilos: "text-yellow-600 hover:bg-yellow-600 hover:text-white p-1",
-        },
-        {
-          to: "/createContacto",
-          icon: FaPlus,
-          estilos: "text-green-600 hover:bg-green-600 hover:text-white p-1",
-        },
-        {
-          to: "/contactoList",
-          icon: FaEye,
-          estilos: "text-blue-600 hover:bg-blue-600 hover:text-white p-1",
-        },
-      ],
-    },
-    {
+      required: true,
+    };
+
+    const campoEstado = {
       component: SelectField,
       label: "Estado",
       name: "estado",
-      options: estadoOptions,
+      options: opcionEstado,
       onChange: manejarEntradas.handleInputChange,
-    },
-    {
-      component: MultipleInputs,
-      label: "Documento",
-      name: "documentos",
-      type: "file",
-      required: false,
-      onChange: manejarEntradas.handleInputChange,
-    },
-    {
+      required: true,
+    };
+
+    const campoDerivarUsuarios = {
       component: UserCheckboxList,
       label: "Derivar a:",
       name: "usuarios",
@@ -171,29 +198,97 @@ export default function editElaborada() {
         manejarEntradas.handleToggleChange(name)(value),
       isLoading: loadingUsuarios,
       error: errorUsuarios,
-    },
-    {
-      component: InputField,
-      label: "Comentario",
+    };
+
+    const campoComentarioDerivacion = {
+      component: TextAreaField,
+      label: "Comentario para derivación",
       name: "comentario_derivacion",
-      required: false,
       onChange: manejarEntradas.handleInputChange,
-    },
-  ];
+    };
+
+    if (tipoPlantillaSeleccionada === "nota_externa") {
+      return [
+        campoPlantilla,
+        { component: InputField, label: "Referencia", name: "referencia", onChange: manejarEntradas.handleInputChange, required: true },
+        { component: CKEditorField, label: "Descripción", name: "descripcion", value: formValues.descripcion, onChange: manejarEntradas.handleInputChange },
+        { component: InputField, label: "Páginas", name: "paginas", type: "number", onChange: manejarEntradas.handleInputChange, required: true },
+        { component: InputField, label: "Comentario (Opcional)", name: "comentario", onChange: manejarEntradas.handleInputChange },
+        { component: SelectField, label: "Destinatario", name: "contacto", options: contactoOptions(), onChange: manejarEntradas.handleInputChange,
+          actionButtons: [
+            { to: `/editContacto/${formValues.contacto}`, icon: FaPencilAlt, estilos: "text-yellow-600 hover:bg-yellow-600 hover:text-white p-1" },
+            { to: "/createContacto", icon: FaPlus, estilos: "text-green-600 hover:bg-green-600 hover:text-white p-1" },
+            { to: "/contactoList", icon: FaEye, estilos: "text-blue-600 hover:bg-blue-600 hover:text-white p-1" }
+          ],
+          isLoading: loadingContactos, error: errorContactos },
+          {
+            component: MultipleInputs,
+            label: "Documento",
+            name: "documentos",
+            type: "file",
+            onChange: manejarEntradas.handleInputChange,
+          },
+        campoPrioridad, campoEstado, campoDerivarUsuarios, campoComentarioDerivacion
+      ];
+    }
+
+    if (tipoPlantillaSeleccionada === "comunicado" || tipoPlantillaSeleccionada === "convocatoria") {
+      return [
+        campoPlantilla,
+        { component: CKEditorField, label: "Descripción", name: "descripcion", value: formValues.descripcion, onChange: manejarEntradas.handleInputChange, required: true },
+        {
+            component: MultipleInputs,
+            label: "Documento",
+            name: "documentos",
+            type: "file",
+            onChange: manejarEntradas.handleInputChange,
+          },
+        campoPrioridad, campoEstado, campoDerivarUsuarios, campoComentarioDerivacion
+      ];
+    }
+
+    if (tipoPlantillaSeleccionada === "informe") {
+      return [
+        campoPlantilla,
+        { component: SelectField, label: "Destinatario", name: "contacto", options: contactoOptions(), onChange: manejarEntradas.handleInputChange,
+          actionButtons: [  
+            { to: `/editContacto/${formValues.contacto}`, icon: FaPencilAlt, estilos: "text-yellow-600 hover:bg-yellow-600 hover:text-white p-1" },
+            { to: "/createContacto", icon: FaPlus, estilos: "text-green-600 hover:bg-green-600 hover:text-white p-1" },
+            { to: "/contactoList", icon: FaEye, estilos: "text-blue-600 hover:bg-blue-600 hover:text-white p-1" }
+          ],
+          isLoading: loadingContactos, error: errorContactos },
+        { component: CKEditorField, label: "Introducción", name: "descripcion_introduccion", value: formValues.descripcion_introduccion, onChange: manejarEntradas.handleInputChange },
+        { component: CKEditorField, label: "Desarrollo", name: "descripcion_desarrollo", value: formValues.descripcion_desarrollo, onChange: manejarEntradas.handleInputChange, required: true },
+        { component: CKEditorField, label: "Conclusión", name: "descripcion_conclusion", value: formValues.descripcion_conclusion, onChange: manejarEntradas.handleInputChange, required: true },
+        {
+            component: MultipleInputs,
+            label: "Documento",
+            name: "documentos",
+            type: "file",
+            onChange: manejarEntradas.handleInputChange,
+          },
+        campoPrioridad, campoEstado, campoDerivarUsuarios, campoComentarioDerivacion
+      ];
+    }
+
+    // Por defecto
+    return [campoPlantilla, { component: CKEditorField, label: "Descripción", name: "descripcion", value: formValues.descripcion, onChange: manejarEntradas.handleInputChange }, campoPrioridad, campoEstado, campoDerivarUsuarios, campoComentarioDerivacion];
+  };
+
   const paraNavegacion = {
-    title: "Editar Correspondencia Enviada",
-    subTitle: "Formulario para editar correspondencia Enviada",
+    title: "Editar Documento",
+    subTitle: "Formulario para editar correspondencia elaborada",
     icon: FaPlus,
     actions: [
       {
         to: "/ElaboradaList",
         label: "Volver",
         icon: FaBackspace,
-        estilos:
-          "bg-gray-500 hover:bg-gray-800 text-white px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",
+        estilos: "bg-gray-500 hover:bg-gray-800 text-white px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",
       },
     ],
   };
+
   return (
     <EditEntity
       useEntityMutations={useCorrespondenciaElaboradaMutations}

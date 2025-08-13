@@ -12,7 +12,7 @@ export default function ElaboradaList() {
     const [correspondenciaId, setCorrespondenciaId] = useState(null);
   
     const { data, isLoading, error } = useCorrespondenciaElaboradas({ all_data: true });
-  
+
     const handleOpenModal = (idCorrespondencia) => {
       setCorrespondenciaId(idCorrespondencia);
       setModalVisible(true);
@@ -54,15 +54,18 @@ export default function ElaboradaList() {
       ),
     },
     { key: "cite", label: "CITE" },
-    {
-      key: "fecha_envio",
-      label: "Fecha de Envio",
-      render: (item) => (
-        <FormattedDate date={item.fecha_envio} format="DD/MMM/YYYY" />
-      ),
+    { 
+      key: "referencia", 
+      label: "Referencia", 
+      render: (item) => item.referencia?.trim() || "Sin referencia" 
     },
-    { key: "referencia", label: "Referencia" },
+    
     { key: "estado", label: "Estado" },
+    { 
+      key: "email", 
+      label: "Elaborado por", 
+      render: (item) => item.usuario?.email || 'No especificado' 
+    },
   ];
 
   const entityData = {

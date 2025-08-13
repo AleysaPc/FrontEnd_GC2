@@ -243,7 +243,7 @@ export default function editEnviada() {
     icon: FaPlus,
     actions: [
       {
-        to: "/correspondenciaRecibidaList",
+        to: -1,
         label: "Volver",
         icon: FaBackspace,
         estilos:

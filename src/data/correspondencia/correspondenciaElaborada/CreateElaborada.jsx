@@ -17,6 +17,7 @@ import { useSearchParams } from "react-router-dom";
 import { TextAreaField } from "../../../components/shared/TextAreaField";
 import { CKEditorField } from "../../../components/shared/CKEditorField";
 import { obtenerIdUser } from "../../../utils/auth";
+import { MultipleInputs } from "../../../components/shared/MultipleInputs";
 
 export default function CreateElaborada() {
   const { options } = useFormEntity();
@@ -98,12 +99,14 @@ export default function CreateElaborada() {
     respuesta_a: respuestaAId || "",
     comentario: "",
     comentario_derivacion: "",
+    documentos: [],
     usuario: "", // se asigna luego
   };
 
   // Preparar datos para envío (unir descripción según plantilla)
   const camposExtras = (formValues) => {
     const contactoField =
+
       tipoPlantillaSeleccionada === "nota_externa" && formValues.contacto
         ? { contacto: Number(formValues.contacto) }
         : {};
@@ -172,6 +175,13 @@ export default function CreateElaborada() {
       error: errorPlantillas,
     };
 
+    const campoDocumentos = {
+      component: MultipleInputs,
+      label: "Documento",
+      name: "documentos",
+      type: "file",
+      onChange: manejarEntradas.handleInputChange,
+    };
     const campoPrioridad = {
       component: SelectField,
       label: "Prioridad",
@@ -269,6 +279,7 @@ export default function CreateElaborada() {
         },
         campoPrioridad,
         campoEstado,
+        campoDocumentos,
         campoDerivarUsuarios,
         campoComentarioDerivacion,
       ];
@@ -287,6 +298,7 @@ export default function CreateElaborada() {
         },
         campoPrioridad,
         campoEstado,
+        campoDocumentos,
         campoDerivarUsuarios,
         campoComentarioDerivacion,
       ];
@@ -305,6 +317,7 @@ export default function CreateElaborada() {
         },
         campoPrioridad,
         campoEstado,
+        campoDocumentos,
         campoDerivarUsuarios,
         campoComentarioDerivacion,
       ];
@@ -376,6 +389,7 @@ export default function CreateElaborada() {
         },
         campoPrioridad,
         campoEstado,
+        campoDocumentos,
         campoDerivarUsuarios,
         campoComentarioDerivacion,
       ];
@@ -393,6 +407,7 @@ export default function CreateElaborada() {
       },
       campoPrioridad,
       campoEstado,
+      campoDocumentos,
       campoDerivarUsuarios,
       campoComentarioDerivacion,
     ];

@@ -73,9 +73,9 @@ const Notificaciones = () => {
                 <div className="font-medium">
                   {noti.documento || "Documento sin referencia"}
                 </div>
-                <div className="text-sm text-gray-600">
+                {/*<div className="text-sm text-gray-600">
                   {noti.descripcion || "Sin descripción"}
-                </div>
+                </div>*/}
                 <div className="text-xs text-gray-400">
                   {new Date(noti.fecha).toLocaleString()}
                 </div>

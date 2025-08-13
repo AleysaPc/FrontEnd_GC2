@@ -17,11 +17,6 @@ export default function InstitucionList() {
                   icon={FaEdit}
                   estilos="hover:bg-gray-600 hover:text-gray-100 text-gray-500 rounded-md flex items-center gap-2 transition duration-200 p-1"
                 />
-                <ActionButton
-                  to={`/historialInstitucion/${item.id_institucion}`}
-                  icon={FaHistory}
-                  estilos="hover:bg-gray-600 hover:text-gray-100 text-gray-500 rounded-md flex items-center gap-2 transition duration-200 p-1"
-                />
               </div>
             ),
           }, 
@@ -55,6 +50,13 @@ export default function InstitucionList() {
                 estilos:
                     "bg-gray-500 hover:bg-gray-800 text-white px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",
             },
+        ],
+        filtros: [
+            { name: "razon_social", placeholder: "Empresa" },
+        ],
+        ordenes: [
+            { name: "razon_social", label: "Empresa" },
+            { name: "fecha_fundacion", label: "Fecha Fundacion" },
         ],
     };
     return <EntityList entityData={entityData} />;

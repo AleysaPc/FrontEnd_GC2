@@ -131,6 +131,8 @@ function CorrespondenciaRecibidaList() {
     ],
     ordenes: [
       { name: "referencia", label: "Referencia" },
+      { name: "fecha_recepcion", label: "Fecha Recepción" },
+      { name: "fecha_respuesta", label: "Fecha Respuesta" },
       { name: "contacto__nombre_contacto", label: "Nombre contacto" },
       { name: "contacto__apellido_pat_contacto", label: "Apellido paterno" },
       { name: "contacto__apellido_mat_contacto", label: "Apellido materno" },

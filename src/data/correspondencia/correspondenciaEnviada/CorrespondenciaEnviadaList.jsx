@@ -123,6 +123,7 @@ function CorrespondenciaEnviadaList() {
     ordenes: [
       { name: "cite", label: "CITE" },
       { name: "referencia", label: "Referencia" },
+      { name: "fecha_envio", label: "Fecha de Envio" },
       { name: "contacto__nombre_contacto", label: "Nombre contacto" },
       { name: "contacto__apellido_pat_contacto", label: "Apellido paterno" },
       { name: "contacto__apellido_mat_contacto", label: "Apellido materno" },

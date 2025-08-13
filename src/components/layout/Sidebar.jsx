@@ -11,8 +11,6 @@ const Sidebar = ({ isVisible }) => {
   const userId = obtenerIdUser();
   const { data: user } = useUser(userId);
 
-  console.log("user", user);
-
   return (
     <div
       className={`sticky z-50 shadow w-64 transition-all duration-300 ${

@@ -41,14 +41,14 @@ export default function VistaPreviaDocumento() {
             label: "Volver",
             icon: FaArrowLeft,
             estilos:
-              "bg-white hover:bg-red-800 text-black px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",
+              "bg-white hover:bg-blue-600 text-black px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",
           },
           {
             to: `http://localhost:8000/api/v1/correspondencia/elaborada/${id_correspondencia}/pdf/`,
             label: "Ver PDF",
             icon: FaFilePdf,
             estilos:
-              "bg-white hover:bg-red-800 text-black px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",
+              "bg-white hover:bg-blue-600 text-black px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",
           },
         ]}
         subTitle={`Información del Documento: ${response?.data?.cite}`}
