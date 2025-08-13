@@ -30,9 +30,9 @@ const Notificaciones = () => {
         if (tipo_documento === "recibido") {
           navigate(`/detailRecibida/${id_documento}`);
         } else if (tipo_documento === "enviado") {
-          navigate(`/detailEnviada/${id_documento}`);
+          navigate(`/vistaPreviaDocumento/${id_documento}`);
         } else {
-          navigate(`/detailRecibida/${id_documento}`);
+          navigate(`/vistaPreviaDocumento/${id_documento}`);
         }
       }
     } catch (e) {

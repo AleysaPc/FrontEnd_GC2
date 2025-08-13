@@ -2,7 +2,6 @@ import { useCorrespondenciaElaboradas } from "../../../hooks/useEntities";
 import EntityList from "../../../components/shared/EntityList";
 import { FaEye, FaFilePdf, FaEdit, FaStream } from "react-icons/fa";
 import { ActionButton } from "../../../components/shared/ActionButton";
-import FormattedDate from "../../../components/shared/FormattedDate";
 import { useState } from "react";
 import HistorialDocumentoModal from "../../../components/shared/HistorialModal";
 
@@ -59,6 +58,10 @@ export default function ElaboradaList() {
       label: "Referencia", 
       render: (item) => item.referencia?.trim() || "Sin referencia" 
     },
+    { 
+      key: "datos_contacto", 
+      label: "Destinatario", 
+    },
     
     { key: "estado", label: "Estado" },
     { 
@@ -73,17 +76,29 @@ export default function ElaboradaList() {
     subTitle: "Listado de documentos elaborados",
     loadingMessage: "Cargando documentos elaborados...",
     errorMessage: "Error al obtener los documentos elaborados",
-    fetchDataHook: (params = {}) =>
-      useCorrespondenciaElaboradas({
-        ...params,
-        filters: {
-          ...params.filters,
-          estado__in: ["borrador", "en_revision"],
-        },
-      }),
+    fetchDataHook: useCorrespondenciaElaboradas,
     all_data: false,
     itemKey: "id_correspondencia",
     entityFields: useFields,
+    filtros: [
+      { name: "cite", placeholder: "CITE" },
+      { name: "referencia", placeholder: "Referencia" },
+      { name: "contacto_nombre_completo", placeholder: "Destinatario" }, // nuevo campo unificado
+      { name: "contacto__institucion__razon_social", placeholder: "Institución" },
+      { name: "estado", placeholder: "Estado" },
+      { name: "plantilla__nombre_plantilla", placeholder: "Tipo Documento" },
+      { name: "email", placeholder: "Elaborado por" },
+    ],
+    ordenes: [
+      { name: "cite", label: "CITE" },
+      { name: "referencia", label: "Referencia" },
+      { name: "contacto__nombre_contacto", label: "Nombre destinatario" },
+      { name: "contacto__apellido_pat_contacto", label: "Apellido paterno destinatario" },
+      { name: "contacto__apellido_mat_contacto", label: "Apellido materno destinatario" },
+      { name: "contacto__institucion__razon_social", label: "Institucion" },
+      { name: "estado", label: "Estado" },
+      { name: "email", label: "Elaborado por" },
+    ],
   };
 
   return (

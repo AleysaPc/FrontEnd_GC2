@@ -106,15 +106,7 @@ function CorrespondenciaEnviadaList() {
     filtros: [
       { name: "cite", placeholder: "CITE " },
       { name: "referencia", placeholder: "Referencia" },
-      { name: "contacto__nombre_contacto", placeholder: "Nombre contacto" },
-      {
-        name: "contacto__apellido_pat_contacto",
-        placeholder: "Apellido paterno",
-      },
-      {
-        name: "contacto__apellido_mat_contacto",
-        placeholder: "Apellido materno",
-      },
+      { name: "contacto_nombre_completo", placeholder: "Destinatario" },
       {
         name: "contacto__institucion__razon_social",
         placeholder: "Institución",
@@ -129,6 +121,7 @@ function CorrespondenciaEnviadaList() {
       { name: "contacto__apellido_mat_contacto", label: "Apellido materno" },
       { name: "contacto__institucion__razon_social", label: "Institución" },
     ],
+    mostrarBusquedaSemantica: true,
   };
 
   return (
