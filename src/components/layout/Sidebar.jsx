@@ -35,10 +35,10 @@ const Sidebar = ({ isVisible }) => {
         {/* Información del usuario */}
         <div className="text-center text-sm">
         <p className=" font-medium text-white">
-            {user?.data?.first_name + " " + user?.data?.secund_name || "Usuario"}
+            {user?.data?.first_name || "Usuario"} {user?.data?.secund_name || ""}
           </p>
           <p className=" font-medium text-white">
-            {user?.data?.last_name + " " + user?.data?.secund_last_name || "Usuario"}
+            {user?.data?.last_name || "Usuario"} {user?.data?.secund_last_name || ""}
           </p>
           <p className="text-xs text-white">
             {user?.data?.email || "correo@ejemplo.com"}

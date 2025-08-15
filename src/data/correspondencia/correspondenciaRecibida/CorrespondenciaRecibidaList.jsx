@@ -115,7 +115,6 @@ function CorrespondenciaRecibidaList() {
     filtros: [
       { name: "nro_registro", placeholder: "Nro. Registro" },
       { name: "referencia", placeholder: "Referencia" },
-      { name: "contacto_nombre_completo", placeholder: "Destinatario" },
       {
         name: "contacto__institucion__razon_social",
         placeholder: "Institución",
@@ -130,7 +129,6 @@ function CorrespondenciaRecibidaList() {
       { name: "contacto__apellido_mat_contacto", label: "Apellido materno" },
       { name: "contacto__institucion__razon_social", label: "Institución" },
     ],
-    mostrarBusquedaSemantica: true,
   };
 
   return (

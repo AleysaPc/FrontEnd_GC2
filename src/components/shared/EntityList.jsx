@@ -20,7 +20,6 @@ function EntityList({ entityData }) {
     icon,
     filtros,
     ordenes,
-    mostrarBusquedaSemantica = false,
   } = entityData;
 
   //Los set son para modificar los estados de las variables
@@ -36,8 +35,8 @@ function EntityList({ entityData }) {
   const manejarFiltro = (nuevosValores) => {
     // Extraemos los valores desde el objeto combinado que viene desde FiltroBusquedaOrden
     const { search, ordering, ...restFilters } = nuevosValores;
-    setSearch(search || "");
-    setOrdering(ordering || "");
+    setSearch(search || '');
+    setOrdering(ordering || '');
     setFilters(restFilters || {});
     setPage(1);
   };
@@ -45,7 +44,6 @@ function EntityList({ entityData }) {
   const { todosDatosOpaginacion } = useFormEntity();
 
   const paginacion = todosDatosOpaginacion(fetchDataHook, {
-    //Enviar lo que ser requiere
     all_data: allData,
     page: page,
     per_page: perPage,
@@ -126,7 +124,6 @@ function EntityList({ entityData }) {
         filtros={filtros}
         ordenes={ordenes}
         placeholderSearch="Search"
-        mostrarBusquedaSemantica={mostrarBusquedaSemantica}
       />
       <SelectPerPage
         perPage={perPage}
