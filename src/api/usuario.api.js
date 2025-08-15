@@ -5,11 +5,10 @@ import { createApiInstance, request} from "./api.Base";
 const ApiUsers = createApi("usuario"); //va armando la url base para el api de usuario
 
 // Crear operaciones CRUD específicas para los usuarios
-export const UsuariosAPI = createCrudOperations(ApiUsers, "usuario");
 export const CustomUsersAPI = createCrudOperations(ApiUsers, "customuser");
-export const RolesApi = createCrudOperations(ApiUsers, "role");
-export const DepartamentosApi = createCrudOperations(ApiUsers, "departamento");
-
+export const RolesApi = createCrudOperations(ApiUsers, "grupos");
+export const DepartamentosApi = createCrudOperations(ApiUsers, "departamentos");
+export const PermisosApi = createCrudOperations(ApiUsers, "permisos");
 // Funciones específicas para el login y registro
 export const login = (email, password) => request(ApiUsers, "post", "login/", { email, password });
 export const RegistroApi = createCrudOperations(ApiUsers, "register");

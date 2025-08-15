@@ -3,66 +3,72 @@ import FormattedDate from "../../components/shared/FormattedDate";
 import EntityList from "../../components/shared/EntityList";
 import { useUsers } from "../../hooks/useEntities";
 import { FaUber } from "react-icons/fa";
+import { ActionButton } from "../../components/shared/ActionButton";
+import { FaEdit, FaEye } from "react-icons/fa";
+import { FaPlus } from "react-icons/fa";
+import { useUserMutations } from "../../hooks/useEntities";
+import { toast } from "react-hot-toast";
+import { FaTrash } from "react-icons/fa";
 
 function UserList() {
+  const userMutations = useUserMutations();
+
+  const handleEliminar = async (id) => {
+    if (!confirm("¿Seguro que deseas eliminar este rol?")) return;
+    try {
+      await userMutations.eliminar.mutateAsync({ id });
+    } catch (error) {
+      console.error("Error al eliminar:", error);
+      toast.error("Error al eliminar el usuario");
+    }
+  };
   const userFields = () => [
     { key: "index", label: "#" },
-    //{
-      //key: "full_name",
-      //label: "Nombre",
-      //render: (item) => (
-        //<Link
-          //to={`/editUser/${item.id}`}
-          //className="text-blue-400 font-bold hover:underline"
-        //>
-          //{item.first_name + item.last_name}
-        //</Link>
-      //),
-    //},
     {
-      key: "Nombre",
+      key: "actions",
+      label: "Acciones",
+      render: (item) => (
+        <div className="flex gap-2">
+          <ActionButton
+            title="Editar"
+            to={`/editUser/${item.id}`}
+            icon={FaEdit}
+            estilos="hover:bg-gray-600 hover:text-gray-100 text-gray-500 rounded-md flex items-center gap-2 transition duration-200 p-1"
+          />
+          <ActionButton
+            title="Detalle"
+            to={`/detailUser/${item.id}`}
+            icon={FaEye}
+            estilos="hover:bg-gray-600 hover:text-gray-100 text-gray-500 rounded-md flex items-center gap-2 transition duration-200 p-1"
+          />
+          <button
+            onClick={() => handleEliminar(item.id)}
+            title="Eliminar"
+            className="hover:bg-gray-600 hover:text-gray-100 text-gray-500 rounded-md flex items-center gap-2 transition duration-200 p-1"
+          >
+            <FaTrash />
+          </button>
+        </div>
+      ),
+    },
+    {
+      key: "nombre",
       label: "Nombre",
       render: (item) => `${item.first_name ?? ""} ${item.secund_name ?? ""}`,
     },
     {
-      key: "apellidos_completos",
+      key: "apellido_completo",
       label: "Apellidos",
       render: (row) => `${row.last_name ?? ""} ${row.secund_last_name ?? ""}`,
     },
-    { key: "username", label: "Usuario" },
-    { key: "name_rol", label: "Rol" },
-    {key:"nombre_departamento", label:"Departamento"},
-    { key: "nombre_institucion", label: "Empresa de Origen" },
+
+    { key: "rol", label: "Rol" },
+    { key: "nombre_departamento", label: "Departamento" },
 
     {
       key: "is_active",
       label: "Estado",
       render: (item) => <StatusBadge isActive={item.is_active} />,
-    },
-    {
-      key: "date_joined", // Antes estaba como data_joined (incorrecto)
-      label: "Fecha de Registro",
-      render: (item) => <FormattedDate date={item.date_joined} />,
-    },
-    {
-      key: "acciones",
-      label: "Acciones",
-      render: (item) => (
-        <div className="flex gap-2">
-          <a
-            //href={`detailDocEntrante/${item.id_correspondencia}`}
-            className="bg-red-800 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-          >
-            Ver
-          </a>
-          <a
-            href={`/editUser/${item.id}`}
-            className="bg-green-800 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded"
-          >
-            Editar
-          </a>
-        </div>
-      ),
     },
   ];
 
@@ -75,16 +81,21 @@ function UserList() {
     all_data: false,
     itemKey: "id",
     entityFields: userFields,
-    clavesBusqueda: ["full_name", "username"],
+    filtros: [
+      {name: "nombre_completo", placeholder: "Nombre"},
+      {name: "email", placeholder: "Email"},
+      {name: "username", placeholder: "Username"},
+      {name: "institucion__razon_social", placeholder: "Institucion"},
+      {name: "departamento", placeholder: "Departamento"},
+      {name: "cargo", placeholder: "Cargo"},
+    ],
     actions: [
       {
         to: "/createUser",
-        label: "Crear Usuario",
-        estilos:
-          "bg-purple-500 hover:bg-purple-800 text-white px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",
-      },  
+        icon: FaPlus,
+        estilos: "text-white bg-green-600 rounded-full p-2",
+      },
     ],
-    icon: FaUber,
   };
 
   return <EntityList entityData={entityData} />;

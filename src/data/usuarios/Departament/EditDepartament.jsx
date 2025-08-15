@@ -9,7 +9,7 @@ import { ToggleSwitch } from "../../../components/shared/ToggleSwitch";
 import { SelectField } from "../../../components/shared/SelectField";
 import { FaBackspace, FaEdit } from "react-icons/fa";
 import EditEntity from "../../../components/shared/EditEntity";
-import { obtenerIdUser } from "../../../utils/auth";
+
 
 export default function EditDepartament() {
   const { paraSelectsdestructuringYMap } = useFormEntity();
@@ -21,7 +21,6 @@ const responsableOptions = () =>
     nombre: entidad?.nombre || "",
     sigla: entidad?.sigla || "",
     estado: entidad?.estado || false,
-    responsable: entidad?.responsable || "",
   });
 
   const paraEnvio = (formValues) => ({
@@ -50,13 +49,6 @@ const responsableOptions = () =>
       name: "estado",
       checked: formValues.estado,
       onChange: manejarEntradas.handleToggleChange("estado"),
-    },
-    {
-      component: SelectField,
-      label: "Responsable",
-      name: "responsable",
-      onChange: manejarEntradas.handleInputChange,
-      options: responsableOptions(),
     },
   ];
 

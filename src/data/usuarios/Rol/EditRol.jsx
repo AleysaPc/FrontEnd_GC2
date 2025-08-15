@@ -3,8 +3,16 @@ import { useRolMutations } from "../../../hooks/useEntities";
 import { InputField } from "../../../components/shared/InputField";
 import { FaBackspace, FaPencilAlt } from "react-icons/fa";
 import EditEntity from "../../../components/shared/EditEntity";
+import { useFormEntity } from "../../../utils/useFormEntity";
+import { obtenerIdUser } from "../../../utils/auth";
 
 export default function EditRol() {
+    const { paraSelectsdestructuringYMap } = useFormEntity();
+
+     const logicaNegocio = {
+        idUsuario: obtenerIdUser(),
+      };
+
     const configuracionFormulario = (entidad) => ({
         name: entidad?.name || "",
         description: entidad?.description || "",
@@ -21,6 +29,7 @@ export default function EditRol() {
             label: "Nombre",
             name: "name",
             required: true,
+            formValue: formValues.name,
             onChange: manejarEntradas.handleInputChange,
         },
         {
@@ -28,6 +37,7 @@ export default function EditRol() {
             label: "Descripcion",
             name: "description",
             required: true,
+            formValue: formValues.description,
             onChange: manejarEntradas.handleInputChange,
         },
     ];

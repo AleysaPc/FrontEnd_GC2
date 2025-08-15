@@ -55,6 +55,8 @@ const TestDerivar = lazy(() =>
 const RegisterEnviada = lazy(() =>
   import("../data/correspondencia/correspondenciaEnviada/RegisterEnviada")
 );
+const DetailUser = lazy(() => import("../data/usuarios/DetailUser"));
+const DetailContacto = lazy(() => import("../data/contacto/DetailContacto"));
 
 export const correspondenciaRoutes = [
   // rutas de correspondencia
@@ -133,5 +135,13 @@ export const correspondenciaRoutes = [
   {
     path: "testDerivar/:id",
     element: <TestDerivar />,
+  },
+  {
+    path: "detailUser/:id",
+    element: <DetailUser />,
+  },
+  {
+    path: "detailContacto/:id",
+    element: <DetailContacto />,
   },
 ];

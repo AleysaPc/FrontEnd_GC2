@@ -1,7 +1,7 @@
 import { useCorrespondenciaElaboradas } from "../../../hooks/useEntities";
 import EntityList from "../../../components/shared/EntityList";
 import FormattedDate from "../../../components/shared/FormattedDate";
-import { FaEdit, FaEye, FaStream } from "react-icons/fa";
+import { FaEdit, FaEye, FaStream, FaPlus } from "react-icons/fa";
 import { ActionButton } from "../../../components/shared/ActionButton";
 import HistorialDocumentoModal from "../../../components/shared/HistorialModal";
 import { useState } from "react";
@@ -97,11 +97,10 @@ function CorrespondenciaEnviadaList() {
     clavesBusqueda: ["referencia"],
     actions: [
       {
-        to: `/createElaborada`,
-        label: "Crear",
-        estilos:
-          "bg-red-800 hover:bg-green-800 text-white px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",
-      },
+              to: "/createElaborada",
+              icon: FaPlus,
+              estilos: "text-white bg-green-600 rounded-full p-2",
+            },
     ],
     filtros: [
       { name: "cite", placeholder: "CITE " },

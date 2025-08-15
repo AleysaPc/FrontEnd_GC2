@@ -12,6 +12,6 @@ export const useEntityMutations = (api, entityName) => {
   return {
     crear: crearMutacion(({ data }) => api.create(data), "Creando"),
     actualizar: crearMutacion(({ id, data }) => api.update(id, data), "actualizado"),
-    eleminar: crearMutacion(({id}) => api.delete(id), "eliminado")
+    eliminar: crearMutacion(({id}) => api.delete(id), "eliminado")
   };
 };

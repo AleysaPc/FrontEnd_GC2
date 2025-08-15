@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useForm, Controller } from "react-hook-form";
-import { login } from "../../api/usuario.api"; // Ahora usando el método de api.Base
+import { login } from "../../api/usuario.api";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../context/AuthContext";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -9,22 +10,28 @@ const Login = () => {
   const [showMessage, setShowMessage] = useState(false);
   const [loginSuccess, setLoginSuccess] = useState(false);
 
+  // Usamos la función loginUser del AuthContext
+  const { loginUser } = useContext(AuthContext);
+
   const submission = async (data) => {
     try {
-      // Eliminar datos antiguos antes de iniciar sesión
+      // Limpiar datos previos de sesión
       localStorage.removeItem("Token");
       localStorage.removeItem("id_usuario");
-      localStorage.removeItem("sessionClosed"); // Eliminar sessionClosed si existe
+      localStorage.removeItem("sessionClosed");
 
       const response = await login(data.email, data.password);
       console.log("Inicio de sesión exitoso:", response.data);
 
-      // Verifica si el token está siendo guardado en localStorage
-      console.log("Token guardado:", response.data.token);
-
-      localStorage.setItem("Token", response.data.token);
-      localStorage.setItem("id_usuario", response.data.user.id); // Suponiendo que el backend te devuelve el id del usuario
-      console.log("id_usuario", response.data.user.id);
+      // 🔹 Llamamos al contexto para guardar usuario y token
+      loginUser({
+        token: response.data.token,
+        id: response.data.user.id,
+        full_name: response.data.user.full_name,
+        email: response.data.user.email,
+        rol: response.data.user.rol,
+        lugar_de_trabajo: response.data.user.lugar_de_trabajo, // Si lo devuelve el backend
+      });
 
       setLoginSuccess(true);
       navigate(`/home`);
@@ -37,13 +44,9 @@ const Login = () => {
   return (
     <div className="flex justify-center items-center w-full h-screen bg-gradient-to-r from-green-900 via-green-800 to-green-900">
       <div className="w-full max-w-sm bg-white p-8 rounded-xl shadow-lg">
-        {/* Sección de Logo y Nombre */}
+        {/* Logo y nombre */}
         <div className="flex flex-col items-center mb-6">
-          <img
-            src="/LogoFed.PNG" 
-            alt="Logo de la Empresa"
-            className="h-16 mb-2" 
-          />
+          <img src="/LogoFed.PNG" alt="Logo de la Empresa" className="h-16 mb-2" />
           <h1 className="text-center text-xl font-bold bg-gradient-to-r from-red-800 via-red-700 to-green-900 text-transparent bg-clip-text">
             FEDERACIÓN DE TRABAJADORES LA PAZ
           </h1>
@@ -55,8 +58,7 @@ const Login = () => {
 
         {showMessage && (
           <div className="mb-4 p-4 text-white bg-red-600 rounded-md">
-            Error al iniciar sesión, inténtelo de nuevo o restablezca su
-            contraseña.
+            Error al iniciar sesión, inténtelo de nuevo o restablezca su contraseña.
           </div>
         )}
 
@@ -77,7 +79,7 @@ const Login = () => {
                   {...field}
                   type="email"
                   placeholder="Email"
-                  autoComplete="username" // Atributo añadido aquí
+                  autoComplete="username"
                   className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
                 />
               )}
@@ -94,7 +96,7 @@ const Login = () => {
                   {...field}
                   type="password"
                   placeholder="Password"
-                  autoComplete="current-password" // Atributo añadido aquí
+                  autoComplete="current-password"
                   className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
                 />
               )}

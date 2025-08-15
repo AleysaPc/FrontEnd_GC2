@@ -10,7 +10,7 @@ export const menus = [
       { label: "Recibido", path: "/createRecibida" },
       { label: "Enviado", path: "/listEnviados" },
     ],
-   //roleRequired: "Cajero",
+   roleRequired: "administrador",
   },  
   {
     title: "Crear Documento",
@@ -38,6 +38,7 @@ export const menus = [
       { label: "Crear Contacto", path: "/createContacto" },
       { label: "Lista de instituciones", path: "/institucionList" },
       { label: "Crear institucion", path: "/createInstitucion" },
+      
     ],
   },
   {
@@ -45,6 +46,11 @@ export const menus = [
     icon: FaUser,
     items: [{ label: "Lista de Usuarios", path: "/userList" },
       { label: "Nuevo Usuario", path: "/createUser" },
+      { label: "Lista de roles", path: "/rolList" },
+      { label: "Crear rol", path: "/createRol" },
+      { label: "Lista de departamentos", path: "/departamentList" },
+      { label: "Crear departamento", path: "/createDepartament" },
     ],
+    //leRequired: "administrador",
   },
 ];

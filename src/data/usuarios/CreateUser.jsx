@@ -1,35 +1,83 @@
 import { useFormEntity } from "../../utils/useFormEntity";
-import { useRoles, useUserMutations } from "../../hooks/useEntities";
+import {
+  useRoles,
+  useUserMutations,
+  useInstituciones,
+  useDepartamentos,
+} from "../../hooks/useEntities";
 import { InputField } from "../../components/shared/InputField";
 import { SelectField } from "../../components/shared/SelectField";
 import { ToggleSwitch } from "../../components/shared/ToggleSwitch";
 import { CheckBox } from "../../components/shared/CheckBox";
-import { FaBackspace, FaEye, FaPencilAlt, FaPlus } from "react-icons/fa";
+import { FaArrowLeft, FaPlus, FaEye } from "react-icons/fa";
 import CreateEntity from "../../components/shared/CreateEntity";
 
 export default function CreateUser() {
+  const { options } = useFormEntity();
   const { paraSelectsdestructuringYMap } = useFormEntity();
 
-  const rolesOptions = () =>
-    paraSelectsdestructuringYMap(useRoles, true, "id", "name");
+  // Selects
+  const departamentosOptions = paraSelectsdestructuringYMap(
+    useDepartamentos,
+    true,
+    "id",
+    "nombre"
+  );
+  //Institución
+  const {
+    data: institucionesData,
+    isLoading: loadingInstituciones,
+    error: errorInstituciones,
+  } = useInstituciones({ all_data: true });
 
-  const selects = {
-    rolesOptions,
-  };
+  //Rol
+  const { data: roleData } = useRoles({ all_data: true });
+  const rolesOptions = roleData?.data
+    ? options(roleData.data, "id", "name")
+    : [];
 
-  const configuracionFormulario = {
+  const institucionesArray = institucionesData?.data || [];
+
+  const institucionOptions = () =>
+    institucionesArray
+      ? options(institucionesArray, "id_institucion", "razon_social")
+      : [];
+
+  // Configuración inicial del formulario
+  const configForm = {
     first_name: "",
+    secund_name: "",
     last_name: "",
+    secund_last_name: "",
     username: "",
     email: "",
     birthday: "",
-    role: "",
+    password: "",
+    confirm_password: "",
     is_active: false,
     is_superuser: false,
+    documento_identidad: "",
+    lugar_nacimiento: "",
+    direccion: "",
+    cargo: "",
+    telefono: "",
+    celular: "",
+    institucion: "",
+    id_institucion: "",
+    id_rol: "",
+    id_departamento: "",
+    notes: "",
   };
 
+  // Datos adicionales para envío
   const camposExtras = (formValues) => ({
-    role: Number(formValues.role),
+    rol: formValues.id_rol ? Number(formValues.id_rol) : null,
+    departamento: formValues.id_departamento
+      ? Number(formValues.id_departamento)
+      : null,
+    institucion: formValues.id_institucion
+      ? Number(formValues.id_institucion)
+      : null,
   });
 
   const paraEnvio = (formValues) => ({
@@ -37,19 +85,32 @@ export default function CreateUser() {
     params: camposExtras(formValues),
   });
 
+  // Construcción de campos
   const construirCampos = (formValues, manejarEntradas) => [
     {
       component: InputField,
-      label: "Nombres",
+      label: "Primer nombre",
       name: "first_name",
       required: true,
       onChange: manejarEntradas.handleInputChange,
     },
     {
       component: InputField,
-      label: "Apellidos",
+      label: "Segundo nombre",
+      name: "secund_name",
+      onChange: manejarEntradas.handleInputChange,
+    },
+    {
+      component: InputField,
+      label: "Apellido paterno",
       name: "last_name",
       required: true,
+      onChange: manejarEntradas.handleInputChange,
+    },
+    {
+      component: InputField,
+      label: "Apellido materno",
+      name: "secund_last_name",
       onChange: manejarEntradas.handleInputChange,
     },
     {
@@ -61,7 +122,43 @@ export default function CreateUser() {
     },
     {
       component: InputField,
-      label: "Correo Electronico",
+      label: "Documento de identidad",
+      name: "documento_identidad",
+      onChange: manejarEntradas.handleInputChange,
+    },
+    {
+      component: InputField,
+      label: "Lugar de nacimiento",
+      name: "lugar_nacimiento",
+      onChange: manejarEntradas.handleInputChange,
+    },
+    {
+      component: InputField,
+      label: "Dirección",
+      name: "direccion",
+      onChange: manejarEntradas.handleInputChange,
+    },
+    {
+      component: InputField,
+      label: "Cargo",
+      name: "cargo",
+      onChange: manejarEntradas.handleInputChange,
+    },
+    {
+      component: InputField,
+      label: "Teléfono",
+      name: "telefono",
+      onChange: manejarEntradas.handleInputChange,
+    },
+    {
+      component: InputField,
+      label: "Celular",
+      name: "celular",
+      onChange: manejarEntradas.handleInputChange,
+    },
+    {
+      component: InputField,
+      label: "Correo Electrónico",
       name: "email",
       type: "email",
       required: true,
@@ -72,7 +169,6 @@ export default function CreateUser() {
       label: "Fecha de Nacimiento",
       name: "birthday",
       type: "date",
-      required: true,
       onChange: manejarEntradas.handleInputChange,
     },
     {
@@ -94,9 +190,9 @@ export default function CreateUser() {
     {
       component: SelectField,
       label: "Rol",
-      name: "role",
+      name: "id_rol",
+      options: rolesOptions,
       onChange: manejarEntradas.handleInputChange,
-      options: selects.rolesOptions(),
     },
     {
       component: ToggleSwitch,
@@ -107,24 +203,59 @@ export default function CreateUser() {
     },
     {
       component: CheckBox,
-      label: "Es admininstrador",
+      label: "Es administrador",
       name: "is_superuser",
       checked: formValues.is_superuser,
       onChange: manejarEntradas.handleToggleChange("is_superuser"),
+    },
+    {
+      component: SelectField,
+      label: "Institucion",
+      name: "id_institucion",
+      options: institucionOptions(),
+      onChange: manejarEntradas.handleInputChange,
+      isLoading: loadingInstituciones,
+      error: errorInstituciones,
+      actionButtons: [
+        {
+          to: "/CreateInstitucion",
+          icon: FaPlus,
+          estilos: "text-green-600 hover:bg-green-600 hover:text-white p-1",
+        },
+        {
+          to: "/institucionList",
+          icon: FaEye,
+          estilos: "text-blue-600 hover:bg-blue-600 hover:text-white p-1",
+        },
+      ],
+    },
+    {
+      component: SelectField,
+      label: "Departamento",
+      name: "id_departamento",
+      required: false,
+      options: departamentosOptions,
+      onChange: manejarEntradas.handleInputChange,
+    },
+    {
+      component: InputField,
+      label: "Observaciones",
+      name: "notes",
+      onChange: manejarEntradas.handleInputChange,
     },
   ];
 
   const paraNavegacion = {
     title: "Crear Usuario",
-    subTitle: "Crea un nuevo usuario",
+    subTitle: "Formulario completo para registrar un usuario",
     icon: FaPlus,
     actions: [
       {
-        to: "/userList",
+        to: -1,
         label: "Volver",
-        icon: FaBackspace,
+        icon: FaArrowLeft,
         estilos:
-          "border-2 border-gray-400 text-gray-700 hover:bg-gray-700 hover:text-white p-2 rounded-lg",
+          "bg-white hover:bg-blue-600 text-black px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",
       },
     ],
   };
@@ -132,7 +263,7 @@ export default function CreateUser() {
   return (
     <CreateEntity
       useEntityMutations={useUserMutations}
-      configForm={configuracionFormulario}
+      configForm={configForm}
       paraEnvio={paraEnvio}
       construirCampos={construirCampos}
       paraNavegacion={paraNavegacion}

@@ -1,13 +1,14 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import SidebarMenu from "./SidebarMenu";
 import { menus } from "../../data/SidebarData";
 import { FaBuilding } from "react-icons/fa";
 import { useUser } from "../../hooks/useEntities";
 import { obtenerIdUser } from "../../utils/auth";
+import { AuthContext } from "../../context/AuthContext";
 
 const Sidebar = ({ isVisible }) => {
   const [openMenu, setOpenMenu] = useState(null);
-
+  const { user: authUser } = useContext(AuthContext);
   const userId = obtenerIdUser();
   const { data: user } = useUser(userId);
 
@@ -18,7 +19,7 @@ const Sidebar = ({ isVisible }) => {
       } h-[calc(100vh)]`}
     >
       {/* titulo */}
-      <div className="p-4 px-6 bg-red-700 flex items-center justify-center gap-2">
+      <div className="p-5 px-6 bg-red-700 flex items-center justify-center gap-2">
         <FaBuilding className="text-white text-2xl" />
         <h1 className="text-white text-xl font-bold">FDLP</h1>
       </div>
@@ -32,11 +33,14 @@ const Sidebar = ({ isVisible }) => {
           </div>
         </div>
         {/* Información del usuario */}
-        <div className="text-center">
-          <p className="text-xl font-medium text-white">
-            {user?.data?.first_name + " " + user?.data?.last_name || "Usuario"}
+        <div className="text-center text-sm">
+        <p className=" font-medium text-white">
+            {user?.data?.first_name + " " + user?.data?.secund_name || "Usuario"}
           </p>
-          <p className="text-xl text-white">
+          <p className=" font-medium text-white">
+            {user?.data?.last_name + " " + user?.data?.secund_last_name || "Usuario"}
+          </p>
+          <p className="text-xs text-white">
             {user?.data?.email || "correo@ejemplo.com"}
           </p>
         </div>
@@ -55,6 +59,8 @@ const Sidebar = ({ isVisible }) => {
               toggleMenu={() =>
                 setOpenMenu(openMenu === menu.title ? null : menu.title)
               }
+              userRole={authUser?.rol}
+              menuRoleRequired={menu.roleRequired}
             />
           ))}
         </ul>

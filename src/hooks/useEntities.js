@@ -12,10 +12,14 @@ import {
   RolesApi,
   PasswordResetAPI,
   DepartamentosApi,
+  PermisosApi,
 } from "../api/usuario.api";
 import { useMutationWithToast } from "./useMutationWithToast";
 import { ContactoApi, InstitucionApi } from "../api/contacto.api";
 import { DocumentoApi, PlantillaDocumentoApi } from "../api/documento.api";
+
+// Default stale time for queries (5 minutes)
+const DEFAULT_STALE_TIME = 1000 * 60 * 5;
 
 //productos
 export const useProducts = (
@@ -462,3 +466,31 @@ export const usePlantillaDocumento = (id) =>
 
 export const usePlantillaDocumentoMutations = () =>
   useEntityMutations(PlantillaDocumentoApi, "plantillaDocumento");
+
+//permisos
+export const usePermisos = (
+  params = {},
+  enabled = true,
+  staleTime = DEFAULT_STALE_TIME
+) => {
+  const defaultParams = {
+    all_data: false,
+    page: 1,
+    per_page: 10,
+    filters: {},
+    ordering: "",
+    search: "",
+  };
+
+  const mergedParams =
+    //params sobreescribe defaultParams si hay campos repetidos
+    { ...defaultParams, ...params };
+  return useData(
+    PermisosApi,
+    "permisos",
+    null,
+    mergedParams,
+    staleTime,
+    enabled
+  );
+};

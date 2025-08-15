@@ -1,7 +1,6 @@
 import { useFormEntity } from "../../../utils/useFormEntity";
 import { InputField } from "../../../components/shared/InputField";
 import { ToggleSwitch } from "../../../components/shared/ToggleSwitch";
-import { SelectField } from "../../../components/shared/SelectField";
 import  CreateEntity from "../../../components/shared/CreateEntity";
 import { FaPlus, FaBackspace } from "react-icons/fa";
 import { useDepartamentoMutations } from "../../../hooks/useEntities";
@@ -9,11 +8,11 @@ import { useDepartamentos } from "../../../hooks/useEntities";
 
 export default function CreateDepartament() {
     const { paraSelectsdestructuringYMap } = useFormEntity();
+  
     const configuracionFormulario = {
         nombre: "",
         sigla: "",
         estado: true,
-        responsable: "",
     }
     const paraEnvio = (formValues) => ({
         link: "/departamentList",
@@ -40,13 +39,6 @@ export default function CreateDepartament() {
             name: "estado",
             checked: formValues.estado,
             onChange: manejarEntradas.handleToggleChange("estado"),
-        },
-        {
-            component: SelectField,
-            label: "Responsable",
-            name: "responsable",
-            onChange: manejarEntradas.handleInputChange,
-            options: paraSelectsdestructuringYMap(useDepartamentos, true, "id", "nombre"),
         },
     ]
     const paraNavegacion = {
