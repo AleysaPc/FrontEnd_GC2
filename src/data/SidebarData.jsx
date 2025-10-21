@@ -10,7 +10,7 @@ export const menus = [
       { label: "Recibido", path: "/createRecibida" },
       { label: "Enviado", path: "/listEnviados" },
     ],
-   roleRequired: "administrador",
+   //roleRequired: "administrador",
   },  
   {
     title: "Crear Documento",

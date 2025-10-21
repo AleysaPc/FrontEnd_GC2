@@ -1,6 +1,7 @@
 import EntityForm from "./EntityForm";
 import { useFormEntity } from "../../utils/useFormEntity";
 import { useState } from "react";
+import { useFormCacheSession } from "../../hooks/useFormCacheSession";
 
 export default function CreateEntity({
   useEntityMutations,
@@ -21,6 +22,14 @@ export default function CreateEntity({
   const [formValues, setFormValues] = useState(
     crearEstadoFomulario(configForm)
   );
+
+  
+  // ✅ Conectamos el cache (clave única por formulario)
+  // En CreateEntity.jsx
+// Usa una clave única basada en el tipo de formulario
+const formCacheKey = `form_${configForm.formType}`; // ahora será único por formulario
+const { clearCache } = useFormCacheSession(formCacheKey, formValues, setFormValues);
+
 
   const handleInputChange = manejarCambioDeEntrada(setFormValues);
   const handleToggleChange = manejarCambioDeEstado(setFormValues);
@@ -46,9 +55,13 @@ export default function CreateEntity({
       }
     }
 
+
+
     manejarEnvio(event, envio.link, formValues, crear, null, envio.entityId, {
       ...envio.params,
     });
+    clearCache();
+    
   };
 
   const fields = construirCampos(formValues, manejarEntradas);

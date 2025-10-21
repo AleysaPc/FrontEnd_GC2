@@ -61,13 +61,14 @@ export default function CreateContacto() {
     );
   }
   const configuracionFormulario = {
-    nombre_contacto: "",
-    apellido_pat_contacto: "",
-    apellido_mat_contacto: "",
-    titulo_profesional: "",
-    cargo: "",
-    email: "",
-    telefono: "",
+    formType: "contacto",
+    //nombre_contacto: "",
+    //apellido_pat_contacto: "",
+    //apellido_mat_contacto: "",
+    //titulo_profesional: "",
+    //cargo: "",
+    //email: "",
+    //telefono: "",
     id_institucion: "",
   };
   const camposExtras = (formValues) => ({

@@ -81,11 +81,13 @@ export default function createRecibida() {
   ];
 
   const configuracionFormulario = {
-    fecha_recepcion: "",
+    formType: "recibida",
+    //fecha_recepcion: "",
     fecha_respuesta: "",
+    hora_respuesta: "",
     tipo: "recibido",
-    referencia: "",
-    descripcion: "",
+    //referencia: "",
+    //descripcion: "",
     paginas: "",
     prioridad: "",
     estado: "",
