@@ -6,7 +6,7 @@ import {
   useCorrespondencia,
 } from "../../../hooks/useEntities";
 import { useFormEntity } from "../../../utils/useFormEntity";
-import { UserCheckboxList } from "../../../components/shared/UserCheckboxList";
+import { UserDropdownSelect } from "../../../components/shared/UserDropdownSelect";
 import { InputField } from "../../../components/shared/InputField";
 import { SelectField } from "../../../components/shared/SelectField";
 import CreateEntity from "../../../components/shared/CreateEntity";
@@ -72,7 +72,7 @@ export default function TestDerivar({ isOpen, onClose, id }) {
       onChange: manejarEntradas.handleInputChange,
     },
     {
-      component: UserCheckboxList,
+      component: UserDropdownSelect,
       label: "Derivar a:",
       name: "usuarios",
       options: usuarioOptions(),

@@ -10,7 +10,7 @@ import { FaBackspace, FaEye, FaPencilAlt, FaPlus } from "react-icons/fa";
 import { useFormEntity } from "../../../utils/useFormEntity";
 import { obtenerIdUser } from "../../../utils/auth";
 import { SelectField } from "../../../components/shared/SelectField";
-import { UserCheckboxList } from "../../../components/shared/UserCheckboxList";
+import { UserDropdownSelect } from "../../../components/shared/UserDropdownSelect";
 import { useEffect } from "react";
 import FormattedDate from "../../../components/shared/FormattedDate";
 import { TextAreaField } from "c:/Users/Admin/Desktop/SystemGC2/Frontend/src/components/shared/TextAreaField";
@@ -234,7 +234,7 @@ export default function createRecibida() {
       onChange: manejarEntradas.handleInputChange,
     },
     {
-      component: UserCheckboxList,
+      component: UserDropdownSelect,
       label: "Derivar a:",
       name: "usuarios",
       options: usuarioOptions(),
@@ -242,7 +242,7 @@ export default function createRecibida() {
         manejarEntradas.handleToggleChange(name)(value),
       isLoading: loadingUsuarios,
       error: errorUsuarios,
-    },
+    }, 
     {
       component: TextAreaField,
       label: "Comentario",
