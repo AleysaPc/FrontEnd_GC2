@@ -51,15 +51,14 @@ export default function VistaPreviaDocumento() {
               "bg-white hover:bg-blue-600 text-black px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",
           },
         ]}
-        subTitle={`Información del Documento: ${response?.data?.cite}`}
+        subTitle={`Información del Documentoooo: ${id_correspondencia}`}
         icon={FaFileSignature}
       />
       <div className="flex-1 bg-white p-0 overflow-hidden">
         <div className="h-full w-full overflow-auto p-4">
-          <div
-            className="mx-auto bg-white p-4 shadow-sm border rounded w-full"
-            dangerouslySetInnerHTML={{ __html: contenidoHTML }}
-          />
+          <div className="mx-auto bg-white p-4 shadow-sm border rounded w-full">
+            <p>hola</p>
+          </div>
         </div>
       </div>
     </div>

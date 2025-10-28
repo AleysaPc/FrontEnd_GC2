@@ -19,24 +19,26 @@ const Notificaciones = () => {
 
   const count = notificaciones.filter((noti) => !noti.visto).length;
 
-  const marcarComoVista = async (id_accion, id_documento, tipo_documento) => {
+  const marcarComoVista = async (id_accion, id_documento, tipo) => {
+    console.log("tipo:", tipo);
+    console.log("id_documento:", id_documento);
+    console.log("id_accion:", id_accion);
     try {
       await AccionCorrespondenciaApi.marcarNotificacionVista(id_accion);
       setNotificaciones((prev) =>
         prev.filter((noti) => noti.id_accion !== id_accion)
       );
 
-      if (id_documento) {
-        if (tipo_documento === "recibido") {
-          navigate(`/detailRecibida/${id_documento}`);
-        } else if (tipo_documento === "enviado") {
-          navigate(`/vistaPreviaDocumento/${id_documento}`);
-        } else {
-          navigate(`/vistaPreviaDocumento/${id_documento}`);
-        }
+      if (tipo?.toLowerCase() === "recibido") {
+        navigate(`/detailRecibida/${id_documento}`);
+      } else if (tipo?.toLowerCase() === "enviado") {
+        navigate(`/vistaPreviaDocumento/${id_documento}`);
+      } else {
+        navigate(`/vistaPreviaDocumento/${id_documento}`);
       }
     } catch (e) {
       console.error("Error al marcar notificación como vista", e);
+      
     }
   };
 
@@ -64,7 +66,7 @@ const Notificaciones = () => {
                   marcarComoVista(
                     noti.id_accion,
                     noti.correspondencia_id,
-                    noti.tipo_documento
+                    noti.tipo
                   )
                 }
                 className="cursor-pointer p-3 border-b border-gray-200 hover:bg-gray-100"

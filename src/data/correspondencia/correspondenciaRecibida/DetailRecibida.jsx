@@ -13,6 +13,7 @@ import {
 } from "react-icons/fa";
 import TestDerivar from "../correspondencia/TestDerivar";
 import { useNavigate } from "react-router-dom";
+import FormattedDateTime from "../../../components/shared/FormattedDate";
 
 export default function DetailRecibida() {
   const { id } = useParams();
@@ -95,10 +96,15 @@ export default function DetailRecibida() {
             </p>
             <p className="text-gray-900">
               <span className="font-medium text-blue-700">
-                {" "}
-                Fecha y hora de recepción :{" "}
-              </span>
-              {new Date(correspondencia.fecha_registro).toLocaleString()}
+                Fecha y hora de recepción:
+              </span>{" "}
+              <FormattedDateTime
+                dateTime={
+                  correspondencia.fecha_recepcion +
+                  "T" +
+                  correspondencia.hora_recepcion
+                }
+              />
             </p>
             <p className="text-gray-900">
               <span className="font-medium text-blue-700"> Contacto : </span>
@@ -121,14 +127,20 @@ export default function DetailRecibida() {
               <span className="font-medium text-blue-700">
                 Fecha y hora de respuesta:
               </span>{" "}
-              {correspondencia.fecha_respuesta
-                ? new Date(correspondencia.fecha_respuesta).toLocaleString()
-                : "El documento no requiere respuesta"}
+              {correspondencia.fecha_respuesta ? (
+                <FormattedDateTime
+                  dateTime={
+                    correspondencia.fecha_respuesta +
+                    "T" +
+                    correspondencia.hora_respuesta
+                  }
+                />
+              ) : (
+                "El documento no requiere respuesta"
+              )}
             </p>
             <p className="text-gray-900">
-              <span className="font-medium text-blue-700">
-                Registrado por:
-              </span>{" "}
+              <span className="font-medium text-blue-700">Registrado por:</span>{" "}
               {correspondencia.usuario?.email || "No especificado"}
             </p>
           </div>
@@ -190,12 +202,13 @@ export default function DetailRecibida() {
                 <div className="space-y-2">
                   <p className="font-medium text-gray-700">Tipo de Acción:</p>
                   <p className="text-gray-900">{accion.accion}</p>
-
-                  <p className="font-medium text-gray-700 mt-4">Derivado por:</p> {/* El operador ?. (encadenamiento opcional) evita errores si usuario_destino es undefined o null. */}
+                  <p className="font-medium text-gray-700 mt-4">
+                    Derivado por:
+                  </p>{" "}
+                  {/* El operador ?. (encadenamiento opcional) evita errores si usuario_destino es undefined o null. */}
                   <p className="text-gray-900">
                     {accion.usuario?.email || "No especificado"}
                   </p>
-
                   <p className="font-medium text-gray-700 mt-4">Fecha:</p>
                   <p className="text-gray-900">
                     {new Date(accion.fecha).toLocaleString()}
@@ -205,7 +218,7 @@ export default function DetailRecibida() {
                 <div className="space-y-2">
                   <p className="font-medium text-gray-700">Usuario Destino:</p>
                   <p className="text-gray-900">
-                    {accion.usuario_destino?.email || "No especificado"} {" "}
+                    {accion.usuario_destino?.email || "No especificado"}{" "}
                   </p>
 
                   <p className="font-medium text-gray-700 mt-4">Comentario:</p>

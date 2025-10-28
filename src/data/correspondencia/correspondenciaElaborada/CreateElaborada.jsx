@@ -11,13 +11,13 @@ import { InputField } from "../../../components/shared/InputField";
 import { SelectField } from "../../../components/shared/SelectField";
 import { FaPlus, FaBackspace, FaEye, FaArrowLeft } from "react-icons/fa";
 import CreateEntity from "../../../components/shared/CreateEntity";
-import { UserCheckboxList } from "../../../components/shared/UserCheckboxList";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { TextAreaField } from "../../../components/shared/TextAreaField";
 import { CKEditorField } from "../../../components/shared/CKEditorField";
 import { obtenerIdUser } from "../../../utils/auth";
 import { MultipleInputs } from "../../../components/shared/MultipleInputs";
+import { UserDropdownSelect } from "../../../components/shared/UserDropdownSelect"
 
 export default function CreateElaborada() {
   const { options } = useFormEntity();
@@ -201,7 +201,7 @@ export default function CreateElaborada() {
     };
 
     const campoDerivarUsuarios = {
-      component: UserCheckboxList,
+      component: UserDropdownSelect,
       label: "Derivar a:",
       name: "usuarios",
       options: usuarioOptions(),

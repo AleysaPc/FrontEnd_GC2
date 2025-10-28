@@ -10,9 +10,9 @@ import { SelectField } from "../../../components/shared/SelectField";
 import EditEntity from "../../../components/shared/EditEntity";
 import { FaBackspace, FaEye, FaPencilAlt, FaPlus } from "react-icons/fa";
 import { MultipleInputs } from "../../../components/shared/MultipleInputs";
-import { UserCheckboxList } from "../../../components/shared/UserCheckboxList";
 import { useUsers } from "../../../hooks/useEntities";
 import { TextAreaField } from "../../../components/shared/TextAreaField";
+import { UserDropdownSelect } from "../../../components/shared/UserDropdownSelect";
 
 export default function editEnviada() {
   const { paraSelectsdestructuringYMap } = useFormEntity();
@@ -219,7 +219,7 @@ export default function editEnviada() {
       onChange: manejarEntradas.handleInputChange,
     },
     {
-      component: UserCheckboxList,
+      component: UserDropdownSelect,
       label: "Derivar a:",
       name: "usuarios",
       options: usuarioOptions(),

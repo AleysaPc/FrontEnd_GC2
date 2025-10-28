@@ -1,29 +1,22 @@
-const FormattedDate = ({ date, format = "DD/MMM/YYYY" }) => {
-  if (!date) return "No registrado";
+const FormattedDateTime = ({ dateTime, format = "DD/MMM/YYYY HH:mm:ss" }) => {
+  if (!dateTime) return "No registrado";
 
-  // Extraemos solo la parte de fecha, sin hora ni zona
-  const fechaSolo = date.split('T')[0]; // "2025-08-04"
+  // Creamos un objeto Date desde la cadena
+  const fecha = new Date(dateTime);
 
-  // Separamos en año, mes y día
-  const [year, month, day] = fechaSolo.split('-');
+  // Opciones para formateo de fecha y hora
+  const opciones = {
+    day: "2-digit",
+    month: format.includes("MMM") ? "short" : "2-digit", // corto: ene, feb...
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: false,
+    timeZone: "America/La_Paz",
+  };
 
-  // Creamos la fecha en UTC (mes - 1 porque enero es 0)
-  const fecha = new Date(Date.UTC(year, month - 1, day));
-
-  // Obtenemos los valores en UTC para evitar desfases por zona horaria local
-  const dia = fecha.getUTCDate().toString().padStart(2, "0");
-  const mesTexto = fecha.toLocaleString("es-ES", { month: "long", timeZone: "UTC" }).toLowerCase();
-  const año = fecha.getUTCFullYear();
-
-  if (format === "DD/MMM/YYYY") {
-    return `${dia} ${mesTexto} ${año}`;
-  }
-
-  if (format === "YYYY-MM-DD") {
-    return `${año}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
-  }
-
-  return fecha.toLocaleDateString("es-ES", { timeZone: "UTC" });
+  return fecha.toLocaleString("es-ES", opciones);
 };
 
-export default FormattedDate;
+export default FormattedDateTime;
