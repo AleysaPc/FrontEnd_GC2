@@ -4,7 +4,7 @@ import FormattedDate from "../../../components/shared/FormattedDate";
 import { Link } from "react-router-dom";
 import { FaEdit, FaEye, FaStream } from "react-icons/fa";
 import { ActionButton } from "../../../components/shared/ActionButton";
-import HistorialDocumentoModal from "../../../components/shared/HistorialModal";
+import HistorialDocumentoModal from "../../../components/shared/HistorialDocumentoModal";
 import { useState } from "react";
 
 function CorrespondenciaList() {
@@ -24,6 +24,7 @@ function CorrespondenciaList() {
     setModalVisible(false);
     setCorrespondenciaId(null);
   };
+  const [mostrarHistorial, setMostrarHistorial] = useState(false);
 
   const useFields = () => [
     { key: "index", label: "#" },
@@ -38,14 +39,7 @@ function CorrespondenciaList() {
             title="Ver detalles del documento"
             estilos="hover:bg-gray-600 hover:text-gray-100 text-gray-500 rounded-md flex items-center gap-2 transition duration-200 p-1"
           />
-          <button
-            onClick={() => handleOpenModal(item.id_correspondencia)} // Abre modal con ID
-            title="Ver historial"
-            className="hover:bg-gray-600 hover:text-gray-100 text-gray-500 rounded-md flex items-center gap-2 transition duration-200 p-1"
-            aria-label="Ver historial"
-          >
-            <FaStream />
-          </button>
+
           <ActionButton
             to={`/editRecibida/${item.id_correspondencia}`}
             icon={FaEdit}
@@ -53,9 +47,25 @@ function CorrespondenciaList() {
             toBack="/correspondenciaList"
             estilos="hover:bg-gray-600 hover:text-gray-100 text-gray-500 rounded-md flex items-center gap-2 transition duration-200 p-1"
           />
+
+          <button
+            onClick={() => handleOpenModal(item.id_correspondencia)} // ✅ Abre el modal correctamente
+            title="Ver historial"
+            className="hover:bg-gray-600 hover:text-gray-100 text-gray-500 rounded-md flex items-center gap-2 transition duration-200 p-1"
+            aria-label="Ver historial"
+          >
+            <FaStream />
+          </button>
+
+          <HistorialDocumentoModal
+            visible={mostrarHistorial}
+            onClose={() => setMostrarHistorial(false)}
+            correspondenciaId={correspondenciaId} // ✅ Corregido
+          />
         </div>
       ),
     },
+
     {
       key: "tipo",
       label: "Tipo",

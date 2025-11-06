@@ -1,16 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { useNotificacionesPendientes } from "../../hooks/useNotificaciones";
-import { AccionCorrespondenciaApi } from "../../api/correspondencia.api";
+import {
+  AccionCorrespondenciaApi,
+  HistorialEventoApi,
+} from "../../api/correspondencia.api";
 import { NotificacionCampana } from "../shared/NotificacionCampana";
 import { useNavigate } from "react-router-dom";
+import { obtenerIdUser } from "../../utils/auth";
 
 const Notificaciones = () => {
   const { data, isLoading, error } = useNotificacionesPendientes();
   const navigate = useNavigate();
+  const currentUser = obtenerIdUser();
 
   const [mostrarNotificaciones, setMostrarNotificaciones] = useState(false);
   const [notificaciones, setNotificaciones] = useState([]);
 
+  // Cargar notificaciones pendientes en estado local
   useEffect(() => {
     if (data?.items) {
       setNotificaciones(data.items);
@@ -19,26 +25,35 @@ const Notificaciones = () => {
 
   const count = notificaciones.filter((noti) => !noti.visto).length;
 
-  const marcarComoVista = async (id_accion, id_documento, tipo) => {
-    console.log("tipo:", tipo);
-    console.log("id_documento:", id_documento);
-    console.log("id_accion:", id_accion);
+  const marcarComoVista = async (id_accion, id_documento, tipo, noti) => {
     try {
+      // 1️⃣ Marcar la notificación como vista
       await AccionCorrespondenciaApi.marcarNotificacionVista(id_accion);
+
+      // 2️⃣ Registrar en historial (con valores válidos)
+      await HistorialEventoApi.create({
+        usuario: currentUser,
+        correspondencia: noti.correspondencia_id,
+        accion: "vista",  // Campo obligatorio
+        origen: "derivacion",   // Valor válido de choices
+      });
+
+      // 3️⃣ Actualizar estado local
       setNotificaciones((prev) =>
-        prev.filter((noti) => noti.id_accion !== id_accion)
+        prev.filter((not) => not.id_accion !== id_accion)
       );
 
+      // 4️⃣ Navegar según el tipo de notificación
       if (tipo?.toLowerCase() === "recibido") {
         navigate(`/detailRecibida/${id_documento}`);
-      } else if (tipo?.toLowerCase() === "enviado") {
-        navigate(`/vistaPreviaDocumento/${id_documento}`);
       } else {
         navigate(`/vistaPreviaDocumento/${id_documento}`);
       }
-    } catch (e) {
-      console.error("Error al marcar notificación como vista", e);
-      
+    } catch (error) {
+      console.error(
+        "⚠️ Error marcando notificación o registrando historial:",
+        error
+      );
     }
   };
 
@@ -47,7 +62,10 @@ const Notificaciones = () => {
   };
 
   if (isLoading) return <div className="p-4">Cargando...</div>;
-  if (error) return <div className="p-4 text-red-600">Error al cargar notificaciones</div>;
+  if (error)
+    return (
+      <div className="p-4 text-red-600">Error al cargar notificaciones</div>
+    );
 
   return (
     <div className="relative">
@@ -66,7 +84,8 @@ const Notificaciones = () => {
                   marcarComoVista(
                     noti.id_accion,
                     noti.correspondencia_id,
-                    noti.tipo
+                    noti.tipo,
+                    noti
                   )
                 }
                 className="cursor-pointer p-3 border-b border-gray-200 hover:bg-gray-100"
