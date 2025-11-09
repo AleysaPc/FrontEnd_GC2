@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNotificacionesPendientes } from "../../hooks/useNotificaciones";
-import {
-  AccionCorrespondenciaApi,
-  HistorialEventoApi,
-} from "../../api/correspondencia.api";
+import { AccionCorrespondenciaApi } from "../../api/correspondencia.api";
 import { NotificacionCampana } from "../shared/NotificacionCampana";
 import { useNavigate } from "react-router-dom";
 import { obtenerIdUser } from "../../utils/auth";
@@ -25,25 +22,23 @@ const Notificaciones = () => {
 
   const count = notificaciones.filter((noti) => !noti.visto).length;
 
-  const marcarComoVista = async (id_accion, id_documento, tipo, noti) => {
+  const marcarComoVista = async (id, id_documento, tipo, noti) => {
     try {
       // 1️⃣ Marcar la notificación como vista
-      await AccionCorrespondenciaApi.marcarNotificacionVista(id_accion);
+      await AccionCorrespondenciaApi.marcarNotificacionVista(id);
 
-      // 2️⃣ Registrar en historial (con valores válidos)
-      await HistorialEventoApi.create({
-        usuario: currentUser,
-        correspondencia: noti.correspondencia_id,
-        accion: "vista",  // Campo obligatorio
-        origen: "derivacion",   // Valor válido de choices
+      // 2️⃣ Registrar un historial opcional
+      await AccionCorrespondenciaApi.create({
+        correspondencia_id: noti.correspondencia_id, // Nombre exacto esperado por serializer
+        usuario_destino_id: noti.usuario_destino_id || null, // si aplica
+        accion: "observado", // Valor válido de choices
+        comentario_derivacion: "Notificación marcada como vista", // usa campo que maneja el serializer
       });
 
       // 3️⃣ Actualizar estado local
-      setNotificaciones((prev) =>
-        prev.filter((not) => not.id_accion !== id_accion)
-      );
+      setNotificaciones((prev) => prev.filter((not) => not.id !== id));
 
-      // 4️⃣ Navegar según el tipo de notificación
+      // 4️⃣ Navegar según tipo
       if (tipo?.toLowerCase() === "recibido") {
         navigate(`/detailRecibida/${id_documento}`);
       } else {
@@ -79,10 +74,10 @@ const Notificaciones = () => {
           ) : (
             notificaciones.map((noti) => (
               <div
-                key={noti.id_accion}
+                key={noti.id}
                 onClick={() =>
                   marcarComoVista(
-                    noti.id_accion,
+                    noti.id,
                     noti.correspondencia_id,
                     noti.tipo,
                     noti

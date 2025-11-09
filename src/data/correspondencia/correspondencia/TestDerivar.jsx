@@ -29,11 +29,14 @@ export default function TestDerivar({ isOpen, onClose, id }) {
   const usuarioOptions = () =>
     usuariosArray ? options(usuariosArray, "id", "email") : [];
 
+  //De acuerdo al modelo 
   const accionOptions = [
-    {id: "DERIVADO", nombre: "Derivado"},
-    {id: "VISTO", nombre: "Visto"},
-    {id: "OBSERVADO", nombre: "Observado"},
-    {id: "APROBADO", nombre: "Aprobado"},
+    {id: "derivado", nombre: "Derivado"},
+    {id: "observado", nombre: "Observado"},
+    {id: "aprobado", nombre: "Aprobado"},
+    {id: "rechazado", nombre: "Rechazado"},
+    {id: "devuelto", nombre: "Devuelto"},
+    {id: "archivado", nombre: "Archivado"},
   ];
 
   const configuracionFormulario = {

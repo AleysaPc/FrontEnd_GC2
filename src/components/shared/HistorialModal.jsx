@@ -52,11 +52,11 @@ export default function HistorialDocumentoModal({ visible, onClose, corresponden
             <div className="absolute left-1/2 top-0 bottom-0 w-0.5 bg-gray-300 transform -translate-x-1/2"></div>
             <div className="space-y-8">
               {accionesOrdenadas.map((accion, index) => {
-                console.log("ID de la acción:", accion.id_accion); // 👈 Aquí imprimes el ID
+                console.log("ID de la acción:", accion.id); // 👈 Aquí imprimes el ID
                 const isEven = index % 2 === 0;
                 return (
                   <div
-                    key={accion.id_accion}
+                    key={accion.id}
                     className={`relative w-1/2 ${isEven ? "pr-8 ml-auto" : "pl-8"}`}
                   >
                     <div

@@ -1,9 +1,9 @@
 import React from "react";
-import { useHistorialEvento } from "../../hooks/useEntities";
+import { useAccionCorrespondencia } from "../../hooks/useEntities";
 import FormattedDate from "./FormattedDate";
 
 const HistorialDocumentoModal = ({ visible, onClose, correspondenciaId }) => {
-  const { data, isLoading, error } = useHistorialEvento({
+  const { data, isLoading, error } = useAccionCorrespondencia({
     all_data: true,
     filters: { correspondencia: correspondenciaId },
   });
@@ -50,6 +50,7 @@ const HistorialDocumentoModal = ({ visible, onClose, correspondenciaId }) => {
               </thead>
               <tbody>
                 {items.map((item) => (
+                  {/*{
                   <tr key={item.id}>
                     <td className="border px-2 py-1">{item.id}</td>
                     <td className="border px-2 py-1">{item.accion}</td>
@@ -65,10 +66,10 @@ const HistorialDocumentoModal = ({ visible, onClose, correspondenciaId }) => {
                     <td className="border px-2 py-1">
                       {item.comentario || "Sin comentario"}
                     </td>
-                    {/* <td className="border px-2 py-1">
+                    <td className="border px-2 py-1">
                       <FormattedDate date={item.fecha} />
-                    </td> */}
-                  </tr>
+                    </td>
+                  </tr> */}
                 ))}
               </tbody>
             </table>

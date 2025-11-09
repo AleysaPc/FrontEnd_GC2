@@ -21,6 +21,7 @@ export default function createRecibida() {
   const logicaNegocio = {
     idUsuario: obtenerIdUser(),
   };
+  console.log("idUsuario", logicaNegocio.idUsuario);
 
   const {
     data: contactosData,

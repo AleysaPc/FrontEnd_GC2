@@ -6,6 +6,7 @@ import { ActionButton } from "../../../components/shared/ActionButton";
 import HistorialDocumentoModal from "../../../components/shared/HistorialModal"; // Ajusté el nombre aquí
 import { FaFileInvoice } from "react-icons/fa";
 import { useState } from "react";
+import FormattedDateTime from "../../../components/shared/FormattedDate";
 
 function CorrespondenciaRecibidaList() {
   const [modalVisible, setModalVisible] = useState(false);
@@ -72,7 +73,9 @@ function CorrespondenciaRecibidaList() {
       key: "fecha_recepcion",
       label: "Fecha Recepción",
       render: (item) => (
-        <FormattedDate date={item.fecha_recepcion} format="DD/MMM/YYYY" />
+        <FormattedDateTime
+          dateTime={item.fecha_recepcion + "T" + item.hora_recepcion}
+        />
       ),
     },
     {

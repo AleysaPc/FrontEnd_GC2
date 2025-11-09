@@ -192,7 +192,7 @@ export default function DetailRecibida() {
         {tieneAcciones ? (
           correspondencia.acciones.map((accion, index) => (
             <div
-              key={accion.id_accion || index}
+              key={accion.id || index}
               className="bg-white p-6 rounded-lg shadow-md"
             >
               <h4 className="text-lg font-semibold mb-2">
