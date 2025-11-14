@@ -1,7 +1,6 @@
 import EntityList from "../../../components/shared/EntityList";
 import { useCorrespondencias } from "../../../hooks/useEntities";
-import FormattedDate from "../../../components/shared/FormattedDate";
-import { Link } from "react-router-dom";
+import FormattedDateTime from "../../../components/shared/FormattedDate";
 import { FaEdit, FaEye, FaStream } from "react-icons/fa";
 import { ActionButton } from "../../../components/shared/ActionButton";
 import HistorialDocumentoModal from "../../../components/shared/HistorialDocumentoModal";
@@ -74,7 +73,7 @@ function CorrespondenciaList() {
       key: "fecha_registro",
       label: "Fecha de Registro",
       render: (item) => (
-        <FormattedDate date={item.fecha_registro} format="DD/MMM/YYYY" />
+        <FormattedDateTime dateTime={item.fecha_registro} />
       ),
     },
     { key: "referencia", label: "Referencia" },

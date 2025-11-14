@@ -207,11 +207,15 @@ export default function DetailRecibida() {
                   </p>{" "}
                   {/* El operador ?. (encadenamiento opcional) evita errores si usuario_destino es undefined o null. */}
                   <p className="text-gray-900">
-                    {accion.usuario?.email || "No especificado"}
+                    {accion.usuario_origen?.email || "No especificado"}
                   </p>
                   <p className="font-medium text-gray-700 mt-4">Fecha:</p>
                   <p className="text-gray-900">
-                    {new Date(accion.fecha).toLocaleString()}
+                    <FormattedDateTime
+                      dateTime={
+                        accion.fecha_inicio 
+                      }
+                    />
                   </p>
                 </div>
 

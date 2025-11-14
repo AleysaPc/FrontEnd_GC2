@@ -11,12 +11,10 @@ import { InputField } from "../../../components/shared/InputField";
 import { SelectField } from "../../../components/shared/SelectField";
 import CreateEntity from "../../../components/shared/CreateEntity";
 import { FaShareSquare } from "react-icons/fa";
+import { cloneElement } from "react";
 
 export default function TestDerivar({ isOpen, onClose, id }) {
-  const { paraSelectsdestructuringYMap } = useAccionCorrespondenciaMutations();
-  const { data: response } = useCorrespondencia(id);
-  const correspondencia = response?.data;
-
+  
   const {
     data: usuariosData,
     isLoading: loadingUsuarios,
@@ -29,40 +27,45 @@ export default function TestDerivar({ isOpen, onClose, id }) {
   const usuarioOptions = () =>
     usuariosArray ? options(usuariosArray, "id", "email") : [];
 
-  //De acuerdo al modelo 
+  //De acuerdo al modelo
   const accionOptions = [
-    {id: "derivado", nombre: "Derivado"},
-    {id: "observado", nombre: "Observado"},
-    {id: "aprobado", nombre: "Aprobado"},
-    {id: "rechazado", nombre: "Rechazado"},
-    {id: "devuelto", nombre: "Devuelto"},
-    {id: "archivado", nombre: "Archivado"},
+    { id: "derivado", nombre: "Derivado" },
+    { id: "observado", nombre: "Observado" },
+    { id: "aprobado", nombre: "Aprobado" },
+    { id: "rechazado", nombre: "Rechazado" },
+    { id: "devuelto", nombre: "Devuelto" },
+    { id: "archivado", nombre: "Archivado" },
   ];
 
   const configuracionFormulario = {
-    correspondencia_id: id,
-    usuarios: [],
+    correspondencia: id,
+    usuario_destino_id,
     comentario_derivacion: "",
     accion: "",
   };
 
   const camposExtras = (formValues) => ({
-    usuarios: Array.isArray(formValues.usuarios)
-      ? formValues.usuarios.map(Number)
+    usuario_destino_id: formValues.usuario_destino_id
+      ? formValues.usuario_destino_id.map((id) => Number(id))
       : [],
-    comentario_derivacion: formValues.comentario_derivacion || "",
-    nro_registro: formValues.nro_registro || "",
+    comentario_derivacion: formValues.comentario_derivacion,
+    accion: formValues.accion,
   });
 
   const paraEnvio = (formValues) => {
-    const idInt = parseInt(id);
+    console.log("formValues al enviar:", formValues);
+    const data = {
+      ...camposExtras(formValues),
+      accion: formValues.accion,
+    };
+    if (formValues.usuario_destino_id && formValues.usuario_destino_id.length > 0) {
+      data.usuario_destino_id = Number(formValues.usuario_destino_id[0]);
+    }
+
+    console.log("data que se envía:", data);
     return {
       link: "/correspondenciaRecibidaList",
-      data: {
-        ...camposExtras(formValues),
-        correspondencia_id: idInt,
-        comentario_derivacion: formValues.comentario_derivacion || "",
-      },
+      data: data,
     };
   };
 
@@ -72,12 +75,14 @@ export default function TestDerivar({ isOpen, onClose, id }) {
       label: "Acción",
       name: "accion",
       options: accionOptions,
+      value: formValues.accion,
       onChange: manejarEntradas.handleInputChange,
     },
     {
       component: UserDropdownSelect,
       label: "Derivar a:",
-      name: "usuarios",
+      name: "usuario_destino_id",
+      value: formValues.usuario_destino_id,
       options: usuarioOptions(),
       onChange: (name, value) =>
         manejarEntradas.handleToggleChange(name)(value),
@@ -88,6 +93,7 @@ export default function TestDerivar({ isOpen, onClose, id }) {
       component: InputField,
       label: "Comentario",
       name: "comentario_derivacion",
+      value: formValues.comentario_derivacion,
       required: false,
       onChange: manejarEntradas.handleInputChange,
     },

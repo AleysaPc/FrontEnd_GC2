@@ -1,25 +1,28 @@
 import React, { useEffect, useState } from "react";
 import { useCorrespondencia } from "../../hooks/useEntities"; // Hook correcto para todas las acciones
 import { FaArrowRight, FaArrowDown, FaFileAlt } from "react-icons/fa";
+import FormattedDateTime from "./FormattedDate";
 
-export default function HistorialDocumentoModal({ visible, onClose, correspondenciaId, }) {
-  
+export default function HistorialDocumentoModal({
+  visible,
+  onClose,
+  correspondenciaId,
+}) {
   //Hook para obtener la correspondencia
   const { data, error } = useCorrespondencia(correspondenciaId);
 
   const [accionesOrdenadas, setAccionesOrdenadas] = useState([]);
- 
+
   useEffect(() => {
-  if (data?.data?.acciones) {
-    const ordenadas = [...data.data.acciones].sort(
-      (a, b) => new Date(b.fecha) - new Date(a.fecha)
-    );
-    setAccionesOrdenadas(ordenadas);
-  } else {
-    setAccionesOrdenadas([]);
-  }
-}, [data, correspondenciaId])
-  
+    if (data?.data?.acciones) {
+      const ordenadas = [...data.data.acciones].sort(
+        (a, b) => new Date(b.fecha) - new Date(a.fecha)
+      );
+      setAccionesOrdenadas(ordenadas);
+    } else {
+      setAccionesOrdenadas([]);
+    }
+  }, [data, correspondenciaId]);
 
   if (!visible || !correspondenciaId) return null;
 
@@ -38,7 +41,9 @@ export default function HistorialDocumentoModal({ visible, onClose, corresponden
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 overflow-y-auto">
       <div className="bg-white p-6 rounded-lg w-full max-w-3xl max-h-[90vh] overflow-y-auto">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-2xl font-semibold text-gray-800">Trazabilidad Documento</h2>
+          <h2 className="text-2xl font-semibold text-gray-800">
+            Trazabilidad Documento
+          </h2>
           <button
             onClick={onClose}
             className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300"
@@ -57,7 +62,9 @@ export default function HistorialDocumentoModal({ visible, onClose, corresponden
                 return (
                   <div
                     key={accion.id}
-                    className={`relative w-1/2 ${isEven ? "pr-8 ml-auto" : "pl-8"}`}
+                    className={`relative w-1/2 ${
+                      isEven ? "pr-8 ml-auto" : "pl-8"
+                    }`}
                   >
                     <div
                       className={`absolute top-4 w-4 h-4 rounded-full bg-blue-500 border-4 border-white ${
@@ -74,22 +81,31 @@ export default function HistorialDocumentoModal({ visible, onClose, corresponden
                             </h3>
                           </div>
                           <p className="text-sm text-gray-600 mb-2">
-                            <strong>Fecha:</strong> {new Date(accion.fecha).toLocaleString()}
+                            <strong>Fecha:</strong>{" "}
+                            <FormattedDateTime dateTime={accion.fecha_inicio} />
                           </p>
                           <div className="grid grid-cols-2 gap-2 text-sm">
                             <div>
                               <p className="text-xs text-gray-500">De</p>
-                              <p className="font-medium">{accion.usuario?.email || "Desconocido"}</p>
-                            </div>
-                            <br />    
-                            <div>
-                              <p className="text-xs text-gray-500">Para</p>
-                              <p className="font-medium">{accion.usuario_destino?.email || "Desconocido"}</p>
+                              <p className="font-medium">
+                                {accion.usuario_origen?.email || "Desconocido"}
+                              </p>
                             </div>
                             <br />
                             <div>
-                              <p className="text-xs text-gray-500">Comentario</p>
-                              <p className="font-medium">{accion.comentario || "Desconocido"}</p>
+                              <p className="text-xs text-gray-500">Para</p>
+                              <p className="font-medium">
+                                {accion.usuario_destino?.email || "Desconocido"}
+                              </p>
+                            </div>
+                            <br />
+                            <div>
+                              <p className="text-xs text-gray-500">
+                                Comentario
+                              </p>
+                              <p className="font-medium">
+                                {accion.comentario || "Desconocido"}
+                              </p>
                             </div>
                           </div>
                         </div>
