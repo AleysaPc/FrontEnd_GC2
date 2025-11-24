@@ -3,7 +3,7 @@ import EntityList from "../../../components/shared/EntityList";
 import { FaEye, FaFilePdf, FaEdit, FaStream } from "react-icons/fa";
 import { ActionButton } from "../../../components/shared/ActionButton";
 import { useState } from "react";
-import HistorialDocumentoModal from "../../../components/shared/HistorialModal";
+import Trazabilidad from "../../../components/shared/Trazabilidad";
 
 export default function ElaboradaList() {
 
@@ -104,7 +104,7 @@ export default function ElaboradaList() {
   return (
     <>
       <EntityList entityData={entityData} />
-      <HistorialDocumentoModal
+      <Trazabilidad
         visible={modalVisible}
         onClose={handleCloseModal}
         correspondenciaId={correspondenciaId}

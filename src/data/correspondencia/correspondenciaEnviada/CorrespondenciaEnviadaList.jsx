@@ -3,7 +3,7 @@ import EntityList from "../../../components/shared/EntityList";
 import FormattedDate from "../../../components/shared/FormattedDate";
 import { FaEdit, FaEye, FaStream, FaPlus } from "react-icons/fa";
 import { ActionButton } from "../../../components/shared/ActionButton";
-import HistorialDocumentoModal from "../../../components/shared/HistorialModal";
+import Trazabilidad from "../../../components/shared/Trazabilidad";
 import { useState } from "react";
 
 function CorrespondenciaEnviadaList() {
@@ -126,7 +126,7 @@ function CorrespondenciaEnviadaList() {
   return (
     <>
       <EntityList entityData={entityData} />
-      <HistorialDocumentoModal
+      <Trazabilidad
         visible={modalVisible}
         onClose={handleCloseModal}
         correspondenciaId={correspondenciaId}

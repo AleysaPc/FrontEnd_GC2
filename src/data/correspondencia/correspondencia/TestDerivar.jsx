@@ -23,7 +23,7 @@ export default function TestDerivar({ isOpen, onClose, id }) {
 
   //Aquí options es una función (definida en useFormEntity) que transforma tu array de usuarios en un array de opciones para el dropdown
   const usuarioOptions = () =>
-    usuariosArray ? options(usuariosArray, "id", "email") : [];
+    usuariosArray ? options(usuariosArray, "id", "email",) : [];
     console.log("Opciones de usuarios destino:", usuarioOptions());
 
   //De acuerdo al modelo
@@ -41,6 +41,7 @@ export default function TestDerivar({ isOpen, onClose, id }) {
     usuario_destino_id: null, // usuario destino (un solo valor)
     comentario_derivacion: "", // comentario opcional
     accion: "derivado", // acción por defecto
+    estado_resultante: "derivado", // estado resultante
   };
 
   const camposExtras = (formValues) => ({
@@ -50,6 +51,7 @@ export default function TestDerivar({ isOpen, onClose, id }) {
       : null,
     comentario_derivacion: formValues.comentario_derivacion,
     accion: formValues.accion,
+    estado_resultante: formValues.estado_resultante,
   });
 
   const paraEnvio = (formValues) => ({
@@ -85,6 +87,14 @@ export default function TestDerivar({ isOpen, onClose, id }) {
       name: "comentario_derivacion",
       value: formValues.comentario_derivacion,
       required: false,
+      onChange: manejarEntradas.handleInputChange,
+    },
+    {
+      component: SelectField,
+      label: "Estado Resultante",
+      name: "estado_resultante",
+      options: accionOptions,
+      value: formValues.estado_resultante,
       onChange: manejarEntradas.handleInputChange,
     },
   ];

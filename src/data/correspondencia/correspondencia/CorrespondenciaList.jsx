@@ -3,7 +3,7 @@ import { useCorrespondencias } from "../../../hooks/useEntities";
 import FormattedDateTime from "../../../components/shared/FormattedDate";
 import { FaEdit, FaEye, FaStream } from "react-icons/fa";
 import { ActionButton } from "../../../components/shared/ActionButton";
-import HistorialDocumentoModal from "../../../components/shared/HistorialDocumentoModal";
+import Trazabilidad from "../../../components/shared/Trazabilidad";
 import { useState } from "react";
 
 function CorrespondenciaList() {
@@ -56,7 +56,7 @@ function CorrespondenciaList() {
             <FaStream />
           </button>
 
-          <HistorialDocumentoModal
+          <Trazabilidad
             visible={mostrarHistorial}
             onClose={() => setMostrarHistorial(false)}
             correspondenciaId={correspondenciaId} // ✅ Corregido
@@ -115,7 +115,7 @@ function CorrespondenciaList() {
   return (
     <>
       <EntityList entityData={entityData} />
-      <HistorialDocumentoModal
+      <Trazabilidad
         visible={modalVisible}
         onClose={handleCloseModal}
         correspondenciaId={correspondenciaId}

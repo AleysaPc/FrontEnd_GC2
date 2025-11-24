@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useCorrespondencia } from "../../hooks/useEntities"; // Hook correcto para todas las acciones
-import { FaArrowRight, FaArrowDown, FaFileAlt } from "react-icons/fa";
+import { FaPaperPlane, FaExclamationTriangle, FaReply, FaWindowClose, FaCheck, FaSave, FaFolder } from "react-icons/fa";
 import FormattedDateTime from "./FormattedDate";
 
-export default function HistorialDocumentoModal({
+export default function Trazabilidad({
   visible,
   onClose,
   correspondenciaId,
@@ -27,19 +27,51 @@ export default function HistorialDocumentoModal({
   if (!visible || !correspondenciaId) return null;
 
   const getIconoAccion = (tipo) => {
+    
     switch (tipo) {
       case "DERIVADO":
-        return <FaArrowRight className="text-blue-500 mr-2" />;
-      case "RECIBIDO":
-        return <FaArrowDown className="text-green-500 mr-2" />;
-      default:
-        return <FaFileAlt className="text-gray-500 mr-2" />;
+        return (
+          <div className="w-10 h-10 rounded-full bg-orange-500 flex items-center justify-center mr-2">
+            <FaPaperPlane className="text-gray-50 text-2xl" />
+          </div>
+        );
+        case "observado":
+        return (
+          <div className="w-10 h-10 rounded-full bg-red-500 flex items-center justify-center mr-2">
+            <FaExclamationTriangle className="text-gray-50 text-2xl" />
+          </div>
+        );
+        case "devuelto":
+        return (
+          <div className="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center mr-2">
+            <FaReply className="text-gray-50 text-2xl" />
+          </div>
+        );
+      case "rechazado":
+        return (
+          <div className="w-10 h-10 rounded-full bg-red-500 flex items-center justify-center mr-2">
+            <FaWindowClose className="text-gray-50 text-2xl" />
+          </div>
+        );
+        case "aprobado":
+        return (
+          <div className="w-10 h-10 rounded-full bg-green-500 flex items-center justify-center mr-2">
+            <FaCheck className="text-gray-50 text-2xl" />
+          </div>
+        );
+        case "archivado":
+          return(
+            <div className="w-10 h-10 rounded-full bg-gray-500 flex items-center justify-center mr-2">
+              <FaFolder className="text-gray-50 text-2xl" />
+            </div>
+          );
+          
     }
   };
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 overflow-y-auto">
-      <div className="bg-white p-6 rounded-lg w-full max-w-3xl max-h-[90vh] overflow-y-auto">
+      <div className="bg-white p-4 rounded-lg w-full max-w-5xl max-h-[90vh] overflow-y-auto">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-2xl font-semibold text-gray-800">
             Trazabilidad Documento
@@ -58,7 +90,7 @@ export default function HistorialDocumentoModal({
             <div className="space-y-8">
               {accionesOrdenadas.map((accion, index) => {
                 console.log("ID de la acción:", accion.id); // 👈 Aquí imprimes el ID
-                const isEven = index % 2 === 0;
+                const isEven = index % 2 == 0;
                 return (
                   <div
                     key={accion.id}
@@ -77,7 +109,7 @@ export default function HistorialDocumentoModal({
                           <div className="flex items-center mb-1">
                             {getIconoAccion(accion.accion)}
                             <h3 className="text-lg font-semibold text-gray-800">
-                              {accion.accion}
+                              {accion.accion.toUpperCase()} 
                             </h3>
                           </div>
                           <p className="text-sm text-gray-600 mb-2">
@@ -88,14 +120,24 @@ export default function HistorialDocumentoModal({
                             <div>
                               <p className="text-xs text-gray-500">De</p>
                               <p className="font-medium">
-                                {accion.usuario_origen?.email || "Desconocido"}
+                                {accion.usuario_origen?.email
+                                  ? `${accion.usuario_origen.email} - ${
+                                      accion.usuario_origen
+                                        ?.nombre_departamento || "Desconocido"
+                                    }`
+                                  : "Desconocido"}
                               </p>
                             </div>
                             <br />
                             <div>
                               <p className="text-xs text-gray-500">Para</p>
                               <p className="font-medium">
-                                {accion.usuario_destino?.email || "Desconocido"}
+                                {accion.usuario_destino?.email
+                                  ? `${accion.usuario_destino.email} - ${
+                                      accion.usuario_destino
+                                        ?.nombre_departamento || "Desconocido"
+                                    }`
+                                  : "Desconocido"}
                               </p>
                             </div>
                             <br />

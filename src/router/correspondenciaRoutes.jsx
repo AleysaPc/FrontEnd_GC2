@@ -57,6 +57,10 @@ const RegisterEnviada = lazy(() =>
 );
 const DetailUser = lazy(() => import("../data/usuarios/DetailUser"));
 const DetailContacto = lazy(() => import("../data/contacto/DetailContacto"));
+const HistorialDocumento = lazy(() =>
+  import("../components/shared/HistorialDocumento")
+);
+const HojaDeRuta = lazy(()=>import("../components/shared/HojadeRuta"))
 
 export const correspondenciaRoutes = [
   // rutas de correspondencia
@@ -143,5 +147,13 @@ export const correspondenciaRoutes = [
   {
     path: "detailContacto/:id",
     element: <DetailContacto />,
+  },
+  {
+    path: "historial/:id",
+    element: <HistorialDocumento />,
+  },
+  {
+    path: "hojaDeRuta/:id",
+    element: <HojaDeRuta />,
   },
 ];

@@ -10,6 +10,9 @@ import {
   FaFileSignature,
   FaShare,
   FaFileMedical,
+  FaTimesCircle,
+  FaTimes,
+  FaStopwatch,
 } from "react-icons/fa";
 import TestDerivar from "../correspondencia/TestDerivar";
 import { useNavigate } from "react-router-dom";
@@ -75,6 +78,20 @@ export default function DetailRecibida() {
             estilos:
               "bg-white hover:bg-red-800 text-black px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",
           },
+          {
+            to: `/historial/${id}`,
+            label: "Historial",
+            icon: FaStopwatch,
+            estilos:
+              "bg-white hover:bg-red-800 text-black px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",
+          },
+          {
+            to: `/hojaDeRuta/${id}`,
+            label: "Hoja de Ruta",
+            icon: FaFile,
+            estilos:
+              "bg-white hover:bg-red-800 text-black px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",
+          }
         ]}
         subTitle={`Información del Documento: ${correspondencia.nro_registro}`}
         icon={FaFileSignature}

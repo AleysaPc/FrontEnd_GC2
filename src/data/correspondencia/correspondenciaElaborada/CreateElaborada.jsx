@@ -144,7 +144,7 @@ export default function CreateElaborada() {
   };
 
   const paraEnvio = (formValues) => ({
-    link: "/ElaboradaList",
+    link: "/elaboradaList",
     params: camposExtras(formValues),
     comentario_derivacion: formValues.comentario_derivacion || "",
   });
@@ -421,7 +421,7 @@ export default function CreateElaborada() {
     icon: FaPlus,
     actions: [
       {
-        to: "/correspondenciaElaboradaList",
+        to: "/elaboradaList",
         label: "Volver",
         icon: FaBackspace,
         estilos:
