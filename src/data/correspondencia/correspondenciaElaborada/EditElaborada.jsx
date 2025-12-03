@@ -12,7 +12,7 @@ import { SelectField } from "../../../components/shared/SelectField";
 import EditEntity from "../../../components/shared/EditEntity";
 import { FaBackspace, FaEye, FaPencilAlt, FaPlus } from "react-icons/fa";
 import { MultipleInputs } from "../../../components/shared/MultipleInputs";
-import { UserCheckboxList } from "../../../components/shared/UserCheckboxList";
+import { UserDropdownSelect } from "../../../components/shared/UserDropdownSelect";
 import { TextAreaField } from "../../../components/shared/TextAreaField";
 import { CKEditorField } from "../../../components/shared/CKEditorField";
 import { useEffect, useState } from "react";
@@ -190,7 +190,7 @@ export default function EditElaborada() {
     };
 
     const campoDerivarUsuarios = {
-      component: UserCheckboxList,
+      component: UserDropdownSelect,
       label: "Derivar a:",
       name: "usuarios",
       options: usuarioOptions(),

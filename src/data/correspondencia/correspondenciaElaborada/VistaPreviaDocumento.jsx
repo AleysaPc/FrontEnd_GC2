@@ -56,9 +56,10 @@ export default function VistaPreviaDocumento() {
       />
       <div className="flex-1 bg-white p-0 overflow-hidden">
         <div className="h-full w-full overflow-auto p-4">
-          <div className="mx-auto bg-white p-4 shadow-sm border rounded w-full">
-            <p>hola</p>
-          </div>
+          <div
+            className="mx-auto bg-white p-8 shadow-sm border rounded w-full min-h-[1000px]"
+            dangerouslySetInnerHTML={{ __html: contenidoHTML }}
+          />
         </div>
       </div>
     </div>

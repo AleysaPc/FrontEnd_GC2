@@ -1,13 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { useCorrespondencia } from "../../hooks/useEntities"; // Hook correcto para todas las acciones
-import { FaPaperPlane, FaExclamationTriangle, FaReply, FaWindowClose, FaCheck, FaSave, FaFolder } from "react-icons/fa";
+import {
+  FaPaperPlane,
+  FaExclamationTriangle,
+  FaReply,
+  FaWindowClose,
+  FaCheck,
+  FaSave,
+  FaFolder,
+  FaCheckCircle,
+} from "react-icons/fa";
 import FormattedDateTime from "./FormattedDate";
 
-export default function Trazabilidad({
-  visible,
-  onClose,
-  correspondenciaId,
-}) {
+export default function Trazabilidad({ visible, onClose, correspondenciaId }) {
   //Hook para obtener la correspondencia
   const { data, error } = useCorrespondencia(correspondenciaId);
 
@@ -27,7 +32,6 @@ export default function Trazabilidad({
   if (!visible || !correspondenciaId) return null;
 
   const getIconoAccion = (tipo) => {
-    
     switch (tipo) {
       case "DERIVADO":
         return (
@@ -35,13 +39,13 @@ export default function Trazabilidad({
             <FaPaperPlane className="text-gray-50 text-2xl" />
           </div>
         );
-        case "observado":
+      case "observado":
         return (
           <div className="w-10 h-10 rounded-full bg-red-500 flex items-center justify-center mr-2">
             <FaExclamationTriangle className="text-gray-50 text-2xl" />
           </div>
         );
-        case "devuelto":
+      case "devuelto":
         return (
           <div className="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center mr-2">
             <FaReply className="text-gray-50 text-2xl" />
@@ -53,19 +57,24 @@ export default function Trazabilidad({
             <FaWindowClose className="text-gray-50 text-2xl" />
           </div>
         );
-        case "aprobado":
+      case "aprobado":
         return (
           <div className="w-10 h-10 rounded-full bg-green-500 flex items-center justify-center mr-2">
             <FaCheck className="text-gray-50 text-2xl" />
           </div>
         );
-        case "archivado":
-          return(
-            <div className="w-10 h-10 rounded-full bg-gray-500 flex items-center justify-center mr-2">
-              <FaFolder className="text-gray-50 text-2xl" />
-            </div>
-          );
-          
+      case "archivado":
+        return (
+          <div className="w-10 h-10 rounded-full bg-gray-500 flex items-center justify-center mr-2">
+            <FaFolder className="text-gray-50 text-2xl" />
+          </div>
+        );
+      case "respondido":
+        return (
+          <div className="w-10 h-10 rounded-full bg-green-500 flex items-center justify-center mr-2">
+            <FaCheckCircle className="text-gray-50 text-2xl" />
+          </div>
+        );
     }
   };
 
@@ -109,7 +118,7 @@ export default function Trazabilidad({
                           <div className="flex items-center mb-1">
                             {getIconoAccion(accion.accion)}
                             <h3 className="text-lg font-semibold text-gray-800">
-                              {accion.accion.toUpperCase()} 
+                              {accion.accion.toUpperCase()}
                             </h3>
                           </div>
                           <p className="text-sm text-gray-600 mb-2">

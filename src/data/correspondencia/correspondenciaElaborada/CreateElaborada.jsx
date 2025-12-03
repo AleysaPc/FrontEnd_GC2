@@ -17,14 +17,15 @@ import { TextAreaField } from "../../../components/shared/TextAreaField";
 import { CKEditorField } from "../../../components/shared/CKEditorField";
 import { obtenerIdUser } from "../../../utils/auth";
 import { MultipleInputs } from "../../../components/shared/MultipleInputs";
-import { UserDropdownSelect } from "../../../components/shared/UserDropdownSelect"
+import { UserDropdownSelect } from "../../../components/shared/UserDropdownSelect";
 
 export default function CreateElaborada() {
   const { options } = useFormEntity();
   const [searchParams] = useSearchParams();
   const respuestaAId = searchParams.get("respuesta_a");
   const [nroRegistroRespuesta, setNroRegistroRespuesta] = useState("");
-  const [tipoPlantillaSeleccionada, setTipoPlantillaSeleccionada] = useState("");
+  const [tipoPlantillaSeleccionada, setTipoPlantillaSeleccionada] =
+    useState("");
 
   const userId = obtenerIdUser();
   const { data: userResponse } = useUser(userId);
@@ -80,6 +81,7 @@ export default function CreateElaborada() {
     { id: "en_revision", nombre: "En revisión" },
     { id: "borrador", nombre: "Borrador" },
     { id: "aprobado", nombre: "Aprobado" },
+    { id: "enviado", nombre: "Enviado" },
   ];
 
   // Configuración inicial del formulario
@@ -106,12 +108,16 @@ export default function CreateElaborada() {
   // Preparar datos para envío (unir descripción según plantilla)
   const camposExtras = (formValues) => {
     const contactoField =
-
       tipoPlantillaSeleccionada === "nota_externa" && formValues.contacto
         ? { contacto: Number(formValues.contacto) }
         : {};
 
     let descripcionFinal = "";
+
+    let usuarioDestino = null;
+    if (Array.isArray(formValues.usuarios) && formValues.usuarios.length > 0) {
+      usuarioDestino = Number(formValues.usuarios[0]); // ID del usuario seleccionado
+    }
 
     if (tipoPlantillaSeleccionada === "informe") {
       descripcionFinal = [
@@ -139,6 +145,7 @@ export default function CreateElaborada() {
       cite: formValues.cite,
       respuesta_a: respuestaAId ? Number(respuestaAId) : null,
       comentario_derivacion: formValues.comentario_derivacion || "",
+      usuario_destino: usuarioDestino,
       usuario: usuario?.email || "",
     };
   };
