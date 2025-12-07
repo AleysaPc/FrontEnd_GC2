@@ -24,6 +24,8 @@ const Notificaciones = () => {
     }
   }, [data]);
 
+  console.log("DATOS DE LA NOTIICAIÓN QUE SE OBTIENE?", data)
+
   // Contar cuántas notificaciones no han sido vistas
   const count = notificaciones.filter((noti) => !noti.visto).length;
 
@@ -93,10 +95,13 @@ const Notificaciones = () => {
                   )
                 }
                 className="cursor-pointer p-3 border-b border-gray-200 hover:bg-gray-100"
-                title={notificacion.descripcion}
+                title={notificacion.comentario_derivacion}
               >
                 <div className="font-medium">
-                  {notificacion.documento || "Documento sin referencia"}
+                  {notificacion.comentario || "Ninguno"}
+                </div>
+                <div className="font-medium">
+                  {notificacion.referencia || "Documento sin referencia"}
                 </div>
                 <div className="text-xs text-gray-400">
                   {new Date(notificacion.fecha).toLocaleString()}

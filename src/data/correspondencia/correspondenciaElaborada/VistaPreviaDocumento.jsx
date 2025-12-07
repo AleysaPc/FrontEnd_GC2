@@ -2,12 +2,14 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { Navigation } from "../../../components/shared/Navigation";
-import { FaArrowLeft, FaFileSignature, FaFilePdf } from "react-icons/fa";
+import { FaArrowLeft, FaFileSignature, FaFilePdf, FaShare } from "react-icons/fa";
 import { useCorrespondenciaElaborada } from "../../../hooks/useEntities";
+import TestDerivar from "../correspondencia/TestDerivar";
 
 export default function VistaPreviaDocumento() {
   const { id_correspondencia } = useParams();
   const [contenidoHTML, setContenidoHTML] = useState("");
+  const [mostrarModalDerivar, setMostrarModalDerivar] = useState(false);
 
   const { data: response, isLoading: isLoadingCorrespondencia } =
     useCorrespondenciaElaborada(id_correspondencia);
@@ -50,6 +52,20 @@ export default function VistaPreviaDocumento() {
             estilos:
               "bg-white hover:bg-blue-600 text-black px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",
           },
+          {
+            label: "Derivar",
+            icon: FaShare,
+            onClick: () => setMostrarModalDerivar(true),
+            estilos:
+              "bg-white hover:bg-green-400 text-black px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",
+          },
+          {
+            label: "Listo",
+            icon: FaShare,
+            onClick: () => setMostrarModalDerivar(true),
+            estilos:
+              "bg-white hover:bg-green-400 text-black px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",
+          },
         ]}
         subTitle={`Información del Documentoooo: ${id_correspondencia}`}
         icon={FaFileSignature}
@@ -62,6 +78,11 @@ export default function VistaPreviaDocumento() {
           />
         </div>
       </div>
+      <TestDerivar
+        isOpen={mostrarModalDerivar}
+        onClose={() => setMostrarModalDerivar(false)}
+        id={id_correspondencia}
+      />
     </div>
   );
 }

@@ -6,7 +6,7 @@ import {
   useCorrespondenciaRecibidaMutations,
   useUsers,
 } from "../../../hooks/useEntities";
-import { FaBackspace, FaEye, FaPencilAlt, FaPlus } from "react-icons/fa";
+import { FaBackspace, FaEye, FaPencilAlt, FaPlus, FaTimes } from "react-icons/fa";
 import { useFormEntity } from "../../../utils/useFormEntity";
 import { obtenerIdUser } from "../../../utils/auth";
 import { SelectField } from "../../../components/shared/SelectField";
@@ -260,8 +260,8 @@ export default function createRecibida() {
     actions: [
       {
         to: "/correspondenciaList",
-        label: " Cancelar ",
-        icon: FaBackspace,
+        label: "  Cancelar ",
+        icon: FaTimes,
         estilos:
           "border-2 border-gray-700 rounded-lg bg-gray-600 text-white p-2 hover:bg-gray-100 hover:text-gray-600",
       },

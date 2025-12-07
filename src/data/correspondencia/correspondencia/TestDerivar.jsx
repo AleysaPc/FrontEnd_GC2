@@ -41,7 +41,7 @@ export default function TestDerivar({ isOpen, onClose, id }) {
     usuario_destino_id: null, // usuario destino (un solo valor)
     comentario_derivacion: "", // comentario opcional
     accion: "derivado", // acción por defecto
-    estado_resultante: "derivado", // estado resultante
+    //estado_resultante: "derivado", // estado resultante
   };
 
   const camposExtras = (formValues) => ({
@@ -51,7 +51,7 @@ export default function TestDerivar({ isOpen, onClose, id }) {
       : null,
     comentario_derivacion: formValues.comentario_derivacion,
     accion: formValues.accion,
-    estado_resultante: formValues.estado_resultante,
+    //estado_resultante: formValues.estado_resultante,
   });
 
   const paraEnvio = (formValues) => ({
@@ -89,14 +89,14 @@ export default function TestDerivar({ isOpen, onClose, id }) {
       required: false,
       onChange: manejarEntradas.handleInputChange,
     },
-    {
-      component: SelectField,
-      label: "Estado Resultante",
-      name: "estado_resultante",
-      options: accionOptions,
-      value: formValues.estado_resultante,
-      onChange: manejarEntradas.handleInputChange,
-    },
+    //{
+      //component: SelectField,
+      //label: "Estado Resultante",
+      //name: "estado_resultante",
+      //options: accionOptions,
+      //value: formValues.estado_resultante,
+      //onChange: manejarEntradas.handleInputChange,
+    //},
   ];
 
   return (
