@@ -22,7 +22,7 @@ const EntityForm = ({
       />
       <form
         onSubmit={manejarEnviar}
-        encType="multipart/form-data"
+        encType="multipart/form-data" 
         className="space-y-3 p-2 border-2 border-gray-200 bg-white w-full"
       >
         {fields.map(({ component: Component, actionButtons, ...props }) => (

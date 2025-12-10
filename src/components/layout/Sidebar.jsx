@@ -25,7 +25,7 @@ const Sidebar = ({ isVisible }) => {
       </div>
 
       {/* Sección de Perfil de Usuario */}
-      <div className="px-4 py-6 border-b flex flex-col items-center justify-center text-center bg-green-700">
+      <div className="px-4 py-6 border-b flex flex-col items-center justify-center text-center"style={{ backgroundColor: 'rgba(10, 89, 92, 0.9)' }}>
         {/* Avatar */}
         <div className="mb-3">
           <div className="w-16 h-16 rounded-full bg-red-700 flex items-center justify-center text-white font-semibold text-xl">

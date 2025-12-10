@@ -1,44 +1,65 @@
 import {
   useCorrespondenciaElaboradaMutations,
   useCorrespondenciaElaborada,
+  useContactos,
+  useUsers,
 } from "../../../hooks/useEntities";
-import { useContactos } from "../../../hooks/useEntities";
+
 import { useFormEntity } from "../../../utils/useFormEntity";
 import { obtenerIdUser } from "../../../utils/auth";
+
 import { InputField } from "../../../components/shared/InputField";
-import EditEntity from "../../../components/shared/EditEntity";
-import { FaBackspace, FaPlus } from "react-icons/fa";
 import { MultipleInputs } from "../../../components/shared/MultipleInputs";
-import { useParams } from "react-router-dom";
 import { ToggleSwitch } from "../../../components/shared/ToggleSwitch";
+import { SelectField } from "../../../components/shared/SelectField";
+import { TextAreaField } from "../../../components/shared/TextAreaField";
+import { UserDropdownSelect } from "../../../components/shared/UserDropdownSelect";
+
+import EditEntity from "../../../components/shared/EditEntity";
+import { FaBackspace, FaFile, FaPlus } from "react-icons/fa";
+import { useParams } from "react-router-dom";
 
 export default function RegisterEnviada() {
-  const { paraSelectsdestructuringYMap } = useFormEntity();
-
-  const { id } = useParams(); // Asegúrate de tener el ID desde la URL
-  const { data: correspondenciaData, isLoading } =
-    useCorrespondenciaElaborada(id);
-  const cite = correspondenciaData?.data?.cite || "";
-
-  const {
-    data: contactosData,
-    isLoading: loadingContactos,
-    error: errorContactos,
-  } = useContactos({ all_data: true });
-  const contactosArray = contactosData?.data || [];
-
+  const { id } = useParams();
   const { options } = useFormEntity();
 
+  const { data: correspondenciaData } = useCorrespondenciaElaborada(id);
+  const cite = correspondenciaData?.data?.cite || "";
+
+  // Datos del usuario logeado
+  const idUsuario = obtenerIdUser();
+
+  // Usuarios
+  const { data: usuariosData } = useUsers({ all_data: true });
+  const usuariosArray = usuariosData?.data || [];
+
+  // Contactos
+  const { data: contactosData } = useContactos({ all_data: true });
+  const contactosArray = contactosData?.data || [];
+
+  // Todos los usuarios como opciones de destino
+  const usuariosDestinoOptions = usuariosArray.map((user) => ({
+    id: user.id,
+    nombre: user.email,
+  }));
+
   const contactoOptions = () =>
-    contactosArray
-      ? options(contactosArray, "id_contacto", "nombre_completo")
-      : [];
+    options(contactosArray, "id_contacto", "nombre_completo");
 
-  const logicaNegocio = {
-    idUsuario: obtenerIdUser(),
-  };
+  const usuarioOptions = () => options(usuariosArray, "id", "email");
 
-  // Esta función intercepta el cambio del toggle para actualizar estado
+  const opcion_EstadoEntrega = [
+    { id: "pendiente", nombre: "Pendiente" },
+    { id: "entregado", nombre: "Entregado" },
+    { id: "no_entregado", nombre: "No entregado" },
+    { id: "devuelto", nombre: "Devuelto" },
+    { id: "rechazado", nombre: "Rechazado" },
+    { id: "extraviado", nombre: "Extraviado" },
+    { id: "direccion_incorrecta", nombre: "Dirección incorrecta" },
+    { id: "destinatario_incorrecto", nombre: "Destinatario incorrecto" },
+  ];
+
+  // Cambiar estado desde el toggle
   const manejarEstadoToggle = (checked, manejarEntradas) => {
     manejarEntradas.handleInputChange({
       target: {
@@ -49,7 +70,6 @@ export default function RegisterEnviada() {
   };
 
   const configuracionFormulario = (entidad) => ({
-    //Modelo 3 - Correspondencia
     fecha_envio: entidad?.data?.fecha_envio || "",
     hora_envio: entidad?.data?.hora_envio || "",
     fecha_recepcion: entidad?.data?.fecha_recepcion || "",
@@ -58,105 +78,156 @@ export default function RegisterEnviada() {
     descripcion: entidad?.data?.descripcion || "",
     paginas: entidad?.data?.paginas || "",
     comentario: entidad?.data?.comentario || "",
-    contacto: entidad?.data?.contacto || "", //Es el nombre del FK que tiene conectado con la correspondencia
+    comentario_derivacion: "",
+    contacto: entidad?.data?.contacto || "",
     documentos: Array.isArray(entidad?.data?.documentos)
       ? entidad.data.documentos
       : [],
     cite: entidad?.data?.cite || "",
-    estado: entidad?.data?.estado || "", 
+    estado: entidad?.data?.estado || "",
+    estado_entrega: entidad?.data?.estado_entrega || "pendiente",
+    motivo_no_entrega: entidad?.data?.motivo_no_entrega || "",
+    fecha_intento_entrega: entidad?.data?.fecha_intento_entrega || "",
+    numero_intentos: entidad?.data?.numero_intentos || 0,
+    usuario_destino_id: null,
+    usuarios: [],
   });
 
-  const camposExtras = (formValues) => ({
-    contacto: Number(formValues.contacto),
-    usuario: logicaNegocio.idUsuario,
-    comentario: formValues.comentario,
-  });
+  const camposExtras = (form) => {
+    const usuariosDestino = form.usuario_destino_id
+      ? Array.isArray(form.usuario_destino_id)
+        ? form.usuario_destino_id.map(Number)
+        : [Number(form.usuario_destino_id)]
+      : [];
 
-  const paraEnvio = (formValues) => ({
-    entityId: formValues.id_correspondencia, //del modelo correspondencia
+    return {
+      contacto: Number(form.contacto),
+      usuario: idUsuario,
+      comentario: form.comentario,
+      estado_entrega: form.estado_entrega,
+      motivo_no_entrega: form.motivo_no_entrega,
+      fecha_intento_entrega: form.fecha_intento_entrega,
+      numero_intentos: Number(form.numero_intentos),
+      comentario_derivacion: form.comentario_derivacion || "",
+      usuario_destino_id: usuariosDestino,
+      usuarios: usuariosDestino,
+    };
+  };
+
+  const paraEnvio = (form) => ({
+    entityId: form.id_correspondencia,
     link: "/correspondenciaEnviadaList",
-    params: camposExtras(formValues),
+    params: camposExtras(form),
   });
 
-  const construirCampos = (formValues, manejarEntradas) => [
+  const construirCampos = (form, manejarEntradas) => [
+    // --- Grupo: Fechas ---
     {
-      component: ({ value, ...props }) => (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-x-4 gap-y-4 items-start">
-          {/* Grupo: Fecha y hora de envío */}
+      component: () => (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {/* Envío */}
           <div className="flex flex-col gap-1">
-            <label className="text-sm font-medium text-gray-700">
-              Fecha y hora de envío del documento
-            </label>
+            <label>Fecha y hora de envío</label>
             <div className="flex gap-2">
               <InputField
                 name="fecha_envio"
                 type="date"
-                required={true}
-                value={formValues.fecha_envio || ""}
+                required
+                value={form.fecha_envio}
                 onChange={manejarEntradas.handleInputChange}
-                className="flex-1"
               />
               <InputField
                 name="hora_envio"
                 type="time"
-                required={true}
-                value={formValues.hora_envio || ""}
+                required
+                value={form.hora_envio}
                 onChange={manejarEntradas.handleInputChange}
-                className="flex-1"
               />
             </div>
           </div>
-
-          {/* Grupo: Fecha y hora de recepción */}
+          {/* Recepción */}
           <div className="flex flex-col gap-1">
-            <label className="text-sm font-medium text-gray-700">
-              Fecha y hora de recepción
-            </label>
+            <label>Fecha y hora de recepción</label>
             <div className="flex gap-2">
               <InputField
                 name="fecha_recepcion"
                 type="date"
-                required={true}
-                value={formValues.fecha_recepcion || ""}
+                value={form.fecha_recepcion}
                 onChange={manejarEntradas.handleInputChange}
-                className="flex-1"
               />
               <InputField
                 name="hora_recepcion"
                 type="time"
-                required={true}
-                value={formValues.hora_recepcion || ""}
+                value={form.hora_recepcion}
                 onChange={manejarEntradas.handleInputChange}
-                className="flex-1"
               />
             </div>
           </div>
-
-          {/* Grupo: Fecha de seguimiento */}
+          {/* Seguimiento */}
           <div className="flex flex-col gap-1">
-            <label className="text-sm font-medium text-gray-700">
-              Fecha de seguimiento
-            </label>
+            <label>Fecha de seguimiento</label>
             <InputField
               name="fecha_seguimiento"
               type="date"
-              required={false}
-              value={formValues.fecha_seguimiento || ""}
+              value={form.fecha_seguimiento}
               onChange={manejarEntradas.handleInputChange}
-              className="w-full"
             />
           </div>
         </div>
       ),
-      name: "fecha_envio",
     },
+
+    // --- Estado entrega ---
+    {
+      component: () => (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <SelectField
+            label="Estado de Entrega"
+            name="estado_entrega"
+            options={opcion_EstadoEntrega}
+            value={form.estado_entrega}
+            onChange={manejarEntradas.handleInputChange}
+          />
+
+          <InputField
+            name="fecha_intento_entrega"
+            label="Fecha intento"
+            type="datetime-local"
+            value={form.fecha_intento_entrega}
+            onChange={manejarEntradas.handleInputChange}
+          />
+
+          <InputField
+            name="numero_intentos"
+            label="N° Intentos"
+            type="number"
+            min={0}
+            value={form.numero_intentos}
+            onChange={manejarEntradas.handleInputChange}
+          />
+        </div>
+      ),
+    },
+
+    // Toggle
     {
       component: ToggleSwitch,
       label: "Registrar oficialmente",
-      name: "estado_toggle", // nombre interno para el toggle (no guardamos este campo en el backend)
-      checked: formValues.estado === "enviado", // true si estado es enviado
+      name: "estado_toggle",
+      checked: form.estado === "enviado",
       onChange: (checked) => manejarEstadoToggle(checked, manejarEntradas),
-    }, 
+    },
+
+    // Motivo no entrega
+    {
+      component: TextAreaField,
+      label: "Motivo de no entrega",
+      name: "motivo_no_entrega",
+      value: form.motivo_no_entrega,
+      onChange: manejarEntradas.handleInputChange,
+    },
+
+    // Documentos
     {
       component: MultipleInputs,
       label: "Documento",
@@ -164,21 +235,41 @@ export default function RegisterEnviada() {
       type: "file",
       onChange: manejarEntradas.handleInputChange,
     },
+
+    // Derivar
+    {
+      component: UserDropdownSelect,
+      label: "Derivar a:",
+      name: "usuario_destino_id",
+      options: usuariosDestinoOptions,
+      onChange: (name, value) =>
+        manejarEntradas.handleToggleChange(name)(value),
+    },
+
+    // Comentario derivación
+    {
+      component: TextAreaField,
+      label: "Comentario",
+      name: "comentario_derivacion",
+      value: form.comentario_derivacion,
+      onChange: manejarEntradas.handleInputChange,
+    },
   ];
+
   const paraNavegacion = {
-    title: `Registrar Correspondencia Enviada - CITE: ${cite}`,
-    subTitle: "",
-    icon: FaPlus,
+    title: `Correspondencia Enviada - CITE: ${cite}`,
+    icon: FaFile,
     actions: [
       {
         to: "/listEnviados",
         label: "Volver",
         icon: FaBackspace,
         estilos:
-          "bg-gray-500 hover:bg-gray-800 text-white px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",
+          "bg-gray-500 hover:bg-gray-800 text-white px-4 py-2 rounded-md flex items-center gap-2 transition",
       },
     ],
   };
+
   return (
     <EditEntity
       useEntityMutations={useCorrespondenciaElaboradaMutations}

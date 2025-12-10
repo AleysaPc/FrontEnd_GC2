@@ -1,9 +1,24 @@
 import EntityList from "../../../components/shared/EntityList";
 import { useCorrespondenciaElaboradas } from "../../../hooks/useEntities";
-import { FaAd, FaAngleUp, FaRegistered, FaSave } from "react-icons/fa";
+import { FaAd, FaAngleUp, FaRegistered, FaSave, FaStream } from "react-icons/fa";
 import { ActionButton } from "../../../components/shared/ActionButton";
 import GenerarDocumentoButton from "../../../components/documentos/GenerarDocumentoButton";
+import Trazabilidad from "../../../components/shared/Trazabilidad";
+import { useState } from "react";
+
 export default function ListEnviados() {
+  const [modalVisible, setModalVisible] = useState(false);
+  const [correspondenciaId, setCorrespondenciaId] = useState(null);
+
+  const handleOpenModal = (idCorrespondencia) => {
+    setCorrespondenciaId(idCorrespondencia);
+    setModalVisible(true);
+  };
+  const handleCloseModal = () => {
+    setModalVisible(false);
+    setCorrespondenciaId(null);
+  };
+
   const useFields = () => [
     { key: "index", label: "#" },
     {
@@ -18,14 +33,22 @@ export default function ListEnviados() {
             estilos="hover:bg-gray-600 hover:text-gray-100 text-gray-500 rounded-md flex items-center gap-2 transition duration-200 p-1"
           />
           <GenerarDocumentoButton id={item.id_correspondencia} />
+          <button
+            onClick={() => handleOpenModal(item.id_correspondencia)} // Abre modal con ID
+            title="Ver historial"
+            className="hover:bg-gray-600 hover:text-gray-100 text-gray-500 rounded-md flex items-center gap-2 transition duration-200 p-1"
+            aria-label="Ver historial"
+          >
+            <FaStream />
+          </button>
         </div>
       ),
     },
+
     { key: "cite", label: "CITE" },
     { key: "estado", label: "Estado" },
     { key: "fecha_envio", label: "Fecha de Envio" },
     { key: "referencia", label: "Referencia" },
-    
   ];
   const entityData = {
     title: "Documentos enviados",
@@ -53,5 +76,14 @@ export default function ListEnviados() {
     //   },
     //],
   };
-  return <EntityList entityData={entityData} />;
+  return (
+    <>
+      <EntityList entityData={entityData} />
+      <Trazabilidad
+        visible={modalVisible}
+        onClose={handleCloseModal}
+        correspondenciaId={correspondenciaId}
+      />
+    </>
+  );
 }
