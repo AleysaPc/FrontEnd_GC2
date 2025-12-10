@@ -263,7 +263,7 @@ export default function createRecibida() {
         label: "  Cancelar ",
         icon: FaTimes,
         estilos:
-          "border-2 border-gray-700 rounded-lg bg-gray-600 text-white p-2 hover:bg-gray-100 hover:text-gray-600",
+          "border-white-700 rounded-lg bg-gray-700 text-white p-2 hover:bg-red-700 hover:text-white-600",
       },
     ],
   };

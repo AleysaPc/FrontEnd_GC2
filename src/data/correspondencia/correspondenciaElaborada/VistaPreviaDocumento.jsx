@@ -2,9 +2,16 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { Navigation } from "../../../components/shared/Navigation";
-import { FaArrowLeft, FaFileSignature, FaFilePdf, FaShare } from "react-icons/fa";
+import {
+  FaArrowLeft,
+  FaFileSignature,
+  FaFilePdf,
+  FaShare,
+} from "react-icons/fa";
 import { useCorrespondenciaElaborada } from "../../../hooks/useEntities";
 import TestDerivar from "../correspondencia/TestDerivar";
+import membreteLogo from "../../../../public/Membrete.PNG";
+import membreteInferiorLogo from "../../../../public/MembreteInferior.PNG";
 
 export default function VistaPreviaDocumento() {
   const { id_correspondencia } = useParams();
@@ -70,14 +77,32 @@ export default function VistaPreviaDocumento() {
         subTitle={`Información del Documentoooo: ${id_correspondencia}`}
         icon={FaFileSignature}
       />
-      <div className="flex-1 bg-white p-0 overflow-hidden">
-        <div className="h-full w-full overflow-auto p-4">
-          <div
-            className="mx-auto bg-white p-8 shadow-sm border rounded w-full min-h-[1000px]"
-            dangerouslySetInnerHTML={{ __html: contenidoHTML }}
-          />
+      <div className="flex-1 bg-gray-200 p-4 flex justify-center">
+        {/* HOJA TAMAÑO CARTA */}
+        <div
+          className="bg-white shadow-md border rounded relative"
+          style={{ width: "816px", minHeight: "900px" }}
+        >
+          {/* MEMBRETE ARRIBA */}
+          <div className="w-full">
+            <img src={membreteLogo} alt="Membrete" className="w-full h-32" />
+          </div>
+
+          {/* CONTENIDO DEL DOCUMENTO */}
+          <div className="px-[2cm] pt-[0.5cm] pb-[2cm]">
+            <div dangerouslySetInnerHTML={{ __html: contenidoHTML }} />
+          </div>
+          {/* MEMBRETE INFERIOR */}
+          <div className="w-full mt-4">
+            <img
+              src={membreteInferiorLogo}
+              alt="Membrete inferior"
+              className="w-full h-20 object-contain"
+            />
+          </div>
         </div>
       </div>
+
       <TestDerivar
         isOpen={mostrarModalDerivar}
         onClose={() => setMostrarModalDerivar(false)}
