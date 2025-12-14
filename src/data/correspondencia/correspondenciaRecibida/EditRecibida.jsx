@@ -37,7 +37,7 @@ export default function editEnviada() {
     contactosArray
       ? options(contactosArray, "id_contacto", "nombre_completo")
       : [];
-  
+
   const usuarioOptions = () =>
     usuariosArray ? options(usuariosArray, "id", "email") : [];
 
@@ -59,10 +59,12 @@ export default function editEnviada() {
 
   const configuracionFormulario = (entidad) => {
     // Asegurarse de que los usuarios sean un array de números
-    const usuarios = Array.isArray(entidad?.data?.usuarios) 
-      ? entidad.data.usuarios.map(user => typeof user === 'object' ? user.id : Number(user))
+    const usuarios = Array.isArray(entidad?.data?.usuarios)
+      ? entidad.data.usuarios.map((user) =>
+          typeof user === "object" ? user.id : Number(user)
+        )
       : [];
-      
+
     return {
       //Modelo 3 - Correspondencia
       fecha_recepcion: entidad?.data?.fecha_recepcion || "",
@@ -85,8 +87,8 @@ export default function editEnviada() {
   const camposExtras = (formValues) => ({
     contacto: Number(formValues.contacto),
     usuario: logicaNegocio.idUsuario,
-    usuarios: Array.isArray(formValues.usuarios) 
-      ? formValues.usuarios.map(Number) 
+    usuarios: Array.isArray(formValues.usuarios)
+      ? formValues.usuarios.map(Number)
       : [],
     comentario_derivacion: formValues.comentario_derivacion || "",
   });
@@ -96,35 +98,34 @@ export default function editEnviada() {
     link: "/correspondenciaRecibidaList",
     data: {
       ...camposExtras(formValues),
-      comentario_derivacion: formValues.comentario_derivacion || ""
-    }
+      comentario_derivacion: formValues.comentario_derivacion || "",
+    },
   });
 
   const construirCampos = (formValues, manejarEntradas) => [
     {
-      component: ({ value, ...props }) => (
-        <div className="flex flex-col md:flex-row gap-4 w-full">
+      component: () => (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
           <InputField
             label="Fecha Recepción"
             name="fecha_recepcion"
-            type="date"
-            required={true}
+            type="datetime-local"
+            required={false}
             value={formValues.fecha_recepcion || ""}
             onChange={manejarEntradas.handleInputChange}
-            className="flex-1"
           />
+
           <InputField
-            label="Hora de recepción"
-            name="hora_recepcion"
-            type="time"
-            required={true}
-            value={formValues.hora_recepcion || ""}
+            label="Fecha Respuesta"
+            name="fecha_respuesta"
+            type="datetime-local"
+            required={false}
+            value={formValues.fecha_respuesta || ""}
             onChange={manejarEntradas.handleInputChange}
-            className="flex-1"
           />
         </div>
       ),
-      name: "fecha_hora_recepcion", // This is required but won't be used for form values
+      name: "fechas"
     },
     {
       component: InputField,
@@ -185,31 +186,6 @@ export default function editEnviada() {
       name: "estado",
       options: estadoOptions,
       onChange: manejarEntradas.handleInputChange,
-    },
-    {
-      component: ({value, ...props}) => (
-        <div className="flex flex-col md:flex-row gap-4 w-full">
-          <InputField
-            label="Fecha Respuesta"
-            name="fecha_respuesta"
-            type="date"
-            required={false}
-            value={formValues.fecha_respuesta || ""}
-            onChange={manejarEntradas.handleInputChange}
-            className="flex-1"
-          />
-          <InputField
-            label="Hora de respuesta"
-            name="hora_respuesta"
-            type="time"
-            required={false}
-            value={formValues.hora_respuesta || ""} //formValues acceder al valor del campo y value le da ese valor del campo
-            onChange={manejarEntradas.handleInputChange}
-            className="flex-1"
-          />
-        </div>
-      ),
-      name: "fecha_hora_respuesta", // This is required but won't be used for form values
     },
     {
       component: MultipleInputs,

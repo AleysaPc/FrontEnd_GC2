@@ -67,7 +67,7 @@ export default function VistaPrevia({ tipo = "recibida" }) {
         </p>
         <p>
           <strong>Fecha y hora de respuesta:</strong>{" "}
-          {dataDocumento.fecha_respuesta ? `${dataDocumento.fecha_respuesta} ${dataDocumento.hora_respuesta}` : "No requiere respuesta"}
+          {dataDocumento.fecha_respuesta ? `${dataDocumento.fecha_respuesta}` : "No requiere respuesta"}
         </p>
         <p><strong>Observaciones:</strong> {dataDocumento.observaciones || "Ninguna"}</p>
       </div>

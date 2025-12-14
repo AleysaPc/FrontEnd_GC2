@@ -1,10 +1,8 @@
 import { useCorrespondenciaRecibidas } from "../../../hooks/useEntities";
 import EntityList from "../../../components/shared/EntityList";
-import FormattedDate from "../../../components/shared/FormattedDate";
 import { FaPlus, FaEdit, FaHistory, FaEye, FaStream } from "react-icons/fa";
 import { ActionButton } from "../../../components/shared/ActionButton";
 import Trazabilidad from "../../../components/shared/Trazabilidad"; // Ajusté el nombre aquí
-import { FaFileInvoice } from "react-icons/fa";
 import { useState } from "react";
 import FormattedDateTime from "../../../components/shared/FormattedDate";
 
@@ -74,7 +72,7 @@ function CorrespondenciaRecibidaList() {
       label: "Fecha Recepción",
       render: (item) => (
         <FormattedDateTime
-          dateTime={item.fecha_recepcion + "T" + item.hora_recepcion}
+          dateTime={item.fecha_recepcion}
         />
       ),
     },
@@ -82,7 +80,7 @@ function CorrespondenciaRecibidaList() {
       key: "fecha_respuesta",
       label: "Fecha Respuesta",
       render: (item) => (
-        <FormattedDate date={item.fecha_respuesta} format="DD/MMM/YYYY" />
+        <FormattedDateTime dateTime={item.fecha_respuesta}/>
       ),
     },
     {

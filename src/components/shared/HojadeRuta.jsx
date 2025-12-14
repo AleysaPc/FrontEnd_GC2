@@ -106,9 +106,7 @@ export default function DetailRecibida() {
                 <p className="border p-2 rounded bg-gray-50">
                   <FormattedDateTime
                     dateTime={
-                      correspondencia.fecha_recepcion +
-                      "T" +
-                      correspondencia.hora_recepcion
+                      correspondencia.fecha_recepcion
                     }
                   />
                 </p>
@@ -150,9 +148,7 @@ export default function DetailRecibida() {
                   {correspondencia.fecha_respuesta ? (
                     <FormattedDateTime
                       dateTime={
-                        correspondencia.fecha_respuesta +
-                        "T" +
-                        correspondencia.hora_respuesta
+                        correspondencia.fecha_respuesta
                       }
                     />
                   ) : (

@@ -131,16 +131,9 @@ export default function RegisterEnviada() {
             <div className="flex gap-2">
               <InputField
                 name="fecha_envio"
-                type="date"
+                type="datetime-local"
                 required
                 value={form.fecha_envio}
-                onChange={manejarEntradas.handleInputChange}
-              />
-              <InputField
-                name="hora_envio"
-                type="time"
-                required
-                value={form.hora_envio}
                 onChange={manejarEntradas.handleInputChange}
               />
             </div>
@@ -151,14 +144,8 @@ export default function RegisterEnviada() {
             <div className="flex gap-2">
               <InputField
                 name="fecha_recepcion"
-                type="date"
+                type="datetime-local"
                 value={form.fecha_recepcion}
-                onChange={manejarEntradas.handleInputChange}
-              />
-              <InputField
-                name="hora_recepcion"
-                type="time"
-                value={form.hora_recepcion}
                 onChange={manejarEntradas.handleInputChange}
               />
             </div>
@@ -168,7 +155,7 @@ export default function RegisterEnviada() {
             <label>Fecha de seguimiento</label>
             <InputField
               name="fecha_seguimiento"
-              type="date"
+              type="datetime-local"
               value={form.fecha_seguimiento}
               onChange={manejarEntradas.handleInputChange}
             />

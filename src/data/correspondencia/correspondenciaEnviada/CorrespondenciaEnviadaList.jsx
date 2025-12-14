@@ -5,6 +5,7 @@ import { FaEdit, FaEye, FaStream, FaPlus } from "react-icons/fa";
 import { ActionButton } from "../../../components/shared/ActionButton";
 import Trazabilidad from "../../../components/shared/Trazabilidad";
 import { useState } from "react";
+import FormattedDateTime from "../../../components/shared/FormattedDate";
 
 function CorrespondenciaEnviadaList() {
 
@@ -60,7 +61,9 @@ function CorrespondenciaEnviadaList() {
       key: "fecha_envio",
       label: "Fecha de Envio",
       render: (item) => (
-        <FormattedDate date={item.fecha_envio} format="DD/MMM/YYYY" />
+        <FormattedDateTime
+          dateTime={item.fecha_envio}
+        />
       ),
     },
     {

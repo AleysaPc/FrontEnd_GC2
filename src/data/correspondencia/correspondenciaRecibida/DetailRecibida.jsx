@@ -111,7 +111,7 @@ export default function DetailRecibida() {
             <p className="text-gray-900">
               <span className="font-medium text-blue-700">Fecha y hora de recepción:</span>{" "}
               <FormattedDateTime
-                dateTime={`${correspondencia.fecha_recepcion}T${correspondencia.hora_recepcion}`}
+                dateTime={correspondencia.fecha_recepcion}
               />
             </p>
             <p className="text-gray-900">
