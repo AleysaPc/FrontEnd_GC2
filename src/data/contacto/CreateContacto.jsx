@@ -60,6 +60,10 @@ export default function CreateContacto() {
       <div className="text-red-500 text-center">Error al cargar datos</div>
     );
   }
+   const tipo_contactoOptions = [
+      { id: "afiliado", nombre: "Afiliado" },
+      { id: "externo", nombre: "Externo" },
+  ];
   const configuracionFormulario = {
     formType: "contacto",
     //nombre_contacto: "",
@@ -83,6 +87,14 @@ export default function CreateContacto() {
   });
 
   const construirCampos = (formValues, manejarEntradas) => [
+    {
+      component: SelectField,
+      label: "Afiliado o Externo",
+      name: "tipo_contacto",
+      required: true,
+      options: tipo_contactoOptions,
+      onChange: manejarEntradas.handleInputChange,
+    },
     {
       component: InputField,
       label: "Nombre",
@@ -128,7 +140,7 @@ export default function CreateContacto() {
       label: "Email",
       name: "email",
       type: "email",
-      required: true,
+      required: false,
       onChange: manejarEntradas.handleInputChange,
     },
     {
@@ -136,7 +148,7 @@ export default function CreateContacto() {
       label: "Telefono",
       name: "telefono",
       type: "text",
-      required: true,
+      required: false,
       onChange: manejarEntradas.handleInputChange,
     },
     {

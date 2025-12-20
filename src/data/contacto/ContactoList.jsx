@@ -73,6 +73,10 @@ export default function ContactoList() {
       key: "email",
       label: "Email",
     },
+    {
+      key: "tipo_contacto",
+      label: "Afiliado o Externo",
+    },
   ];
 
   const entityData = {

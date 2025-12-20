@@ -17,7 +17,8 @@ export const menus = [
     icon: IoCreateSharp,
     items: [
       { label: "Nuevo", path: "/createElaborada" },
-      { label: "Lista Documentos elaborados", path: "/elaboradaList" },
+      { label: "Documentos Elaborados - Internos", path: "/elaboradaList" },
+      { label: "Documentos Elaborados - Externos", path: "/" },
     ],
   },
   {

@@ -29,6 +29,10 @@ export default function EditContacto() {
         ? options(institucionesArray, "id_institucion", "razon_social")
         : [];
 
+    const tipo_contactoOptions = [
+      { id: "afiliado", nombre: "Afiliado" },
+      { id: "externo", nombre: "Externo" },
+  ];
 
 //Hace referencia al modelo contacto
   const configuracionFormulario = (entidad) => ({
@@ -40,6 +44,7 @@ export default function EditContacto() {
     email: entidad?.email || "",
     telefono: entidad?.telefono || "",
     institucion: entidad?.institucion || "",
+    tipo_contacto: entidad?.tipo_contacto || "",
 
   });
 
@@ -55,6 +60,14 @@ export default function EditContacto() {
   });
 
   const construirCampos = (formValues, manejarEntradas) => [
+    {
+      component: SelectField,
+      label: "Afiliado o Externo",
+      name: "tipo_contacto",
+      required: true,
+      options: tipo_contactoOptions,
+      onChange: manejarEntradas.handleInputChange,
+    },
     {
       component: InputField,
       label: "Nombre",
@@ -94,14 +107,14 @@ export default function EditContacto() {
       component: InputField,
       label: "Email",
       name: "email",
-      required: true,
+      required: false,
       onChange: manejarEntradas.handleInputChange,
     },
     {
       component: InputField,
       label: "Telefono",
       name: "telefono",
-      required: true,
+      required: false,
       onChange: manejarEntradas.handleInputChange,
     },
     {

@@ -56,6 +56,8 @@ export default function CreateElaborada() {
     error: errorUsuarios,
   } = useUsers({ all_data: true });
 
+  console.log("Que usuario tenemos? ", usuario);
+
   const plantillasArray = plantillasData?.data || [];
   const contactosArray = contactosData?.data || [];
   const usuariosArray = usuariosData?.data || [];
@@ -97,6 +99,7 @@ export default function CreateElaborada() {
     contacto: "",
     plantilla_id: "",
     usuarios: [],
+    usuario_destino: "",
     cite: "",
     respuesta_a: respuestaAId || "",
     comentario: "",
@@ -107,6 +110,33 @@ export default function CreateElaborada() {
 
   // Preparar datos para envío (unir descripción según plantilla)
   const camposExtras = (formValues) => {
+    const esMemorando = tipoPlantillaSeleccionada === "memorando";
+
+    // Copia segura de usuarios
+    let usuariosFinal = Array.isArray(formValues.usuarios)
+      ? [...formValues.usuarios]
+      : [];
+
+    // 🔑 OBTENER DESTINATARIO COMO TEXTO (TRAMPA CONTROLADA)
+    let destinatarioTexto = "";
+
+    if (esMemorando && formValues.usuario_destino) {
+      const usuarioSeleccionado = usuariosArray.find(
+        (u) => u.id === Number(formValues.usuario_destino)
+      );
+
+      if (usuarioSeleccionado) {
+        destinatarioTexto = [
+          usuarioSeleccionado.first_name,
+          usuarioSeleccionado.secund_name,
+          usuarioSeleccionado.last_name,
+          usuarioSeleccionado.secund_last_name,
+        ]
+          .filter(Boolean)
+          .join(" ");
+      }
+    }
+
     const contactoField =
       tipoPlantillaSeleccionada === "nota_externa" && formValues.contacto
         ? { contacto: Number(formValues.contacto) }
@@ -114,12 +144,10 @@ export default function CreateElaborada() {
 
     let descripcionFinal = "";
 
-    let usuarioDestino = null;
-    if (Array.isArray(formValues.usuarios) && formValues.usuarios.length > 0) {
-      usuarioDestino = Number(formValues.usuarios[0]); // ID del usuario seleccionado
-    }
-
-    if (tipoPlantillaSeleccionada === "informe") {
+    if (
+      tipoPlantillaSeleccionada === "informe" ||
+      tipoPlantillaSeleccionada === "convocatoria"
+    ) {
       descripcionFinal = [
         formValues.descripcion_introduccion || "",
         formValues.descripcion_desarrollo || "",
@@ -139,14 +167,16 @@ export default function CreateElaborada() {
       estado: formValues.estado,
       ...contactoField,
       plantilla_id: Number(formValues.plantilla_id),
-      usuarios: Array.isArray(formValues.usuarios)
-        ? formValues.usuarios.map(Number)
-        : [],
+
+      // ✅ destinatarios reales
+      usuarios: usuariosFinal,
+      datos_contacto: esMemorando
+        ? { nombre_completo: destinatarioTexto }
+        : null,
+
       cite: formValues.cite,
       respuesta_a: respuestaAId ? Number(respuestaAId) : null,
       comentario_derivacion: formValues.comentario_derivacion || "",
-      usuario_destino: usuarioDestino,
-      usuario: usuario?.email || "",
     };
   };
 
@@ -225,7 +255,10 @@ export default function CreateElaborada() {
       onChange: manejarEntradas.handleInputChange,
     };
 
-    if (tipoPlantillaSeleccionada === "nota_externa") {
+    if (
+      tipoPlantillaSeleccionada === "nota_externa" ||
+      tipoPlantillaSeleccionada === "nota_interna"
+    ) {
       return [
         campoPlantilla,
         {
@@ -238,7 +271,7 @@ export default function CreateElaborada() {
         {
           component: CKEditorField,
           label: "Descripción",
-          name: "descripcion",
+          name: "descripcion_desarrollo",
           value: formValues.descripcion,
           onChange: manejarEntradas.handleInputChange,
         },
@@ -292,13 +325,16 @@ export default function CreateElaborada() {
       ];
     }
 
-    if (tipoPlantillaSeleccionada === "comunicado") {
+    if (
+      tipoPlantillaSeleccionada === "comunicado" ||
+      tipoPlantillaSeleccionada === "resolucion"
+    ) {
       return [
         campoPlantilla,
         {
           component: CKEditorField,
           label: "Descripción",
-          name: "descripcion",
+          name: "descripcion_desarrollo", //OJO CON DESCRIPCIÓN_DESARROLLO NO DESCRIPCIÓN
           value: formValues.descripcion,
           onChange: manejarEntradas.handleInputChange,
           required: true,
@@ -316,9 +352,24 @@ export default function CreateElaborada() {
         campoPlantilla,
         {
           component: CKEditorField,
-          label: "Descripción",
-          name: "descripcion",
-          value: formValues.descripcion,
+          label: "Contenido",
+          name: "descripcion_introduccion",
+          value: formValues.descripcion_introduccion,
+          onChange: manejarEntradas.handleInputChange,
+        },
+        {
+          component: CKEditorField,
+          label: "Lugar y fecha de la convocatoria",
+          name: "descripcion_desarrollo",
+          value: formValues.descripcion_desarrollo,
+          onChange: manejarEntradas.handleInputChange,
+          required: true,
+        },
+        {
+          component: CKEditorField,
+          label: "Puntos a tratar/Nota/Otro",
+          name: "descripcion_conclusion",
+          value: formValues.descripcion_conclusion,
           onChange: manejarEntradas.handleInputChange,
           required: true,
         },
@@ -346,7 +397,7 @@ export default function CreateElaborada() {
         {
           component: SelectField,
           label: "Destinatario",
-          name: "contacto",
+          name: "usuario_destino",
           options: contactoOptions(),
           onChange: manejarEntradas.handleInputChange,
           required: true,
@@ -372,6 +423,13 @@ export default function CreateElaborada() {
           },
         },
         {
+          component: InputField,
+          label: "Referencia",
+          name: "referencia",
+          value: formValues.referencia,
+          onChange: manejarEntradas.handleInputChange,
+        },
+        {
           component: CKEditorField,
           label: "Introducción",
           name: "descripcion_introduccion",
@@ -391,6 +449,48 @@ export default function CreateElaborada() {
           label: "Conclusión",
           name: "descripcion_conclusion",
           value: formValues.descripcion_conclusion,
+          onChange: manejarEntradas.handleInputChange,
+          required: true,
+        },
+        campoPrioridad,
+        campoEstado,
+        campoDocumentos,
+        campoDerivarUsuarios,
+        campoComentarioDerivacion,
+      ];
+    }
+    if (tipoPlantillaSeleccionada === "memorando") {
+      return [
+        campoPlantilla,
+        {
+          component: InputField,
+          label: "Remitente",
+          name: "usuario",
+          value: formValues.usuario,
+          readOnly: true,
+          required: true,
+          disabled: true,
+          variant: "filled",
+        },
+        {
+          component: SelectField,
+          label: "Destinatario",
+          name: "usuario_destino",
+          options: usuarioOptions(),
+          onChange: manejarEntradas.handleInputChange,
+        },
+        {
+          component: InputField,
+          label: "Referencia",
+          name: "referencia",
+          value: formValues.referencia,
+          onChange: manejarEntradas.handleInputChange,
+        },
+        {
+          component: CKEditorField,
+          label: "Desarrollo",
+          name: "descripcion_desarrollo",
+          value: formValues.descripcion_desarrollo,
           onChange: manejarEntradas.handleInputChange,
           required: true,
         },
