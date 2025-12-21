@@ -85,6 +85,10 @@ export default function CreateElaborada() {
     { id: "aprobado", nombre: "Aprobado" },
     { id: "enviado", nombre: "Enviado" },
   ];
+  const opcionAmbito = [
+    { id: "interno", nombre: "Interno" },
+    { id: "externo", nombre: "Externo" },
+  ];
 
   // Configuración inicial del formulario
   const configuracionFormulario = {
@@ -106,6 +110,7 @@ export default function CreateElaborada() {
     comentario_derivacion: "",
     documentos: [],
     usuario: "", // se asigna luego
+    ambito: "",
   };
 
   // Preparar datos para envío (unir descripción según plantilla)
@@ -177,6 +182,7 @@ export default function CreateElaborada() {
       cite: formValues.cite,
       respuesta_a: respuestaAId ? Number(respuestaAId) : null,
       comentario_derivacion: formValues.comentario_derivacion || "",
+      ambito: formValues.ambito
     };
   };
 
@@ -194,6 +200,14 @@ export default function CreateElaborada() {
         target: { name: "usuario", value: usuario.email },
       });
     }
+    const campoAmbito = {
+      component: SelectField,
+      label: "Ámbito del documento",
+      name: "ambito",
+      options: opcionAmbito,
+      onChange: manejarEntradas.handleInputChange,
+      required: true,
+    };
 
     const campoPlantilla = {
       component: SelectField,
@@ -260,6 +274,7 @@ export default function CreateElaborada() {
       tipoPlantillaSeleccionada === "nota_interna"
     ) {
       return [
+        campoAmbito,
         campoPlantilla,
         {
           component: InputField,
@@ -504,6 +519,7 @@ export default function CreateElaborada() {
 
     // Por defecto para otros tipos de plantilla
     return [
+      campoAmbito,
       campoPlantilla,
       {
         component: CKEditorField,

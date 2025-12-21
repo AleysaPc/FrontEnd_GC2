@@ -60,7 +60,9 @@ const DetailContacto = lazy(() => import("../data/contacto/DetailContacto"));
 const HistorialDocumento = lazy(() =>
   import("../components/shared/HistorialDocumento")
 );
-const HojaDeRuta = lazy(()=>import("../components/shared/HojadeRuta"))
+const HojaDeRuta = lazy(()=>import("../components/shared/HojadeRuta"));
+const InternalCorrespondenceList = lazy(()=>import("../data/correspondencia/correspondenciaElaborada/InternalCorrespondenceList"));
+const ExternalCorrespondenceList = lazy(()=>import("../data/correspondencia/correspondenciaElaborada/ExternalCorrespondenceList"))
 
 export const correspondenciaRoutes = [
   // rutas de correspondencia
@@ -155,5 +157,13 @@ export const correspondenciaRoutes = [
   {
     path: "hojaDeRuta/:id",
     element: <HojaDeRuta />,
+  },
+  {
+    path: "internalCorrespondenceList",
+    element: <InternalCorrespondenceList/>
+  },
+  {
+    path: "externalCorrespondenceList",
+    element: <ExternalCorrespondenceList/>
   },
 ];
