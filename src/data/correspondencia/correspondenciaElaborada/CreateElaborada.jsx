@@ -299,12 +299,6 @@ export default function CreateElaborada() {
           required: true,
         },
         {
-          component: InputField,
-          label: "Comentario (Opcional)",
-          name: "comentario",
-          onChange: manejarEntradas.handleInputChange,
-        },
-        {
           component: SelectField,
           label: "Destinatario",
           name: "contacto",
@@ -412,7 +406,7 @@ export default function CreateElaborada() {
         {
           component: SelectField,
           label: "Destinatario",
-          name: "usuario_destino",
+          name: "contacto",
           options: contactoOptions(),
           onChange: manejarEntradas.handleInputChange,
           required: true,

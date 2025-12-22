@@ -22,7 +22,14 @@ export default function EditElaborada() {
   const logicaNegocio = { idUsuario: obtenerIdUser() };
 
   // --- Estado para guardar tipo de plantilla ---
-  const [tipoPlantillaSeleccionada, setTipoPlantillaSeleccionada] = useState("");
+  const [tipoPlantillaSeleccionada, setTipoPlantillaSeleccionada] =
+    useState("");
+  const [plantillaInicial, setPlantillaInicial] = useState(null);
+  useEffect(() => {
+    if (plantillaInicial && tipoPlantillaSeleccionada === "") {
+      setTipoPlantillaSeleccionada(plantillaInicial);
+    }
+  }, [plantillaInicial]);
 
   // Datos necesarios
   const {
@@ -72,7 +79,7 @@ export default function EditElaborada() {
   // --- Configuración del formulario con datos existentes ---
   const configuracionFormulario = (entidad) => {
     if (entidad?.data?.plantilla?.tipo) {
-      setTipoPlantillaSeleccionada(entidad.data.plantilla.tipo);
+      setPlantillaInicial(entidad.data.plantilla.tipo);
     }
 
     const usuarios = Array.isArray(entidad?.data?.usuarios)
@@ -86,7 +93,10 @@ export default function EditElaborada() {
     let descripcion_desarrollo = "";
     let descripcion_conclusion = "";
 
-    if (entidad?.data?.plantilla?.tipo === "informe" && entidad?.data?.descripcion) {
+    if (
+      entidad?.data?.plantilla?.tipo === "informe" &&
+      entidad?.data?.descripcion
+    ) {
       const partes = entidad.data.descripcion.split("\n\n");
       descripcion_introduccion = partes[0] || "";
       descripcion_desarrollo = partes[1] || "";
@@ -210,69 +220,187 @@ export default function EditElaborada() {
     if (tipoPlantillaSeleccionada === "nota_externa") {
       return [
         campoPlantilla,
-        { component: InputField, label: "Referencia", name: "referencia", onChange: manejarEntradas.handleInputChange, required: true },
-        { component: CKEditorField, label: "Descripción", name: "descripcion", value: formValues.descripcion, onChange: manejarEntradas.handleInputChange },
-        { component: InputField, label: "Páginas", name: "paginas", type: "number", onChange: manejarEntradas.handleInputChange, required: true },
-        { component: InputField, label: "Comentario (Opcional)", name: "comentario", onChange: manejarEntradas.handleInputChange },
-        { component: SelectField, label: "Destinatario", name: "contacto", options: contactoOptions(), onChange: manejarEntradas.handleInputChange,
+        {
+          component: InputField,
+          label: "Referencia",
+          name: "referencia",
+          onChange: manejarEntradas.handleInputChange,
+          required: true,
+        },
+        {
+          component: CKEditorField,
+          label: "Desarrollo",
+          name: "descripcion_desarrollo",
+          value: formValues.descripcion_desarrollo,
+          onChange: manejarEntradas.handleInputChange,
+          required: true,
+        },
+        {
+          component: InputField,
+          label: "Páginas",
+          name: "paginas",
+          type: "number",
+          onChange: manejarEntradas.handleInputChange,
+          required: true,
+        },
+        {
+          component: InputField,
+          label: "Comentario (Opcional)",
+          name: "comentario",
+          onChange: manejarEntradas.handleInputChange,
+        },
+        {
+          component: SelectField,
+          label: "Destinatario",
+          name: "contacto",
+          options: contactoOptions(),
+          onChange: manejarEntradas.handleInputChange,
           actionButtons: [
-            { to: `/editContacto/${formValues.contacto}`, icon: FaPencilAlt, estilos: "text-yellow-600 hover:bg-yellow-600 hover:text-white p-1" },
-            { to: "/createContacto", icon: FaPlus, estilos: "text-green-600 hover:bg-green-600 hover:text-white p-1" },
-            { to: "/contactoList", icon: FaEye, estilos: "text-blue-600 hover:bg-blue-600 hover:text-white p-1" }
+            {
+              to: `/editContacto/${formValues.contacto}`,
+              icon: FaPencilAlt,
+              estilos:
+                "text-yellow-600 hover:bg-yellow-600 hover:text-white p-1",
+            },
+            {
+              to: "/createContacto",
+              icon: FaPlus,
+              estilos: "text-green-600 hover:bg-green-600 hover:text-white p-1",
+            },
+            {
+              to: "/contactoList",
+              icon: FaEye,
+              estilos: "text-blue-600 hover:bg-blue-600 hover:text-white p-1",
+            },
           ],
-          isLoading: loadingContactos, error: errorContactos },
-          {
-            component: MultipleInputs,
-            label: "Documento",
-            name: "documentos",
-            type: "file",
-            onChange: manejarEntradas.handleInputChange,
-          },
-        campoPrioridad, campoEstado, campoDerivarUsuarios, campoComentarioDerivacion
+          isLoading: loadingContactos,
+          error: errorContactos,
+        },
+        {
+          component: MultipleInputs,
+          label: "Documento",
+          name: "documentos",
+          type: "file",
+          onChange: manejarEntradas.handleInputChange,
+        },
+        campoPrioridad,
+        campoEstado,
+        campoDerivarUsuarios,
+        campoComentarioDerivacion,
       ];
     }
 
-    if (tipoPlantillaSeleccionada === "comunicado" || tipoPlantillaSeleccionada === "convocatoria") {
+    if (
+      tipoPlantillaSeleccionada === "comunicado" ||
+      tipoPlantillaSeleccionada === "convocatoria"
+    ) {
       return [
         campoPlantilla,
-        { component: CKEditorField, label: "Descripción", name: "descripcion", value: formValues.descripcion, onChange: manejarEntradas.handleInputChange, required: true },
         {
-            component: MultipleInputs,
-            label: "Documento",
-            name: "documentos",
-            type: "file",
-            onChange: manejarEntradas.handleInputChange,
-          },
-        campoPrioridad, campoEstado, campoDerivarUsuarios, campoComentarioDerivacion
+          component: CKEditorField,
+          label: "Desarrollo",
+          name: "descripcion_desarrollo",
+          value: formValues.descripcion_desarrollo,
+          onChange: manejarEntradas.handleInputChange,
+          required: true,
+        },
+
+        {
+          component: MultipleInputs,
+          label: "Documento",
+          name: "documentos",
+          type: "file",
+          onChange: manejarEntradas.handleInputChange,
+        },
+        campoPrioridad,
+        campoEstado,
+        campoDerivarUsuarios,
+        campoComentarioDerivacion,
       ];
     }
 
     if (tipoPlantillaSeleccionada === "informe") {
       return [
         campoPlantilla,
-        { component: SelectField, label: "Destinatario", name: "contacto", options: contactoOptions(), onChange: manejarEntradas.handleInputChange,
-          actionButtons: [  
-            { to: `/editContacto/${formValues.contacto}`, icon: FaPencilAlt, estilos: "text-yellow-600 hover:bg-yellow-600 hover:text-white p-1" },
-            { to: "/createContacto", icon: FaPlus, estilos: "text-green-600 hover:bg-green-600 hover:text-white p-1" },
-            { to: "/contactoList", icon: FaEye, estilos: "text-blue-600 hover:bg-blue-600 hover:text-white p-1" }
-          ],
-          isLoading: loadingContactos, error: errorContactos },
-        { component: CKEditorField, label: "Introducción", name: "descripcion_introduccion", value: formValues.descripcion_introduccion, onChange: manejarEntradas.handleInputChange },
-        { component: CKEditorField, label: "Desarrollo", name: "descripcion_desarrollo", value: formValues.descripcion_desarrollo, onChange: manejarEntradas.handleInputChange, required: true },
-        { component: CKEditorField, label: "Conclusión", name: "descripcion_conclusion", value: formValues.descripcion_conclusion, onChange: manejarEntradas.handleInputChange, required: true },
         {
-            component: MultipleInputs,
-            label: "Documento",
-            name: "documentos",
-            type: "file",
-            onChange: manejarEntradas.handleInputChange,
-          },
-        campoPrioridad, campoEstado, campoDerivarUsuarios, campoComentarioDerivacion
+          component: SelectField,
+          label: "Destinatario",
+          name: "contacto",
+          options: contactoOptions(),
+          onChange: manejarEntradas.handleInputChange,
+          actionButtons: [
+            {
+              to: `/editContacto/${formValues.contacto}`,
+              icon: FaPencilAlt,
+              estilos:
+                "text-yellow-600 hover:bg-yellow-600 hover:text-white p-1",
+            },
+            {
+              to: "/createContacto",
+              icon: FaPlus,
+              estilos: "text-green-600 hover:bg-green-600 hover:text-white p-1",
+            },
+            {
+              to: "/contactoList",
+              icon: FaEye,
+              estilos: "text-blue-600 hover:bg-blue-600 hover:text-white p-1",
+            },
+          ],
+          isLoading: loadingContactos,
+          error: errorContactos,
+        },
+        {
+          component: CKEditorField,
+          label: "Introducción",
+          name: "descripcion_introduccion",
+          value: formValues.descripcion_introduccion,
+          onChange: manejarEntradas.handleInputChange,
+        },
+        {
+          component: CKEditorField,
+          label: "Desarrollo",
+          name: "descripcion_desarrollo",
+          value: formValues.descripcion_desarrollo,
+          onChange: manejarEntradas.handleInputChange,
+          required: true,
+        },
+        {
+          component: CKEditorField,
+          label: "Conclusión",
+          name: "descripcion_conclusion",
+          value: formValues.descripcion_conclusion,
+          onChange: manejarEntradas.handleInputChange,
+          required: true,
+        },
+        {
+          component: MultipleInputs,
+          label: "Documento",
+          name: "documentos",
+          type: "file",
+          onChange: manejarEntradas.handleInputChange,
+        },
+        campoPrioridad,
+        campoEstado,
+        campoDerivarUsuarios,
+        campoComentarioDerivacion,
       ];
     }
 
     // Por defecto
-    return [campoPlantilla, { component: CKEditorField, label: "Descripción", name: "descripcion", value: formValues.descripcion, onChange: manejarEntradas.handleInputChange }, campoPrioridad, campoEstado, campoDerivarUsuarios, campoComentarioDerivacion];
+    return [
+      campoPlantilla,
+      {
+        component: CKEditorField,
+        label: "Descripción",
+        name: "descripcion",
+        value: formValues.descripcion,
+        onChange: manejarEntradas.handleInputChange,
+      },
+      campoPrioridad,
+      campoEstado,
+      campoDerivarUsuarios,
+      campoComentarioDerivacion,
+    ];
   };
 
   const paraNavegacion = {
@@ -284,7 +412,8 @@ export default function EditElaborada() {
         to: -1,
         label: "Volver",
         icon: FaBackspace,
-        estilos: "bg-gray-500 hover:bg-gray-800 text-white px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",
+        estilos:
+          "bg-gray-500 hover:bg-gray-800 text-white px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",
       },
     ],
   };

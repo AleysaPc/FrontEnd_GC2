@@ -3,13 +3,28 @@ import { FaEdit, FaEye, FaStream } from "react-icons/fa";
 import { ActionButton } from "../../../components/shared/ActionButton";
 import { useCorrespondenciaElaboradas } from "../../../hooks/useEntities";
 import EntityList from "../../../components/shared/EntityList";
-
+import Trazabilidad from "../../../components/shared/Trazabilidad";
 
 export default function externalCorrespondenceList() {
+
+  const [modalVisible, setModalVisible] = useState(false);
+
+
   const [correspondenciaId, setCorrespondenciaId] = useState(null);
   const { data, isLoading, error } = useCorrespondenciaElaboradas({
     all_data: true,
   });
+
+  //Para abrir o cerar elmodal
+  const handleOpenModal = (idCorrespondencia) => {
+    setCorrespondenciaId(idCorrespondencia);
+    setModalVisible(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalVisible(false);
+    setCorrespondenciaId(null)
+  };
 
   const useFields = () => [
     { key: "index", label: "#" },
@@ -82,5 +97,15 @@ export default function externalCorrespondenceList() {
     itemKey: "id_correspondencia",
     entityFields: useFields,
   };
-  return <EntityList entityData={entityData} />;
+  return (
+    <>
+      <EntityList entityData={entityData} />
+      <Trazabilidad 
+        visible={modalVisible}
+        onClose={handleCloseModal}
+        correspondenciaId={correspondenciaId}
+
+      />
+    </>
+  );
 }

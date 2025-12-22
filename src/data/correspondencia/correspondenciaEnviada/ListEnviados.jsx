@@ -1,10 +1,16 @@
 import EntityList from "../../../components/shared/EntityList";
 import { useCorrespondenciaElaboradas } from "../../../hooks/useEntities";
-import { FaAd, FaAngleUp, FaRegistered, FaSave, FaStream } from "react-icons/fa";
+import {
+  FaAngleUp,
+  FaSave,
+  FaStream,
+  FaEye,
+} from "react-icons/fa";
 import { ActionButton } from "../../../components/shared/ActionButton";
 import GenerarDocumentoButton from "../../../components/documentos/GenerarDocumentoButton";
 import Trazabilidad from "../../../components/shared/Trazabilidad";
 import { useState } from "react";
+import FormattedDateTime from "../../../components/shared/FormattedDate";
 
 export default function ListEnviados() {
   const [modalVisible, setModalVisible] = useState(false);
@@ -40,6 +46,12 @@ export default function ListEnviados() {
             aria-label="Ver historial"
           >
             <FaStream />
+            <ActionButton
+              to={`/vistaPreviaDocumento/${item.id_correspondencia}`}
+              icon={FaEye}
+              ttile={"Vista previa del documento"}
+              estilos="hover:bg-gray-600 hover:text-gray-100 text-gray-500 rounded-md flex items-center gap-2 p-1"
+            />
           </button>
         </div>
       ),
@@ -47,8 +59,14 @@ export default function ListEnviados() {
 
     { key: "cite", label: "CITE" },
     { key: "estado", label: "Estado" },
-    { key: "fecha_envio", label: "Fecha de Envio" },
-    { key: "referencia", label: "Referencia" },
+    {
+      key: "fecha_envio", label:"Fecha de Envio",
+      render: (item) => <FormattedDateTime dateTime={item.fecha_envio} />,
+    },
+    {
+      key: "referencia", label: "Referencia",
+      render: (item) => item.referencia || "Sin referencia",
+    },
   ];
   const entityData = {
     title: "Documentos enviados",

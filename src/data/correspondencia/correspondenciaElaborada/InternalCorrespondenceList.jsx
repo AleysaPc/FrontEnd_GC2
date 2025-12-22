@@ -3,7 +3,7 @@ import { FaEdit, FaEye, FaStream } from "react-icons/fa";
 import { ActionButton } from "../../../components/shared/ActionButton";
 import { useCorrespondenciaElaboradas } from "../../../hooks/useEntities";
 import EntityList from "../../../components/shared/EntityList";
-
+import  Trazabilidad  from "../../../components/shared/Trazabilidad"
 export default function internalCorrespondenciaList() {
   //Para el manejo del modal. Variable, FunciónParaCambiarEstado, Cerrado
   const [modalVisible, setModalVisible] = useState(false);
@@ -106,8 +106,16 @@ export default function internalCorrespondenciaList() {
     entityFields: useFields,
   };
   //EntityList es un componente genérico que recibe la configuración entityData.
-
-  return <EntityList entityData={entityData} />;
+  return (
+    <>
+      <EntityList entityData={entityData} />
+      <Trazabilidad
+        visible={modalVisible}
+        onClose={handleCloseModal}
+        correspondenciaId={correspondenciaId}
+      />
+    </>
+  );
 }
 
 //EntityList es un “contenedor inteligente” que no sabe qué entidad mostrar hasta que recibe entityData. Y entityData le dice:

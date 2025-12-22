@@ -10,9 +10,6 @@ import {
 } from "react-icons/fa";
 import { useCorrespondenciaElaborada } from "../../../hooks/useEntities";
 import TestDerivar from "../correspondencia/TestDerivar";
-import membreteLogo from "../../../../public/Membrete.PNG";
-import membreteInferiorLogo from "../../../../public/MembreteInferior.PNG";
-import selloLogo from "../../../../public/Sello.PNG";
 
 export default function VistaPreviaDocumento() {
   const { id_correspondencia } = useParams();
@@ -69,42 +66,36 @@ export default function VistaPreviaDocumento() {
         ]}
       />
 
-      {/* ÁREA DE PREVISUALIZACIÓN */}
       <div className="flex-1 bg-gray-200 p-4 flex justify-center overflow-auto">
-        {/* HOJA OFICIO */}
-        <div
-          className="bg-white shadow-md border rounded flex flex-col relative"
-          style={{ width: "816px", minHeight: "900px" }}
-        >
-          {/* 1️⃣ MEMBRETE SUPERIOR */}
-          <header className="w-full flex-shrink-0">
-            <img
-              src={membreteLogo}
-              alt="Membrete superior"
-              className="block w-full"
-            />
-          </header>
+        <div className="bg-white shadow-md border rounded w-[816px] min-h-[900px] relative">
+          {/* Membrete superior */}
+          <img
+            src="http://localhost:8000/media/Membrete.PNG"
+            alt="Membrete superior"
+            className="w-full"
+          />
 
-          {/* 2️⃣ CONTENIDO */}
-          <main className="flex-1 px-[3cm] pt-[0.5cm] pb-[2cm]">
-            <div dangerouslySetInnerHTML={{ __html: contenidoHTML }} />
-          </main>
-          {/* 3️⃣ SELLO */}
-          <footer className="w-full flex justify-center">
-            <img
-              src={selloLogo}
-              alt="Membrete inferior"
-              className="w-40 h-40 align-super"
-            />
-          </footer>
-          {/* 3️⃣ MEMBRETE INFERIOR */}
-          <footer className="w-full">
-            <img
-              src={membreteInferiorLogo}
-              alt="Membrete inferior"
-              className="w-full h-20 object-contain"
-            />
-          </footer>
+          {/* Contenido dinámico */}
+          <div
+            style={{
+              padding: "0.5cm 2.5cm 2cm 3.5cm",
+              boxSizing: "border-box",
+            }}
+            dangerouslySetInnerHTML={{ __html: contenidoHTML }}
+          />
+          {/* Sello */}
+          <img
+            src="http://localhost:8000/media/Sello.PNG"
+            alt="Membrete inferior"
+            className="h-40 w-40 mx-auto block"
+          />
+
+          {/* Membrete inferior */}
+          <img
+            src="http://localhost:8000/media/MembreteInferior.PNG"
+            alt="Membrete inferior"
+            className="w-full"
+          />
         </div>
       </div>
 
