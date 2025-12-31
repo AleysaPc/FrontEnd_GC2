@@ -73,7 +73,12 @@ export default function externalCorrespondenceList() {
       label: "Destinatario",
     },
 
-    { key: "estado", label: "Estado" },
+    { key: "estado", label: "Estado",
+      render: (item) =>
+        item.estado
+          ? item.estado.charAt(0).toUpperCase() + item.estado.slice(1)
+          : "Sin estado",
+     },
     {
       key: "email",
       label: "Elaborado por",

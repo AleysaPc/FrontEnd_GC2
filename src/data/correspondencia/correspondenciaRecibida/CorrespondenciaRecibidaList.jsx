@@ -70,26 +70,34 @@ function CorrespondenciaRecibidaList() {
     {
       key: "fecha_recepcion",
       label: "Fecha Recepción",
-      render: (item) => (
-        <FormattedDateTime
-          dateTime={item.fecha_recepcion}
-        />
-      ),
+      render: (item) => <FormattedDateTime dateTime={item.fecha_recepcion} />,
     },
     {
       key: "fecha_respuesta",
       label: "Fecha Respuesta",
-      render: (item) => (
-        <FormattedDateTime dateTime={item.fecha_respuesta}/>
-      ),
+      render: (item) => <FormattedDateTime dateTime={item.fecha_respuesta} />,
     },
     {
       key: "referencia",
       label: "Referencia",
       render: (item) => item.referencia,
     },
-    { key: "prioridad", label: "Prioridad", render: (item) => item.prioridad },
-    { key: "estado", label: "Estado", render: (item) => item.estado },
+    {
+      key: "prioridad",
+      label: "Prioridad",
+      render: (item) =>
+        item.estado
+          ? item.estado.charAt(0).toUpperCase() + item.estado.slice(1)
+          : "Sin estado",
+    },
+    {
+      key: "estado",
+      label: "Estado",
+      render: (item) =>
+        item.estado
+          ? item.estado.charAt(0).toUpperCase() + item.estado.slice(1)
+          : "Sin estado",
+    },
     {
       key: "datos_contacto",
       label: "Remitente",

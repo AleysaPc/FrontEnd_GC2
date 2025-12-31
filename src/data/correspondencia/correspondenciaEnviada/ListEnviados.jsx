@@ -58,7 +58,12 @@ export default function ListEnviados() {
     },
 
     { key: "cite", label: "CITE" },
-    { key: "estado", label: "Estado" },
+    { key: "estado", label: "Estado",
+      render: (item) =>
+        item.estado
+          ? item.estado.charAt(0).toUpperCase() + item.estado.slice(1)
+          : "Sin estado",
+     },
     {
       key: "fecha_envio", label:"Fecha de Envio",
       render: (item) => <FormattedDateTime dateTime={item.fecha_envio} />,

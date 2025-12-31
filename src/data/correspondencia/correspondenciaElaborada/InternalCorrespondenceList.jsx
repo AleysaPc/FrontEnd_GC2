@@ -3,7 +3,7 @@ import { FaEdit, FaEye, FaStream } from "react-icons/fa";
 import { ActionButton } from "../../../components/shared/ActionButton";
 import { useCorrespondenciaElaboradas } from "../../../hooks/useEntities";
 import EntityList from "../../../components/shared/EntityList";
-import  Trazabilidad  from "../../../components/shared/Trazabilidad"
+import Trazabilidad from "../../../components/shared/Trazabilidad";
 export default function internalCorrespondenciaList() {
   //Para el manejo del modal. Variable, FunciónParaCambiarEstado, Cerrado
   const [modalVisible, setModalVisible] = useState(false);
@@ -76,11 +76,32 @@ export default function internalCorrespondenciaList() {
       render: (item) => item.referencia?.trim() || "Sin referencia",
     },
     {
-      key: "datos_contacto",
+      key: "destinatario",
       label: "Destinatario",
+      render: (item) => {
+        // Caso contacto externo (string)
+        if (item.datos_contacto && item.datos_contacto.trim()) {
+          return item.datos_contacto || "No disponible"; // <- usar el campo email si existe
+        }
+        // Caso destino interno (objeto)
+        else if (item.destino_interno) {
+          return item.destino_interno?.email || "No disponible";
+        }
+        // Ninguno definido
+        else {
+          return "No disponible";
+        }
+      },
     },
 
-    { key: "estado", label: "Estado" },
+    {
+      key: "estado",
+      label: "Estado",
+      render: (item) =>
+        item.estado
+          ? item.estado.charAt(0).toUpperCase() + item.estado.slice(1)
+          : "Sin estado",
+    },
     {
       key: "email",
       label: "Elaborado por",

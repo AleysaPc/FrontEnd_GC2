@@ -6,21 +6,22 @@ import { useState } from "react";
 import Trazabilidad from "../../../components/shared/Trazabilidad";
 
 export default function ElaboradaList() {
-
   const [modalVisible, setModalVisible] = useState(false);
-    const [correspondenciaId, setCorrespondenciaId] = useState(null);
-  
-    const { data, isLoading, error } = useCorrespondenciaElaboradas({ all_data: true });
+  const [correspondenciaId, setCorrespondenciaId] = useState(null);
 
-    const handleOpenModal = (idCorrespondencia) => {
-      setCorrespondenciaId(idCorrespondencia);
-      setModalVisible(true);
-    };
-  
-    const handleCloseModal = () => {
-      setModalVisible(false);
-      setCorrespondenciaId(null);
-    };
+  const { data, isLoading, error } = useCorrespondenciaElaboradas({
+    all_data: true,
+  });
+
+  const handleOpenModal = (idCorrespondencia) => {
+    setCorrespondenciaId(idCorrespondencia);
+    setModalVisible(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalVisible(false);
+    setCorrespondenciaId(null);
+  };
   const useFields = () => [
     { key: "index", label: "#" },
     {
@@ -53,21 +54,28 @@ export default function ElaboradaList() {
       ),
     },
     { key: "cite", label: "CITE" },
-    { 
-      key: "referencia", 
-      label: "Referencia", 
-      render: (item) => item.referencia?.trim() || "Sin referencia" 
+    {
+      key: "referencia",
+      label: "Referencia",
+      render: (item) => item.referencia?.trim() || "Sin referencia",
     },
-    { 
-      key: "datos_contacto", 
-      label: "Destinatario", 
+    {
+      key: "datos_contacto",
+      label: "Destinatario",
     },
-    
-    { key: "estado", label: "Estado" },
-    { 
-      key: "email", 
-      label: "Elaborado por", 
-      render: (item) => item.usuario?.email || 'No especificado' 
+
+    {
+      key: "estado",
+      label: "Estado",
+      render: (item) =>
+        item.estado
+          ? item.estado.charAt(0).toUpperCase() + item.estado.slice(1)
+          : "Sin estado",
+    },
+    {
+      key: "email",
+      label: "Elaborado por",
+      render: (item) => item.usuario?.email || "No especificado",
     },
   ];
 
@@ -84,7 +92,10 @@ export default function ElaboradaList() {
       { name: "cite", placeholder: "CITE" },
       { name: "referencia", placeholder: "Referencia" },
       { name: "contacto_nombre_completo", placeholder: "Destinatario" }, // nuevo campo unificado
-      { name: "contacto__institucion__razon_social", placeholder: "Institución" },
+      {
+        name: "contacto__institucion__razon_social",
+        placeholder: "Institución",
+      },
       { name: "estado", placeholder: "Estado" },
       { name: "plantilla__nombre_plantilla", placeholder: "Tipo Documento" },
       { name: "email", placeholder: "Elaborado por" },
@@ -93,8 +104,14 @@ export default function ElaboradaList() {
       { name: "cite", label: "CITE" },
       { name: "referencia", label: "Referencia" },
       { name: "contacto__nombre_contacto", label: "Nombre destinatario" },
-      { name: "contacto__apellido_pat_contacto", label: "Apellido paterno destinatario" },
-      { name: "contacto__apellido_mat_contacto", label: "Apellido materno destinatario" },
+      {
+        name: "contacto__apellido_pat_contacto",
+        label: "Apellido paterno destinatario",
+      },
+      {
+        name: "contacto__apellido_mat_contacto",
+        label: "Apellido materno destinatario",
+      },
       { name: "contacto__institucion__razon_social", label: "Institucion" },
       { name: "estado", label: "Estado" },
       { name: "email", label: "Elaborado por" },

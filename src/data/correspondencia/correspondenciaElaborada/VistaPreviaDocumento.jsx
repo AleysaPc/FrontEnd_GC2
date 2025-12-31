@@ -67,7 +67,7 @@ export default function VistaPreviaDocumento() {
       />
 
       <div className="flex-1 bg-gray-200 p-4 flex justify-center overflow-auto">
-        <div className="bg-white shadow-md border rounded w-[816px] min-h-[900px] relative">
+        <div className="bg-white shadow-md border rounded w-[816px] min-h-[800px] relative">
           {/* Membrete superior */}
           <img
             src="http://localhost:8000/media/Membrete.PNG"

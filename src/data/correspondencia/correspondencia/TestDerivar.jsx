@@ -89,14 +89,6 @@ export default function TestDerivar({ isOpen, onClose, id }) {
       required: false,
       onChange: manejarEntradas.handleInputChange,
     },
-    //{
-      //component: SelectField,
-      //label: "Estado Resultante",
-      //name: "estado_resultante",
-      //options: accionOptions,
-      //value: formValues.estado_resultante,
-      //onChange: manejarEntradas.handleInputChange,
-    //},
   ];
 
   return (
@@ -110,7 +102,7 @@ export default function TestDerivar({ isOpen, onClose, id }) {
           title: `Derivar`,
           subTitle: "",
           icon: FaShareSquare,
-          actions: [], // No necesitas botones extra en el modal
+          actions: [], 
         }}
       />
     </Modal>

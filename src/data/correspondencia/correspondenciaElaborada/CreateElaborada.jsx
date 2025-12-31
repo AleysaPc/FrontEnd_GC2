@@ -13,25 +13,33 @@ import { FaPlus, FaBackspace, FaEye, FaArrowLeft } from "react-icons/fa";
 import CreateEntity from "../../../components/shared/CreateEntity";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { TextAreaField } from "../../../components/shared/TextAreaField";
 import { CKEditorField } from "../../../components/shared/CKEditorField";
 import { obtenerIdUser } from "../../../utils/auth";
-import { MultipleInputs } from "../../../components/shared/MultipleInputs";
-import { UserDropdownSelect } from "../../../components/shared/UserDropdownSelect";
-
+import { buildCommonFields } from "./commonFields";
+import {
+  campoDestinatarioContacto,
+  campoDescripcion,
+  campoReferencia,
+  campoDestinoInterno,
+  campoDestinatario,
+} from "./fieldFactories";
 export default function CreateElaborada() {
-  const { options } = useFormEntity();
-  const [searchParams] = useSearchParams();
-  const respuestaAId = searchParams.get("respuesta_a");
-  const [nroRegistroRespuesta, setNroRegistroRespuesta] = useState("");
-  const [tipoPlantillaSeleccionada, setTipoPlantillaSeleccionada] =
-    useState("");
+  //Función principal del formulario
+  const { options } = useFormEntity(); //Para transformar arrays en opciones para <Select />.
 
-  const userId = obtenerIdUser();
-  const { data: userResponse } = useUser(userId);
+  //Hooks
+  const [searchParams] = useSearchParams(); //Para obtener el parametro de respuesta_a
+  const respuestaAId = searchParams.get("respuesta_a");
+  const [nroRegistroRespuesta, setNroRegistroRespuesta] = useState(""); //Guarda el número de registro del doc que se responde
+  const [tipoPlantillaSeleccionada, setTipoPlantillaSeleccionada] =
+    useState(""); //Guarda el tipo de plantilla
+
+  //Hook usuario : Sirve para identificar quien crea el documento, autocompletar el campo usuario
+  const userId = obtenerIdUser(); //Obtiene el ID del usuario logueado
+  const { data: userResponse } = useUser(userId); //Obtiene datos del usuario completo
   const usuario = userResponse?.data;
 
-  // Obtener nro_registro de la correspondencia recibida si aplica
+  // Trae el documento que estamos respondiendo
   const { data: respuestaData } = useCorrespondenciaRecibida(respuestaAId);
   useEffect(() => {
     if (respuestaData?.data?.nro_registro) {
@@ -39,7 +47,7 @@ export default function CreateElaborada() {
     }
   }, [respuestaData]);
 
-  // Carga de datos para selects
+  // Carga de datos para selects Hook de datos selects
   const {
     data: plantillasData,
     isLoading: loadingPlantillas,
@@ -56,8 +64,6 @@ export default function CreateElaborada() {
     error: errorUsuarios,
   } = useUsers({ all_data: true });
 
-  console.log("Que usuario tenemos? ", usuario);
-
   const plantillasArray = plantillasData?.data || [];
   const contactosArray = contactosData?.data || [];
   const usuariosArray = usuariosData?.data || [];
@@ -73,28 +79,10 @@ export default function CreateElaborada() {
   const usuarioOptions = () =>
     usuariosArray ? options(usuariosArray, "id", "email") : [];
 
-  const opcionPrioridad = [
-    { id: "alta", nombre: "Alta" },
-    { id: "media", nombre: "Media" },
-    { id: "baja", nombre: "Baja" },
-  ];
-
-  const opcionEstado = [
-    { id: "en_revision", nombre: "En revisión" },
-    { id: "borrador", nombre: "Borrador" },
-    { id: "aprobado", nombre: "Aprobado" },
-    { id: "enviado", nombre: "Enviado" },
-  ];
-  const opcionAmbito = [
-    { id: "interno", nombre: "Interno" },
-    { id: "externo", nombre: "Externo" },
-  ];
-
   // Configuración inicial del formulario
   const configuracionFormulario = {
     fecha_elaboracion: "",
     referencia: "",
-    descripcion: "",
     descripcion_introduccion: "",
     descripcion_desarrollo: "",
     descripcion_conclusion: "",
@@ -111,81 +99,24 @@ export default function CreateElaborada() {
     documentos: [],
     usuario: "", // se asigna luego
     ambito: "",
+    destino_interno: "",
   };
 
   // Preparar datos para envío (unir descripción según plantilla)
   const camposExtras = (formValues) => {
-    const esMemorando = tipoPlantillaSeleccionada === "memorando";
-
-    // Copia segura de usuarios
-    let usuariosFinal = Array.isArray(formValues.usuarios)
-      ? [...formValues.usuarios]
-      : [];
-
-    // 🔑 OBTENER DESTINATARIO COMO TEXTO (TRAMPA CONTROLADA)
-    let destinatarioTexto = "";
-
-    if (esMemorando && formValues.usuario_destino) {
-      const usuarioSeleccionado = usuariosArray.find(
-        (u) => u.id === Number(formValues.usuario_destino)
-      );
-
-      if (usuarioSeleccionado) {
-        destinatarioTexto = [
-          usuarioSeleccionado.first_name,
-          usuarioSeleccionado.secund_name,
-          usuarioSeleccionado.last_name,
-          usuarioSeleccionado.secund_last_name,
-        ]
-          .filter(Boolean)
-          .join(" ");
-      }
-    }
-
-    const contactoField =
-      tipoPlantillaSeleccionada === "nota_externa" && formValues.contacto
-        ? { contacto: Number(formValues.contacto) }
-        : {};
-
-    let descripcionFinal = "";
-
-    if (
-      tipoPlantillaSeleccionada === "informe" ||
-      tipoPlantillaSeleccionada === "convocatoria"
-    ) {
-      descripcionFinal = [
-        formValues.descripcion_introduccion || "",
-        formValues.descripcion_desarrollo || "",
-        formValues.descripcion_conclusion || "",
-      ]
-        .filter(Boolean)
-        .join("\n\n");
-    } else {
-      descripcionFinal = formValues.descripcion || "";
-    }
-
     return {
       fecha_elaboracion: formValues.fecha_elaboracion,
       referencia: formValues.referencia,
-      descripcion: descripcionFinal,
       prioridad: formValues.prioridad,
       estado: formValues.estado,
-      ...contactoField,
       plantilla_id: Number(formValues.plantilla_id),
-
-      // ✅ destinatarios reales
-      usuarios: usuariosFinal,
-      datos_contacto: esMemorando
-        ? { nombre_completo: destinatarioTexto }
-        : null,
-
       cite: formValues.cite,
       respuesta_a: respuestaAId ? Number(respuestaAId) : null,
       comentario_derivacion: formValues.comentario_derivacion || "",
-      ambito: formValues.ambito
+      ambito: formValues.ambito,
     };
   };
-
+  //Se envia el payload
   const paraEnvio = (formValues) => ({
     link: "/elaboradaList",
     params: camposExtras(formValues),
@@ -200,96 +131,48 @@ export default function CreateElaborada() {
         target: { name: "usuario", value: usuario.email },
       });
     }
-    const campoAmbito = {
-      component: SelectField,
-      label: "Ámbito del documento",
-      name: "ambito",
-      options: opcionAmbito,
-      onChange: manejarEntradas.handleInputChange,
-      required: true,
-    };
-
-    const campoPlantilla = {
-      component: SelectField,
-      label: "Plantilla",
-      name: "plantilla_id",
-      options: plantillaOptions(),
-      onChange: (e) => {
-        manejarEntradas.handleInputChange(e);
-        const seleccionada = plantillasArray.find(
-          (p) => p.id_plantilla === Number(e.target.value)
-        );
-        setTipoPlantillaSeleccionada(seleccionada?.tipo || "");
-      },
-      required: true,
-      isLoading: loadingPlantillas,
-      error: errorPlantillas,
-    };
-
-    const campoDocumentos = {
-      component: MultipleInputs,
-      label: "Documento",
-      name: "documentos",
-      type: "file",
-      onChange: manejarEntradas.handleInputChange,
-    };
-    const campoPrioridad = {
-      component: SelectField,
-      label: "Prioridad",
-      name: "prioridad",
-      options: opcionPrioridad,
-      onChange: manejarEntradas.handleInputChange,
-      required: true,
-    };
-
-    const campoEstado = {
-      component: SelectField,
-      label: "Estado",
-      name: "estado",
-      options: opcionEstado,
-      onChange: manejarEntradas.handleInputChange,
-      required: true,
-    };
-
-    const campoDerivarUsuarios = {
-      component: UserDropdownSelect,
-      label: "Derivar a:",
-      name: "usuarios",
-      options: usuarioOptions(),
-      onChange: (name, value) =>
-        manejarEntradas.handleToggleChange(name)(value),
-      isLoading: loadingUsuarios,
-      error: errorUsuarios,
-    };
-
-    const campoComentarioDerivacion = {
-      component: TextAreaField,
-      label: "Comentario para derivación",
-      name: "comentario_derivacion",
-      onChange: manejarEntradas.handleInputChange,
-    };
+    const {
+      campoAmbito,
+      campoPlantilla,
+      campoPrioridad,
+      campoEstado,
+      campoDocumentos,
+      campoDerivarUsuarios,
+      campoComentarioDerivacion,
+    } = buildCommonFields({
+      plantillasArray,
+      plantillaOptions,
+      contactoOptions,
+      usuarioOptions,
+      loadingPlantillas,
+      loadingContactos,
+      loadingUsuarios,
+      errorPlantillas,
+      errorContactos,
+      errorUsuarios,
+      manejarEntradas,
+      setTipoPlantillaSeleccionada,
+    });
 
     if (
       tipoPlantillaSeleccionada === "nota_externa" ||
       tipoPlantillaSeleccionada === "nota_interna"
     ) {
       return [
-        campoAmbito,
         campoPlantilla,
-        {
-          component: InputField,
-          label: "Referencia",
-          name: "referencia",
-          onChange: manejarEntradas.handleInputChange,
-          required: true,
-        },
-        {
-          component: CKEditorField,
+        campoDestinatarioContacto({
+          contactoOptions,
+          manejarEntradas,
+          loadingContactos,
+          errorContactos,
+        }),
+        campoReferencia(manejarEntradas),
+        campoDescripcion({
           label: "Descripción",
           name: "descripcion_desarrollo",
-          value: formValues.descripcion,
-          onChange: manejarEntradas.handleInputChange,
-        },
+          value: formValues.descripcion_desarrollo,
+          manejarEntradas,
+        }),
         {
           component: InputField,
           label: "Páginas",
@@ -297,34 +180,6 @@ export default function CreateElaborada() {
           type: "number",
           onChange: manejarEntradas.handleInputChange,
           required: true,
-        },
-        {
-          component: SelectField,
-          label: "Destinatario",
-          name: "contacto",
-          options: contactoOptions(),
-          onChange: manejarEntradas.handleInputChange,
-          required: true,
-          actionButtons: [
-            {
-              to: "/createContacto",
-              icon: FaPlus,
-              estilos: "text-green-600 hover:bg-green-600 hover:text-white p-1",
-            },
-            {
-              to: "/contactoList",
-              icon: FaEye,
-              estilos: "text-blue-600 hover:bg-blue-600 hover:text-white p-1",
-            },
-          ],
-          isLoading: loadingContactos,
-          error: errorContactos,
-          validate: (value) => {
-            if (!value) {
-              return "El destinatario es requerido";
-            }
-            return null;
-          },
         },
         campoPrioridad,
         campoEstado,
@@ -391,6 +246,10 @@ export default function CreateElaborada() {
     }
 
     if (tipoPlantillaSeleccionada === "informe") {
+      // Decidir tipo de destinatario según la plantilla o campo ambito
+      const tipoDestinatario =
+        formValues.ambito === "interno" ? "interno" : "externo";
+
       return [
         campoPlantilla,
         {
@@ -403,41 +262,17 @@ export default function CreateElaborada() {
           disabled: true,
           variant: "filled",
         },
-        {
-          component: SelectField,
-          label: "Destinatario",
-          name: "contacto",
-          options: contactoOptions(),
-          onChange: manejarEntradas.handleInputChange,
-          required: true,
-          actionButtons: [
-            {
-              to: "/createContacto",
-              icon: FaPlus,
-              estilos: "text-green-600 hover:bg-green-600 hover:text-white p-1",
-            },
-            {
-              to: "/contactoList",
-              icon: FaEye,
-              estilos: "text-blue-600 hover:bg-blue-600 hover:text-white p-1",
-            },
-          ],
-          isLoading: loadingContactos,
-          error: errorContactos,
-          validate: (value) => {
-            if (!value) {
-              return "El destinatario es requerido";
-            }
-            return null;
-          },
-        },
-        {
-          component: InputField,
-          label: "Referencia",
-          name: "referencia",
-          value: formValues.referencia,
-          onChange: manejarEntradas.handleInputChange,
-        },
+        campoDestinatario({
+          contactoOptions,
+          usuarioOptions,
+          manejarEntradas,
+          loadingContactos,
+          errorContactos,
+          loadingUsuarios,
+          errorUsuarios,
+          tipoDestinatario,
+        }),
+        campoReferencia(manejarEntradas),
         {
           component: CKEditorField,
           label: "Introducción",
@@ -468,6 +303,7 @@ export default function CreateElaborada() {
         campoComentarioDerivacion,
       ];
     }
+
     if (tipoPlantillaSeleccionada === "memorando") {
       return [
         campoPlantilla,
@@ -481,20 +317,13 @@ export default function CreateElaborada() {
           disabled: true,
           variant: "filled",
         },
-        {
-          component: SelectField,
-          label: "Destinatario",
-          name: "usuario_destino",
-          options: usuarioOptions(),
-          onChange: manejarEntradas.handleInputChange,
-        },
-        {
-          component: InputField,
-          label: "Referencia",
-          name: "referencia",
-          value: formValues.referencia,
-          onChange: manejarEntradas.handleInputChange,
-        },
+        campoDestinoInterno({
+          usuarioOptions,
+          manejarEntradas,
+          loadingUsuarios,
+          errorUsuarios,
+        }),
+        campoReferencia(manejarEntradas),
         {
           component: CKEditorField,
           label: "Desarrollo",
@@ -515,13 +344,6 @@ export default function CreateElaborada() {
     return [
       campoAmbito,
       campoPlantilla,
-      {
-        component: CKEditorField,
-        label: "Descripción",
-        name: "descripcion",
-        value: formValues.descripcion,
-        onChange: manejarEntradas.handleInputChange,
-      },
       campoPrioridad,
       campoEstado,
       campoDocumentos,

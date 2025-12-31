@@ -72,13 +72,25 @@ function CorrespondenciaList() {
     {
       key: "fecha_registro",
       label: "Fecha de Registro",
-      render: (item) => (
-        <FormattedDateTime dateTime={item.fecha_registro} />
-      ),
+      render: (item) => <FormattedDateTime dateTime={item.fecha_registro} />,
     },
     { key: "referencia", label: "Referencia" },
-    { key: "prioridad", label: "Prioridad" },
-    { key: "estado", label: "Estado" },
+    {
+      key: "prioridad",
+      label: "Prioridad",
+      render: (item) =>
+        item.estado
+          ? item.estado.charAt(0).toUpperCase() + item.estado.slice(1)
+          : "Sin estado",
+    },
+    {
+      key: "estado",
+      label: "Estado",
+      render: (item) =>
+        item.estado
+          ? item.estado.charAt(0).toUpperCase() + item.estado.slice(1)
+          : "Sin estado",
+    },
     {
       key: "contacto",
       label: "Destinatario",
