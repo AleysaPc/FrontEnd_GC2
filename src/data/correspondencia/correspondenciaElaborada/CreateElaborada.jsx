@@ -155,16 +155,21 @@ export default function CreateElaborada() {
     });
 
     if (
-      tipoPlantillaSeleccionada === "nota_externa" ||
-      tipoPlantillaSeleccionada === "nota_interna"
-    ) {
+      tipoPlantillaSeleccionada === "nota") {
+
+      const tipoDestinatario =
+        formValues.ambito === "interno" ? "interno" : "externo";
       return [
         campoPlantilla,
-        campoDestinatarioContacto({
+        campoDestinatario({
           contactoOptions,
+          usuarioOptions,
           manejarEntradas,
           loadingContactos,
           errorContactos,
+          loadingUsuarios,
+          errorUsuarios,
+          tipoDestinatario,
         }),
         campoReferencia(manejarEntradas),
         campoDescripcion({

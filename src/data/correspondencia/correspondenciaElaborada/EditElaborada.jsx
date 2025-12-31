@@ -217,7 +217,7 @@ export default function EditElaborada() {
       onChange: manejarEntradas.handleInputChange,
     };
 
-    if (tipoPlantillaSeleccionada === "nota_externa") {
+    if (tipoPlantillaSeleccionada === "nota") {
       return [
         campoPlantilla,
         {
