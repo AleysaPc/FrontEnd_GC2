@@ -9,7 +9,7 @@ import {
 } from "../../../hooks/useEntities";
 import { InputField } from "../../../components/shared/InputField";
 import { SelectField } from "../../../components/shared/SelectField";
-import { FaPlus, FaBackspace, FaEye, FaArrowLeft } from "react-icons/fa";
+import { FaPlus, FaBackspace, FaEye, FaArrowLeft, FaTimes } from "react-icons/fa";
 import CreateEntity from "../../../components/shared/CreateEntity";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
@@ -365,18 +365,11 @@ export default function CreateElaborada() {
     icon: FaPlus,
     actions: [
       {
-        to: "/elaboradaList",
-        label: "Volver",
-        icon: FaBackspace,
-        estilos:
-          "bg-red-800 hover:bg-gray-800 text-white px-4 py-2 rounded-md flex items-center gap-2",
-      },
-      {
         to: -1,
-        label: "Atras",
-        icon: FaArrowLeft,
+        label: "Cancelar",
+        icon: FaTimes,
         estilos:
-          "bg-blue-800 hover:bg-gray-800 text-white px-4 py-2 rounded-md flex items-center gap-2",
+          "border-white-700 rounded-lg bg-green-700 text-white p-2 hover:bg-red-700 hover:text-white-600"
       },
     ],
   };

@@ -9,14 +9,14 @@ export function ActionButton({
   onClick,
   disabled = false,
   to,
-  title
+  title,
 }) {
   const buttonClasses = `flex items-center transition duration-200 ${estilos}`;
 
   const content = (
     <>
-      {Icon && <Icon className={`w-5 h-5 ${styleIcon}`}  />}
-      {label}
+      {Icon && <Icon className={`w-5 h-5 ${styleIcon}`} />}
+      {label && <span>{label}</span>}
     </>
   );
 

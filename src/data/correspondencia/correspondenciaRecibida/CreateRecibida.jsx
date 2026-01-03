@@ -244,7 +244,7 @@ export default function createRecibida() {
         label: "  Cancelar ",
         icon: FaTimes,
         estilos:
-          "border-white-700 rounded-lg bg-gray-700 text-white p-2 hover:bg-red-700 hover:text-white-600",
+          "border-white-700 rounded-lg bg-green-700 text-white p-2 hover:bg-red-700 hover:text-white-600",
       },
     ],
   };

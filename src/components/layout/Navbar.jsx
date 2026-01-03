@@ -9,7 +9,7 @@ const Navbar = ({ toggleSidebar, user }) => {
   const logoutUser = useLogout();
 
   return (
-    <nav className="bg-red-700 text-white flex justify-between items-center p-3 sticky top-0 z-50 shadow-md h-16">
+    <nav className="bg-green-700 text-white flex justify-between items-center p-3 sticky top-0 z-50 shadow-md h-16">
       <button
         className="p-2 hover:bg-red-600 rounded"
         onClick={toggleSidebar}

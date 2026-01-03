@@ -16,7 +16,7 @@ import { TextAreaField } from "../../../components/shared/TextAreaField";
 import { UserDropdownSelect } from "../../../components/shared/UserDropdownSelect";
 
 import EditEntity from "../../../components/shared/EditEntity";
-import { FaBackspace, FaFile, FaPlus } from "react-icons/fa";
+import { FaBackspace, FaFile, FaPlus, FaTimes } from "react-icons/fa";
 import { useParams } from "react-router-dom";
 
 export default function RegisterEnviada() {
@@ -249,10 +249,10 @@ export default function RegisterEnviada() {
     actions: [
       {
         to: "/listEnviados",
-        label: "Volver",
-        icon: FaBackspace,
+        label: " Cancelar",
+        icon: FaTimes,
         estilos:
-          "bg-gray-500 hover:bg-gray-800 text-white px-4 py-2 rounded-md flex items-center gap-2 transition",
+          "border-white-700 rounded-lg bg-green-700 text-white p-2 hover:bg-red-700 hover:text-white-600"
       },
     ],
   };

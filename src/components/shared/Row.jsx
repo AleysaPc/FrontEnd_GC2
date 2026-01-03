@@ -1,7 +1,7 @@
 
 const Row = ({ item, fields, index }) => {
     return (
-      <tr className="hover:bg-gray-700 hover:text-white">
+      <tr className="hover:bg-gray-200 hover:text-blue-600 text-gray-700">
         {fields.map((field, idx) => (
           <td
             key={`${item.id || idx}-${field.key}`}

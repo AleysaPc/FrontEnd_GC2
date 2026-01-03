@@ -60,9 +60,9 @@ const GenerarDocumentoButton = ({ id, className = "" }) => {
         <button
             onClick={handleGenerateWord}
             title="Generar Documento Word"
-            className={`hover:bg-gray-600 hover:text-gray-100 text-gray-500 rounded-md flex items-center gap-2 transition duration-200 p-1 ${className}`}
+            className={`hover:bg-blue-600 hover:text-white text-blue-500 rounded-md flex items-center gap-2 transition duration-200 p-1 ${className}`}
         >
-            <FaFileWord className="text-blue-500" size={20} />
+            <FaFileWord className="text-white-500" size={20} />
         </button>
     );
 };

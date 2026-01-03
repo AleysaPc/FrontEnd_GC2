@@ -1,11 +1,6 @@
 import EntityList from "../../../components/shared/EntityList";
 import { useCorrespondenciaElaboradas } from "../../../hooks/useEntities";
-import {
-  FaAngleUp,
-  FaSave,
-  FaStream,
-  FaEye,
-} from "react-icons/fa";
+import { FaAngleUp, FaSave, FaStream, FaEye } from "react-icons/fa";
 import { ActionButton } from "../../../components/shared/ActionButton";
 import GenerarDocumentoButton from "../../../components/documentos/GenerarDocumentoButton";
 import Trazabilidad from "../../../components/shared/Trazabilidad";
@@ -15,6 +10,7 @@ import FormattedDateTime from "../../../components/shared/FormattedDate";
 export default function ListEnviados() {
   const [modalVisible, setModalVisible] = useState(false);
   const [correspondenciaId, setCorrespondenciaId] = useState(null);
+  const [mostrarHistorial, setMostrarHistorial] = useState(false);
 
   const handleOpenModal = (idCorrespondencia) => {
     setCorrespondenciaId(idCorrespondencia);
@@ -36,40 +32,43 @@ export default function ListEnviados() {
             to={`/registerEnviada/${item.id_correspondencia}`}
             icon={FaSave}
             title="Registrar"
-            estilos="hover:bg-gray-600 hover:text-gray-100 text-gray-500 rounded-md flex items-center gap-2 transition duration-200 p-1"
+            estilos="hover:bg-green-500 hover:text-white text-gray-500 rounded-md flex items-center gap-2 transition duration-200 p-1"
           />
           <GenerarDocumentoButton id={item.id_correspondencia} />
           <button
             onClick={() => handleOpenModal(item.id_correspondencia)} // Abre modal con ID
             title="Ver historial"
-            className="hover:bg-gray-600 hover:text-gray-100 text-gray-500 rounded-md flex items-center gap-2 transition duration-200 p-1"
+            className="hover:bg-orange-600 hover:text-gray-100 text-gray-500 rounded-md flex items-center gap-2 transition duration-200 p-1"
             aria-label="Ver historial"
           >
             <FaStream />
-            <ActionButton
-              to={`/vistaPreviaDocumento/${item.id_correspondencia}`}
-              icon={FaEye}
-              ttile={"Vista previa del documento"}
-              estilos="hover:bg-gray-600 hover:text-gray-100 text-gray-500 rounded-md flex items-center gap-2 p-1"
-            />
           </button>
+          <Trazabilidad
+            visible={mostrarHistorial}
+            onClose={() => setMostrarHistorial(false)}
+            correspondenciaId={correspondenciaId} // ✅ Corregido
+          />
         </div>
       ),
     },
 
     { key: "cite", label: "CITE" },
-    { key: "estado", label: "Estado",
+    {
+      key: "estado",
+      label: "Estado",
       render: (item) =>
         item.estado
           ? item.estado.charAt(0).toUpperCase() + item.estado.slice(1)
           : "Sin estado",
-     },
+    },
     {
-      key: "fecha_envio", label:"Fecha de Envio",
+      key: "fecha_envio",
+      label: "Fecha de Envio",
       render: (item) => <FormattedDateTime dateTime={item.fecha_envio} />,
     },
     {
-      key: "referencia", label: "Referencia",
+      key: "referencia",
+      label: "Referencia",
       render: (item) => item.referencia || "Sin referencia",
     },
   ];

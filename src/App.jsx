@@ -3,6 +3,9 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "react-hot-toast";
 import AppRoutes from "./router/AppRoutes";
 import { AuthProvider } from "./context/AuthContext";
+import '@fontsource/roboto/400.css'; // Peso normal
+import '@fontsource/roboto/500.css'; // Peso medio
+import '@fontsource/roboto/700.css'; // Peso bold
 const queryClient = new QueryClient();
 
 function App() {

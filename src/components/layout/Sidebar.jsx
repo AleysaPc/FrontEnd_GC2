@@ -19,13 +19,16 @@ const Sidebar = ({ isVisible }) => {
       } h-[calc(100vh)]`}
     >
       {/* titulo */}
-      <div className="p-5 px-6 bg-red-700 flex items-center justify-center gap-2">
+      <div className="h-16 flex items-center justify-center gap-2 bg-red-700 p-4">
         <FaBuilding className="text-white text-2xl" />
         <h1 className="text-white text-xl font-bold">FDLP</h1>
       </div>
 
       {/* Sección de Perfil de Usuario */}
-      <div className="px-4 py-6 border-b flex flex-col items-center justify-center text-center"style={{ backgroundColor: 'rgba(10, 89, 92, 0.9)' }}>
+      <div
+        className="px-4 py-6 border-b flex flex-col items-center justify-center text-center"
+        style={{ backgroundColor: "rgba(10, 89, 92, 0.9)" }}
+      >
         {/* Avatar */}
         <div className="mb-3">
           <div className="w-16 h-16 rounded-full bg-red-700 flex items-center justify-center text-white font-semibold text-xl">
@@ -48,8 +51,8 @@ const Sidebar = ({ isVisible }) => {
         </div>
       </div>
 
-      {/* Contenedor del menú con scroll */}
-      <div className="flex-1 overflow-y-auto">
+      {/* Contenedor del menú con scroll      bg-white  color del sidebar donde se muestran los datos*/}
+      <div className="flex-1 overflow-y-auto bg-white">
         <ul className="px-2 space-y-2">
           {menus.map((menu, index) => (
             <SidebarMenu

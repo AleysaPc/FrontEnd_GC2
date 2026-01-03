@@ -5,7 +5,7 @@ import { ActionButton } from "../shared/ActionButton";
 // Función para optimizar la clase activa de NavLink
 const getNavLinkClass = (isActive) =>
   `block px-4 py-2 rounded-lg transition-all duration-200 hover:text-white ${
-    isActive ? "bg-gray-700 text-white" : "text-gray-700 hover:bg-teal-700"
+    isActive ? "bg-gray-900 text-white" : "text-dark-700 hover:bg-teal-700"
   }`;
 
 const SidebarMenu = ({
@@ -36,9 +36,9 @@ const SidebarMenu = ({
   return (
     <li>
       <ActionButton
-        label={title}
-        estilos={`flex items-center w-full px-4 py-3 text-base font-semibold rounded-lg transition-all duration-300 hover:text-white text-gray-700 ${
-          isOpen ? "bg-gray-700 text-white" : "hover:bg-gray-700 text-black-300"
+        label={title}                                                                                             //Hover el color que cambia al poner el curso  
+        estilos={`flex items-center w-full px-4 py-3 text-base font-normal rounded-lg transition-all duration-300 hover:text-blue-600 text-gray-600 ${
+          isOpen ? "bg-gray-200 text-gray-600" : "hover:bg-gray-200 text-gray-600"
         }`}
         onClick={toggleMenu}
         icon={Icon}

@@ -1,7 +1,7 @@
 import EntityList from "../../../components/shared/EntityList";
 import { useCorrespondencias } from "../../../hooks/useEntities";
 import FormattedDateTime from "../../../components/shared/FormattedDate";
-import { FaEdit, FaEye, FaStream } from "react-icons/fa";
+import { FaEdit, FaEye, FaStream, FaFolderOpen } from "react-icons/fa";
 import { ActionButton } from "../../../components/shared/ActionButton";
 import Trazabilidad from "../../../components/shared/Trazabilidad";
 import { useState } from "react";
@@ -34,23 +34,22 @@ function CorrespondenciaList() {
         <div className="flex gap-2">
           <ActionButton
             to={`/detailRecibida/${item.id_correspondencia}`}
-            icon={FaEye}
+            icon={FaFolderOpen}
             title="Ver detalles del documento"
-            estilos="hover:bg-gray-600 hover:text-gray-100 text-gray-500 rounded-md flex items-center gap-2 transition duration-200 p-1"
+            estilos="hover:bg-blue-600 hover:text-white text-gray-500 rounded-md flex items-center gap-2 transition duration-200 p-1"
           />
-
           <ActionButton
             to={`/editRecibida/${item.id_correspondencia}`}
             icon={FaEdit}
             title="Editar"
             toBack="/correspondenciaList"
-            estilos="hover:bg-gray-600 hover:text-gray-100 text-gray-500 rounded-md flex items-center gap-2 transition duration-200 p-1"
+            estilos="hover:bg-orange-600 hover:text-white text-gray-500 rounded-md flex items-center gap-2 transition duration-200 p-1"
           />
 
           <button
             onClick={() => handleOpenModal(item.id_correspondencia)} // ✅ Abre el modal correctamente
             title="Ver historial"
-            className="hover:bg-gray-600 hover:text-gray-100 text-gray-500 rounded-md flex items-center gap-2 transition duration-200 p-1"
+            className="hover:bg-green-600 hover:text-white text-gray-500 rounded-md flex items-center gap-2 transition duration-200 p-1"
             aria-label="Ver historial"
           >
             <FaStream />

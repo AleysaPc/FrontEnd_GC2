@@ -40,12 +40,12 @@ export default function externalCorrespondenceList() {
             to={`/vistaPreviaDocumento/${item.id_correspondencia}`}
             icon={FaEye}
             ttile={"Vista previa del documento"}
-            estilos="hover:bg-gray-600 hover:text-gray-100 text-gray-500 rounded-md flex items-center gap-2 p-1"
+            estilos="hover:bg-blue-600 hover:text-white text-gray-500 rounded-md flex items-center gap-2 p-1"
           />
           <button
             onClick={() => handleOpenModal(item.id_correspondencia)}
             title="Ver Trazabilidad"
-            className="hover:bg-gray-600 hover:text-gray-100 text-gray-500 rounded-md flex items-center gap-2 transition duration-200 p-1"
+            className="hover:bg-green-600 hover:text-white text-gray-500 rounded-md flex items-center gap-2 transition duration-200 p-1"
             aria-label="Ver trazabilidad"
           >
             <FaStream />
@@ -54,7 +54,7 @@ export default function externalCorrespondenceList() {
             to={`/editElaborada/${item.id_correspondencia}`}
             icon={FaEdit}
             title="Editar"
-            estilos="hover:bg-gray-600 hover:text-gray-100 text-gray-500 rounded-md flex items-center gap-2 transition duration-200 p-1"
+            estilos="hover:bg-orange-600 hover:text-white text-gray-500 rounded-md flex items-center gap-2 transition duration-200 p-1"
           />
         </div>
       ),

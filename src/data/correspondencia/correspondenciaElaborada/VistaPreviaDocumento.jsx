@@ -47,21 +47,21 @@ export default function VistaPreviaDocumento() {
             label: "Volver",
             icon: FaArrowLeft,
             estilos:
-              "bg-white hover:bg-blue-600 text-black px-4 py-2 rounded-md flex items-center gap-2",
+             "border-white-700 rounded-lg bg-green-700 text-white p-2 hover:bg-white hover:text-green-700",
           },
           {
             to: `http://localhost:8000/api/v1/correspondencia/elaborada/${id_correspondencia}/pdf/`,
             label: "Ver PDF",
             icon: FaFilePdf,
             estilos:
-              "bg-white hover:bg-blue-600 text-black px-4 py-2 rounded-md flex items-center gap-2",
+              "border-white-700 rounded-lg bg-green-700 text-white p-2 hover:bg-white hover:text-green-700",
           },
           {
             label: "Derivar",
             icon: FaShare,
             onClick: () => setMostrarModalDerivar(true),
             estilos:
-              "bg-white hover:bg-green-400 text-black px-4 py-2 rounded-md flex items-center gap-2",
+             "border-white-700 rounded-lg bg-green-700 text-white p-2 hover:bg-white hover:text-green-700",
           },
         ]}
       />
