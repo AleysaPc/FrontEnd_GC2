@@ -3,10 +3,11 @@ import CreateEntity from "../../../components/shared/CreateEntity";
 import { useRolMutations } from "../../../hooks/useEntities";
 import { FaPlus } from "react-icons/fa";
 import SelectorPermisos from "../../../components/shared/SelectorPermisos";
-import { usePermisos } from "../../../hooks/useEntities";
+import { usePermisosList } from "../../../hooks/useEntities";
+import SelectorDual from "../../../components/shared/SelectorDual";
 
 export default function CreateRol() {
-  const { data: permisosData } = usePermisos();
+  const { data: permisosData } = usePermisosList();
   console.log("Datos de permisos", permisosData);
 
   const estadoInicial = {
@@ -33,9 +34,9 @@ export default function CreateRol() {
       onChange: manejarEntradas.handleInputChange,
     },
     {
-      component: SelectorPermisos,
-      permisosData: permisosData?.data || [], // Accedemos a la propiedad data
-      value: formValues.permissions || [],
+      component: SelectorDual,
+      data: permisosData?.data, //esta parte es la clave de data
+      value: formValues.permissions,
       onChange: (ids) => {
         manejarEntradas.handleInputChange({
           target: {
@@ -44,9 +45,12 @@ export default function CreateRol() {
           },
         });
       },
+      labelLeft: "Permisos Disponibles",
+      labelRight: "Permisos Seleccionados",
+      itemLabel: "name", // campo de la data de permisos nombre
       label: "Permisos",
       name: "permissions",
-    }
+    },
   ];
 
   const paraNavegacion = {

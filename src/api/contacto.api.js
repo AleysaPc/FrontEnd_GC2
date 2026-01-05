@@ -5,3 +5,4 @@ const ApiContacto = createApi("contacto");
 
 export const ContactoApi = createCrudOperations(ApiContacto, "contacto")
 export const InstitucionApi = createCrudOperations(ApiContacto, "institucion")
+export const InstitucionSelectApi = createCrudOperations(ApiContacto, "institucion-select")

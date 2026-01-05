@@ -8,14 +8,23 @@ import {
 } from "../api/correspondencia.api";
 import useData from "./useData";
 import {
-  CustomUsersAPI,
+  UsuarioAPI,
   RolesApi,
   PasswordResetAPI,
   DepartamentosApi,
   PermisosApi,
+  UsuarioListApi,
+  RolListApi,
+  DepartamentoSelectApi,
+  DepartamentoListApi,
+  PermisoListApi,
 } from "../api/usuario.api";
 import { useMutationWithToast } from "./useMutationWithToast";
-import { ContactoApi, InstitucionApi } from "../api/contacto.api";
+import {
+  ContactoApi,
+  InstitucionApi,
+  InstitucionSelectApi,
+} from "../api/contacto.api";
 import { DocumentoApi, PlantillaDocumentoApi } from "../api/documento.api";
 
 // Default stale time for queries (5 minutes)
@@ -223,9 +232,8 @@ export const useAccionCorrespondencia = (id) =>
 export const useAccionCorrespondenciaMutations = () =>
   useEntityMutations(AccionCorrespondenciaApi, "acciones");
 
-
 //users
-export const useUsers = (
+export const useUsuariosList = (
   params = {},
   enable = true,
   staleTime = 1000 * 60 * 5
@@ -243,8 +251,8 @@ export const useUsers = (
     //params sobreescribe defaultParams si hay campos repetidos
     { ...defaultParams, ...params };
   return useData(
-    CustomUsersAPI,
-    "users",
+    UsuarioListApi,
+    "usuarios-list",
     null,
     mergedParams,
     staleTime,
@@ -252,12 +260,11 @@ export const useUsers = (
   );
 };
 export const useUser = (id) =>
-  useData(CustomUsersAPI, "user", id, {}, 1000 * 60 * 5, !!id);
-export const useUserMutations = () =>
-  useEntityMutations(CustomUsersAPI, "Usuario");
+  useData(UsuarioAPI, "user", id, {}, 1000 * 60 * 5, !!id);
+export const useUserMutations = () => useEntityMutations(UsuarioAPI, "Usuario");
 
 //roles
-export const useRoles = (
+export const useRolesList = (
   params = {},
   enable = true,
   staleTime = 1000 * 60 * 5
@@ -274,11 +281,47 @@ export const useRoles = (
   const mergedParams =
     //params sobreescribe defaultParams si hay campos repetidos
     { ...defaultParams, ...params };
-  return useData(RolesApi, "roles", null, mergedParams, staleTime, enable);
+  return useData(
+    RolListApi,
+    "roles-list",
+    null,
+    mergedParams,
+    staleTime,
+    enable
+  );
 };
+
 export const useRol = (id) =>
   useData(RolesApi, "rol", id, {}, 1000 * 60 * 5, !!id);
 export const useRolMutations = () => useEntityMutations(RolesApi, "Rol");
+
+//Permisos
+export const usePermisosList = (
+  params = {},
+  enable = true,
+  staleTime = 1000 * 60 * 5
+) => {
+  const defaultParams = {
+    all_data: false,
+    page: 1,
+    per_page: 10,
+    filters: {},
+    ordering: "",
+    search: "",
+  };
+
+  const mergedParams =
+    //params sobreescribe defaultParams si hay campos repetidos
+    { ...defaultParams, ...params };
+  return useData(
+    PermisoListApi,
+    "permisos-list",
+    null,
+    mergedParams,
+    staleTime,
+    enable
+  );
+};
 
 // password reset
 export const usePasswordResetConfirm = () => {
@@ -325,6 +368,61 @@ export const useDepartamentos = (
     enable
   );
 };
+
+export const useDepartamentoList = (
+  params = {},
+  enable = true,
+  staleTime = 1000 * 60 * 5
+) => {
+  const defaultParams = {
+    all_data: false,
+    page: 1,
+    per_page: 10,
+    filters: {},
+    ordering: "",
+    search: "",
+  };
+
+  const mergedParams =
+    //params sobreescribe defaultParams si hay campos repetidos
+    { ...defaultParams, ...params };
+  return useData(
+    DepartamentoListApi,
+    "departamento-list",
+    null,
+    mergedParams,
+    staleTime,
+    enable
+  );
+};
+
+export const useDepartamentoSelect = (
+  params = {},
+  enable = true,
+  staleTime = 1000 * 60 * 5
+) => {
+  const defaultParams = {
+    all_data: false,
+    page: 1,
+    per_page: 10,
+    filters: {},
+    ordering: "",
+    search: "",
+  };
+
+  const mergedParams =
+    //params sobreescribe defaultParams si hay campos repetidos
+    { ...defaultParams, ...params };
+  return useData(
+    DepartamentoSelectApi,
+    "departamento-select",
+    null,
+    mergedParams,
+    staleTime,
+    enable
+  );
+};
+
 export const useDepartamento = (id) =>
   useData(DepartamentosApi, "departamento", id, {}, 1000 * 60 * 5, !!id);
 export const useDepartamentoMutations = () =>
@@ -384,6 +482,33 @@ export const useInstituciones = (
   return useData(
     InstitucionApi,
     "instituciones",
+    null,
+    mergedParams,
+    staleTime,
+    enable
+  );
+};
+//Institucion
+export const useInstitucionSelect = (
+  params = {},
+  enable = true,
+  staleTime = 1000 * 60 * 5
+) => {
+  const defaultParams = {
+    all_data: false,
+    page: 1,
+    per_page: 10,
+    filters: {},
+    ordering: "",
+    search: "",
+  };
+
+  const mergedParams =
+    //params sobreescribe defaultParams si hay campos repetidos
+    { ...defaultParams, ...params };
+  return useData(
+    InstitucionSelectApi,
+    "institucion-select",
     null,
     mergedParams,
     staleTime,

@@ -1,47 +1,41 @@
 import { useFormEntity } from "../../utils/useFormEntity";
 import {
-  useRoles,
+  useRolesList,
   useUserMutations,
   useInstituciones,
-  useDepartamentos,
+  useDepartamentoSelect,
 } from "../../hooks/useEntities";
 import { InputField } from "../../components/shared/InputField";
 import { SelectField } from "../../components/shared/SelectField";
 import { ToggleSwitch } from "../../components/shared/ToggleSwitch";
 import { CheckBox } from "../../components/shared/CheckBox";
+import SelectorDual from "../../components/shared/SelectorDual";
+import ImagePreview from "../../components/shared/ImagePreview";
 import { FaArrowLeft, FaPlus, FaEye } from "react-icons/fa";
 import CreateEntity from "../../components/shared/CreateEntity";
+import { data } from "react-router-dom";
 
 export default function CreateUser() {
-  const { options } = useFormEntity();
-  const { paraSelectsdestructuringYMap } = useFormEntity();
+  const { data: roles } = useRolesList({ all_data: true });
+  const rolesData = roles?.data || [];
 
-  // Selects
-  const departamentosOptions = paraSelectsdestructuringYMap(
-    useDepartamentos,
-    true,
-    "id",
-    "nombre"
-  );
-  //Institución
-  const {
-    data: institucionesData,
-    isLoading: loadingInstituciones,
-    error: errorInstituciones,
-  } = useInstituciones({ all_data: true });
+  // Llamar los hooks directamente en el nivel superior
+  const { data: departamentosData } = useDepartamentoSelect({ all_data: true });
+  const { data: institucionesData } = useInstituciones({ all_data: true });
 
-  //Rol
-  const { data: roleData } = useRoles({ all_data: true });
-  const rolesOptions = roleData?.data
-    ? options(roleData.data, "id", "name")
-    : [];
+  const institucionOptions =
+    institucionesData?.data?.map((item) => ({
+      //aqui data tambien es la clave
+      id: item.id_institucion,
+      nombre: item.razon_social,
+    })) || [];
 
-  const institucionesArray = institucionesData?.data || [];
-
-  const institucionOptions = () =>
-    institucionesArray
-      ? options(institucionesArray, "id_institucion", "razon_social")
-      : [];
+  const departamentoOptions =
+    departamentosData?.data?.map((item) => ({
+      //aqui data tambien es la clave
+      id: item.id,
+      nombre: item.nombre,
+    })) || [];
 
   // Configuración inicial del formulario
   const configForm = {
@@ -67,6 +61,7 @@ export default function CreateUser() {
     id_rol: "",
     id_departamento: "",
     notes: "",
+    imagen: "",
   };
 
   // Datos adicionales para envío
@@ -78,6 +73,7 @@ export default function CreateUser() {
     institucion: formValues.id_institucion
       ? Number(formValues.id_institucion)
       : null,
+    imagen: formValues.imagen || null,
   });
 
   const paraEnvio = (formValues) => ({
@@ -188,13 +184,6 @@ export default function CreateUser() {
       onChange: manejarEntradas.handleInputChange,
     },
     {
-      component: SelectField,
-      label: "Rol",
-      name: "id_rol",
-      options: rolesOptions,
-      onChange: manejarEntradas.handleInputChange,
-    },
-    {
       component: ToggleSwitch,
       label: "Estado del Usuario",
       name: "is_active",
@@ -212,10 +201,8 @@ export default function CreateUser() {
       component: SelectField,
       label: "Institucion",
       name: "id_institucion",
-      options: institucionOptions(),
+      options: institucionOptions,
       onChange: manejarEntradas.handleInputChange,
-      isLoading: loadingInstituciones,
-      error: errorInstituciones,
       actionButtons: [
         {
           to: "/CreateInstitucion",
@@ -230,11 +217,29 @@ export default function CreateUser() {
       ],
     },
     {
+      component: SelectorDual,
+      data: rolesData?.data, //esta parte es la clave de data
+      value: formValues.roles,
+      onChange: (ids) => {
+        manejarEntradas.handleInputChange({
+          target: {
+            name: "roles",
+            value: ids,
+          },
+        });
+      },
+      labelLeft: "Roles Disponibles",
+      labelRight: "Roles Seleccionados",
+      itemLabel: "name", // campo de la data de permisos nombre
+      label: "Roles",
+      name: "roles",
+    },
+    {
       component: SelectField,
       label: "Departamento",
       name: "id_departamento",
       required: false,
-      options: departamentosOptions,
+      options: departamentoOptions,
       onChange: manejarEntradas.handleInputChange,
     },
     {
@@ -242,6 +247,26 @@ export default function CreateUser() {
       label: "Observaciones",
       name: "notes",
       onChange: manejarEntradas.handleInputChange,
+    },
+    {
+      name: "imagen",
+      component: () => (
+        <div className="space-y-2">
+          <div className="font-medium text-gray-700">Imagen actual</div>
+          <ImagePreview
+            image={formValues.imagen}
+            alt={`Imagen de ${formValues.nombre || "producto"}`}
+            className="h-40 w-40 mb-4"
+          />
+          <InputField
+            label="Cambiar imagen"
+            name="imagen"
+            type="file"
+            accept="image/*"
+            onChange={manejarEntradas.handleInputChange}
+          />
+        </div>
+      ),
     },
   ];
 

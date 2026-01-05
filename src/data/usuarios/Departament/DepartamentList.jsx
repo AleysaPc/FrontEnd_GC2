@@ -1,5 +1,5 @@
 import { StatusBadge } from "../../../components/shared/StatusBadge";
-import { useDepartamentos, useDepartamentoMutations } from "../../../hooks/useEntities";
+import { useDepartamentoList, useDepartamentoMutations } from "../../../hooks/useEntities";
 import EntityList from "../../../components/shared/EntityList";
 import { FaBackspace, FaPlus, FaUber } from "react-icons/fa";
 import { ActionButton } from "../../../components/shared/ActionButton";
@@ -56,7 +56,7 @@ export default function DepartamentList() {
     subTitle: "Listado de departamentos",
     loadingMessage: "Cargando departamentos...",
     errorMessage: "Error al obtener los departamentos",
-    fetchDataHook: useDepartamentos,
+    fetchDataHook: useDepartamentoList,
     all_data: false,
     itemKey: "id",
     entityFields: userFields,

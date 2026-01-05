@@ -215,6 +215,17 @@ export const useFormEntity = () => {
       }));
   };
 
+  function useSelectOptions(hook, keyId, keyLabel) {
+  const { data } = hook({ all_data: true });
+
+  return (
+    data?.data?.map(item => ({
+      value: item[keyId],
+      label: item[keyLabel],
+    })) || []
+  );
+}
+
   const todosDatosOpaginacion = (fetchDataHook, params = {}) => {
     const { all_data = false } = params;
     const { currentPage, handlePageChange } = usePagination();
@@ -272,5 +283,6 @@ export const useFormEntity = () => {
     destructuring,
     paraSelectsdestructuringYMap,
     todosDatosOpaginacion,
+    useSelectOptions,
   };
 };

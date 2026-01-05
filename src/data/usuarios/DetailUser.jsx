@@ -42,9 +42,9 @@ export default function DetailUser() {
           
           {/* Columna izquierda: Foto de perfil */}
           <div className="flex flex-col items-center">
-            {user?.data?.avatar_url ? (
+            {user?.data?.imagen ? (
               <img
-                src={user.data.avatar_url}
+                src={user.data.imagen}
                 alt={`${user.data.first_name} ${user.data.last_name}`}
                 className="w-48 h-48 rounded-full mb-4 object-cover shadow-lg border-2 border-blue-600"
               />

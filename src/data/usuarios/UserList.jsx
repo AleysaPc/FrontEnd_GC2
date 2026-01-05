@@ -1,8 +1,6 @@
 import { StatusBadge } from "../../components/shared/StatusBadge";
-import FormattedDate from "../../components/shared/FormattedDate";
 import EntityList from "../../components/shared/EntityList";
-import { useUsers } from "../../hooks/useEntities";
-import { FaUber } from "react-icons/fa";
+import { useUsuariosList } from "../../hooks/useEntities";
 import { ActionButton } from "../../components/shared/ActionButton";
 import { FaEdit, FaEye } from "react-icons/fa";
 import { FaPlus } from "react-icons/fa";
@@ -62,7 +60,7 @@ function UserList() {
       render: (row) => `${row.last_name ?? ""} ${row.secund_last_name ?? ""}`,
     },
 
-    { key: "rol", label: "Rol" },
+    { key: "roles", label: "Roles", render: (item) =>item.roles.join("-") },
     { key: "nombre_departamento", label: "Departamento" },
 
     {
@@ -77,7 +75,7 @@ function UserList() {
     subTitle: "Listado de usuarios",
     loadingMessage: "Cargando usuarios...",
     errorMessage: "Error al obtener los usuarios",
-    fetchDataHook: useUsers,
+    fetchDataHook: useUsuariosList,
     all_data: false,
     itemKey: "id",
     entityFields: userFields,
