@@ -42,9 +42,9 @@ export default function DetailUser() {
           
           {/* Columna izquierda: Foto de perfil */}
           <div className="flex flex-col items-center">
-            {user?.data?.avatar_url ? (
+            {user?.data?.imagen ? (
               <img
-                src={user.data.avatar_url}
+                src={user.data.imagen}
                 alt={`${user.data.first_name} ${user.data.last_name}`}
                 className="w-48 h-48 rounded-full mb-4 object-cover shadow-lg border-2 border-blue-600"
               />
@@ -54,7 +54,7 @@ export default function DetailUser() {
               </div>
             )}
             <p className="font-medium text-blue-700 text-lg text-center">
-              {user?.data?.first_name} {user?.data?.secund_name} {user?.data?.last_name} {user?.data?.secund_last_name}
+              {user?.data?.first_name} {user?.data?.second_name} {user?.data?.last_name} {user?.data?.second_last_name}
             </p>
             <p className="text-gray-600">{user?.data?.rol}</p>
             <p className="text-gray-600">{user?.data?.cargo}</p>

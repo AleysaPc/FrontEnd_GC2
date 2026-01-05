@@ -18,54 +18,51 @@ import {
 } from "react-icons/fa";
 import EditEntity from "../../components/shared/EditEntity";
 import { useFormEntity } from "../../utils/useFormEntity";
+import ImagePreview from "../../components/shared/ImagePreview";
 
 export default function EditUser() {
   const { paraSelectsdestructuringYMap } = useFormEntity();
   const { options } = useFormEntity();
   // Opciones para selects
-  
-    const {
-      data: rolesData,
-      isLoading: loadingRoles,
-      error: errorRoles,
-    } = useRoles({ all_data: true });
-    const rolesArray = rolesData?.data || [];
 
-    const {
-      data: institucionData,
-      isLoading: loadingInstituciones,
-      error: errorInstituciones,
-    } = useInstituciones({ all_data: true });
-    const institucionesArray = institucionData?.data || [];
-  
-    const {
-      data: departamentosData,
-      isLoading: loadingDepartamentos,
-      error: errorDepartamentos,
-    } = useDepartamentos({ all_data: true });
+  const {
+    data: rolesData,
+    isLoading: loadingRoles,
+    error: errorRoles,
+  } = useRoles({ all_data: true });
+  const rolesArray = rolesData?.data || [];
 
-    const departamentosArray = departamentosData?.data || [];
-    const institucionOptions = () =>
-      institucionesArray
-        ? options(institucionesArray, "id_institucion", "razon_social")
-        : [];
-    
-    const rolesOptions = () =>
-      rolesArray
-        ? options(rolesArray, "id_rol", "name")
-        : [];
+  const {
+    data: institucionData,
+    isLoading: loadingInstituciones,
+    error: errorInstituciones,
+  } = useInstituciones({ all_data: true });
+  const institucionesArray = institucionData?.data || [];
 
-    const departamentosOptions = () =>
-      departamentosArray
-        ? options(departamentosArray, "id", "nombre")
-        : [];
+  const {
+    data: departamentosData,
+    isLoading: loadingDepartamentos,
+    error: errorDepartamentos,
+  } = useDepartamentos({ all_data: true });
+
+  const departamentosArray = departamentosData?.data || [];
+  const institucionOptions = () =>
+    institucionesArray
+      ? options(institucionesArray, "id_institucion", "razon_social")
+      : [];
+
+  const rolesOptions = () =>
+    rolesArray ? options(rolesArray, "id_rol", "name") : [];
+
+  const departamentosOptions = () =>
+    departamentosArray ? options(departamentosArray, "id", "nombre") : [];
 
   // Configuración inicial del formulario con datos de la entidad
   const configuracionFormulario = (entidad) => ({
     first_name: entidad?.first_name || "",
-    secund_name: entidad?.secund_name || "",
+    second_name: entidad?.second_name || "",
     last_name: entidad?.last_name || "",
-    secund_last_name: entidad?.secund_last_name || "",
+    second_last_name: entidad?.second_last_name || "",
     username: entidad?.username || "",
     email: entidad?.email || "",
     birthday: entidad?.birthday || "",
@@ -82,14 +79,16 @@ export default function EditUser() {
     is_superuser: entidad?.is_superuser || false,
     notes: entidad?.notes || "",
     new_password: "",
+    imagen: entidad?.imagen || null,
   });
 
   // Datos adicionales para envío
   const camposExtras = (formValues) => ({
-      departamento: Number(formValues.departamento),
-      institucion: Number(formValues.institucion),
-      rol: Number(formValues.rol),
+    departamento: Number(formValues.departamento),
+    institucion: Number(formValues.institucion),
+    rol: Number(formValues.rol),
     new_password: formValues.new_password || undefined,
+    imagen: formValues.imagen || null,
   });
 
   const paraEnvio = (formValues) => ({
@@ -110,7 +109,7 @@ export default function EditUser() {
     {
       component: InputField,
       label: "Segundo nombre",
-      name: "secund_name",
+      name: "second_name",
       onChange: manejarEntradas.handleInputChange,
     },
     {
@@ -123,7 +122,7 @@ export default function EditUser() {
     {
       component: InputField,
       label: "Apellido materno",
-      name: "secund_last_name",
+      name: "second_last_name",
       onChange: manejarEntradas.handleInputChange,
     },
     {
@@ -286,6 +285,28 @@ export default function EditUser() {
       name: "notes",
       onChange: manejarEntradas.handleInputChange,
     },
+    {
+      name: "imagen",
+      component: () => (
+        <div className="space-y-2">
+          <div className="font-medium text-gray-700">
+            Imagen Actual
+            <ImagePreview
+              image={formValues.imagen}
+              alt={`Imagen de ${formValues.nombre || "imagen"}`}
+              className="h-40 w-40 mb-4"
+            />
+            <InputField
+              label="Cambiar imagen"
+              name="imagen"
+              type="file"
+              accept="image/*"
+              onChange={manejarEntradas.handleInputChange}
+            />
+          </div>
+        </div>
+      ),
+    },
   ];
 
   const paraNavegacion = {
@@ -297,7 +318,8 @@ export default function EditUser() {
         to: "/userList",
         label: "Volver",
         icon: FaBackspace,
-        estilos : "bg-gray-500 hover:bg-gray-800 text-white px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",
+        estilos:
+          "bg-gray-500 hover:bg-gray-800 text-white px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",
       },
     ],
   };

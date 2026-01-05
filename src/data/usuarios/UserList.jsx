@@ -54,12 +54,12 @@ function UserList() {
     {
       key: "nombre",
       label: "Nombre",
-      render: (item) => `${item.first_name ?? ""} ${item.secund_name ?? ""}`,
+      render: (item) => `${item.first_name ?? ""} ${item.second_name ?? ""}`,
     },
     {
       key: "apellido_completo",
       label: "Apellidos",
-      render: (row) => `${row.last_name ?? ""} ${row.secund_last_name ?? ""}`,
+      render: (row) => `${row.last_name ?? ""} ${row.second_last_name ?? ""}`,
     },
 
     { key: "rol", label: "Rol" },

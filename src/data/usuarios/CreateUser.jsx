@@ -11,6 +11,7 @@ import { ToggleSwitch } from "../../components/shared/ToggleSwitch";
 import { CheckBox } from "../../components/shared/CheckBox";
 import { FaArrowLeft, FaPlus, FaEye } from "react-icons/fa";
 import CreateEntity from "../../components/shared/CreateEntity";
+import ImagePreview from "../../components/shared/ImagePreview";
 
 export default function CreateUser() {
   const { options } = useFormEntity();
@@ -46,9 +47,9 @@ export default function CreateUser() {
   // Configuración inicial del formulario
   const configForm = {
     first_name: "",
-    secund_name: "",
+    second_name: "",
     last_name: "",
-    secund_last_name: "",
+    second_last_name: "",
     username: "",
     email: "",
     birthday: "",
@@ -67,6 +68,7 @@ export default function CreateUser() {
     id_rol: "",
     id_departamento: "",
     notes: "",
+    imagen: "",
   };
 
   // Datos adicionales para envío
@@ -78,6 +80,7 @@ export default function CreateUser() {
     institucion: formValues.id_institucion
       ? Number(formValues.id_institucion)
       : null,
+    imagen: formValues.imagen || null,
   });
 
   const paraEnvio = (formValues) => ({
@@ -97,7 +100,7 @@ export default function CreateUser() {
     {
       component: InputField,
       label: "Segundo nombre",
-      name: "secund_name",
+      name: "second_name",
       onChange: manejarEntradas.handleInputChange,
     },
     {
@@ -110,7 +113,7 @@ export default function CreateUser() {
     {
       component: InputField,
       label: "Apellido materno",
-      name: "secund_last_name",
+      name: "second_last_name",
       onChange: manejarEntradas.handleInputChange,
     },
     {
@@ -242,6 +245,28 @@ export default function CreateUser() {
       label: "Observaciones",
       name: "notes",
       onChange: manejarEntradas.handleInputChange,
+    },
+    {
+      name: "imagen",
+      component: () => (
+        <div className="space-y-2">
+          <div className="font-medium text-gray-700">
+            Imagen Actual
+            <ImagePreview
+              image={formValues.imagen}
+              alt={`Imagen de ${formValues.nombre || "imagen"}`}
+              className="h-40 w-40 mb-4"
+            />
+            <InputField
+              label="Cambiar imagen"
+              name="imagen"
+              type="file"
+              accept="image/*"
+              onChange={manejarEntradas.handleInputChange}
+            />
+          </div>
+        </div>
+      ),
     },
   ];
 

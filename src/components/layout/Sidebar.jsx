@@ -1,7 +1,7 @@
 import { useState, useContext } from "react";
 import SidebarMenu from "./SidebarMenu";
 import { menus } from "../../data/SidebarData";
-import { FaBuilding } from "react-icons/fa";
+import { FaBuilding, FaUser } from "react-icons/fa";
 import { useUser } from "../../hooks/useEntities";
 import { obtenerIdUser } from "../../utils/auth";
 import { AuthContext } from "../../context/AuthContext";
@@ -26,24 +26,29 @@ const Sidebar = ({ isVisible }) => {
 
       {/* Sección de Perfil de Usuario */}
       <div
-        className="px-4 py-6 border-b flex flex-col items-center justify-center text-center"
+        className="flex flex-col items-center p-4"
         style={{ backgroundColor: "rgba(10, 89, 92, 0.9)" }}
       >
-        {/* Avatar */}
-        <div className="mb-3">
-          <div className="w-16 h-16 rounded-full bg-red-700 flex items-center justify-center text-white font-semibold text-xl">
-            {user?.data?.first_name?.substring(0, 2).toUpperCase() || "US"}
+        {user?.data?.imagen ? (
+          <img
+            src={user.data.imagen}
+            alt={`${user.data.first_name} ${user.data.last_name}`}
+            className="w-28 h-28 rounded-full mb-4 object-cover shadow-lg "
+          />
+        ) : (
+          <div className="w-28 h-28 rounded-full mb-4 bg-white flex items-center justify-center text-gray-500 text-6xl border-2 border-gray-200 shadow-sm">
+            <FaUser />
           </div>
-        </div>
+        )}
         {/* Información del usuario */}
         <div className="text-center text-xl">
           <p className=" font-normal text-white">
             {user?.data?.first_name || "Usuario"}{" "}
-            {user?.data?.secund_name || ""}
+            {user?.data?.second_name || ""}
           </p>
           <p className=" font-normal text-white">
             {user?.data?.last_name || "Usuario"}{" "}
-            {user?.data?.secund_last_name || ""}
+            {user?.data?.second_last_name || ""}
           </p>
           <p className="text-center text-white">
             {user?.data?.email || "correo@ejemplo.com"}
