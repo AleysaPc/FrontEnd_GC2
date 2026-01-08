@@ -65,7 +65,7 @@ export default function CreateUser() {
     celular: "",
     institucion: "",
     id_institucion: "",
-    id_rol: "",
+    id_roles: "",
     id_departamento: "",
     notes: "",
     imagen: "",
@@ -193,7 +193,7 @@ export default function CreateUser() {
     {
       component: SelectField,
       label: "Rol",
-      name: "id_rol",
+      name: "id_roles",
       options: rolesOptions,
       onChange: manejarEntradas.handleInputChange,
     },

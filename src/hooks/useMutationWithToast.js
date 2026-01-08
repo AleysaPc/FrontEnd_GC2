@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
+import { mostrarErrores } from "../utils/mostrarErrores";
 
 export const useMutationWithToast = (
   mutationFn,
@@ -10,22 +11,32 @@ export const useMutationWithToast = (
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data) =>
-      toast.promise(mutationFn(data), {
-        loading: loadingMsg,
-        success: successMsg,
-        error: (error) =>
-          `Error: ${error.response?.data?.detail || error.message}`,
-      }),
-    onSuccess: () => {
-      if (queryKeyToInvalidate) {
-        queryClient.invalidateQueries([queryKeyToInvalidate]); // Invalida la query correcta
+    mutationFn: async (data) => {
+      const toastId = toast.loading(loadingMsg);
+      try {
+        const result = await mutationFn(data);
+        toast.success(successMsg, { id: toastId });
+        return result;
+      } catch (error) {
+        toast.dismiss(toastId);
+
+        let errorData = error.response?.data || error;
+
+        // Si viene como string JSON, parsearlo
+        if (typeof errorData === "string") {
+          try {
+            errorData = JSON.parse(errorData);
+          } catch {
+            // si no se puede parsear, usar como mensaje
+            errorData = { error: errorData };
+          }
+        }
+
+        mostrarErrores(errorData); // extraer y mostrar todos los mensajes limpios
+        throw error;
       }
     },
-    onError: (error) => {
-      console.error("Error en la mutación:", error);
-    },
-    onSettled: () => {
+    onSuccess: () => {
       if (queryKeyToInvalidate) {
         queryClient.invalidateQueries([queryKeyToInvalidate]);
       }
