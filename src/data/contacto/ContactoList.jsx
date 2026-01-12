@@ -10,14 +10,41 @@ import { FaTrash } from "react-icons/fa";
 export default function ContactoList() {
   const contactosMutations = useContactoMutations();
 
-  const handleEliminar = async (id_contacto) => {
-    if (!confirm("¿Seguro que deseas eliminar este contacto?")) return;
-    try {
-      await contactosMutations.eliminar.mutateAsync({ id: id_contacto });
-    } catch (error) {
-      console.error("Error al eliminar:", error);
-      toast.error("Error al eliminar el contacto");
-    }
+  const handleEliminar = (id_contacto) => {
+    toast(
+      (t) => (
+        <div className="flex flex-col gap-2">
+          <p className="text-sm">¿Seguro que deseas eliminar este usuario?</p>
+
+          <div className="flex justify-end gap-2">
+            <button
+              className="px-3 py-1 text-sm bg-gray-200 rounded"
+              onClick={() => toast.dismiss(t.id_contacto)}
+            >
+              Cancelar
+            </button>
+
+            <button
+              className="px-3 py-1 text-sm bg-red-600 text-white rounded"
+              onClick={async () => {
+                toast.dismiss(t.id_contacto);
+                try {
+                  await contactosMutations.eliminar.mutateAsync({ id: id_contacto });
+                  toast.success("Usuario eliminado correctamente");
+                } catch (error) {
+                  toast.error("Error al eliminar el usuario");
+                }
+              }}
+            >
+              Eliminar
+            </button>
+          </div>
+        </div>
+      ),
+      {
+        duration: Infinity, // ⏳ hasta que el usuario decida
+      }
+    );
   };
 
   const useFields = () => [

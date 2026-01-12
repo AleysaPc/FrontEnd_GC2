@@ -2,6 +2,7 @@ import EntityForm from "./EntityForm";
 import { useFormEntity } from "../../utils/useFormEntity";
 import { useState } from "react";
 import { useFormCacheSession } from "../../hooks/useFormCacheSession";
+import { toast } from "react-hot-toast";
 
 export default function CreateEntity({
   useEntityMutations,
@@ -23,13 +24,15 @@ export default function CreateEntity({
     crearEstadoFomulario(configForm)
   );
 
-  
   // ✅ Conectamos el cache (clave única por formulario)
   // En CreateEntity.jsx
-// Usa una clave única basada en el tipo de formulario
-const formCacheKey = `form_${configForm.formType}`; // ahora será único por formulario
-const { clearCache } = useFormCacheSession(formCacheKey, formValues, setFormValues);
-
+  // Usa una clave única basada en el tipo de formulario
+  const formCacheKey = `form_${configForm.formType}`; // ahora será único por formulario
+  const { clearCache } = useFormCacheSession(
+    formCacheKey,
+    formValues,
+    setFormValues
+  );
 
   const handleInputChange = manejarCambioDeEntrada(setFormValues);
   const handleToggleChange = manejarCambioDeEstado(setFormValues);
@@ -46,22 +49,21 @@ const { clearCache } = useFormCacheSession(formCacheKey, formValues, setFormValu
 
     // Validación de Contraseña solo si existen los campos 'password' y 'confirm_password'
     if (
-      (formValues.password ?? false) &&
-      (formValues.confirm_password ?? false)
+      formValues.password &&
+      formValues.confirm_password &&
+      formValues.password !== formValues.confirm_password
     ) {
-      if (formValues.password !== formValues.confirm_password) {
-        alert("Las contraseñas no coinciden.");
-        return;
-      }
+      toast.error("Las contraseñas no coinciden", {
+        duration: 4000,
+        icon: "🔒",
+      });
+      return; // 🔑 DETIENE el submit
     }
-
-
 
     manejarEnvio(event, envio.link, formValues, crear, null, envio.entityId, {
       ...envio.params,
     });
     clearCache();
-    
   };
 
   const fields = construirCampos(formValues, manejarEntradas);

@@ -13,14 +13,41 @@ import { FaTrash } from "react-icons/fa";
 function UserList() {
   const userMutations = useUserMutations();
 
-  const handleEliminar = async (id) => {
-    if (!confirm("¿Seguro que deseas eliminar este rol?")) return;
-    try {
-      await userMutations.eliminar.mutateAsync({ id });
-    } catch (error) {
-      console.error("Error al eliminar:", error);
-      toast.error("Error al eliminar el usuario");
-    }
+  const handleEliminar = (id) => {
+    toast(
+      (t) => (
+        <div className="flex flex-col gap-2">
+          <p className="text-sm">¿Seguro que deseas eliminar este usuario?</p>
+
+          <div className="flex justify-end gap-2">
+            <button
+              className="px-3 py-1 text-sm bg-gray-200 rounded"
+              onClick={() => toast.dismiss(t.id)}
+            >
+              Cancelar
+            </button>
+
+            <button
+              className="px-3 py-1 text-sm bg-red-600 text-white rounded"
+              onClick={async () => {
+                toast.dismiss(t.id);
+                try {
+                  await userMutations.eliminar.mutateAsync({ id });
+                  toast.success("Usuario eliminado correctamente");
+                } catch (error) {
+                  toast.error("Error al eliminar el usuario");
+                }
+              }}
+            >
+              Eliminar
+            </button>
+          </div>
+        </div>
+      ),
+      {
+        duration: Infinity, // ⏳ hasta que el usuario decida
+      }
+    );
   };
   const userFields = () => [
     { key: "index", label: "#" },
@@ -82,12 +109,12 @@ function UserList() {
     itemKey: "id",
     entityFields: userFields,
     filtros: [
-      {name: "nombre_completo", placeholder: "Nombre"},
-      {name: "email", placeholder: "Email"},
-      {name: "username", placeholder: "Username"},
-      {name: "institucion__razon_social", placeholder: "Institucion"},
-      {name: "departamento", placeholder: "Departamento"},
-      {name: "cargo", placeholder: "Cargo"},
+      { name: "nombre_completo", placeholder: "Nombre" },
+      { name: "email", placeholder: "Email" },
+      { name: "username", placeholder: "Username" },
+      { name: "institucion__razon_social", placeholder: "Institucion" },
+      { name: "departamento", placeholder: "Departamento" },
+      { name: "cargo", placeholder: "Cargo" },
     ],
     actions: [
       {
