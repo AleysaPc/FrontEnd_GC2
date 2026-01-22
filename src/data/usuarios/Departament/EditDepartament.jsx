@@ -2,7 +2,7 @@ import { useFormEntity } from "../../../utils/useFormEntity";
 import {
   useDepartamentoMutations,
   useDepartamento,
-  useUsers,
+  useUser,
 } from "../../../hooks/useEntities";
 import { InputField } from "../../../components/shared/InputField";
 import { ToggleSwitch } from "../../../components/shared/ToggleSwitch";
@@ -15,7 +15,7 @@ export default function EditDepartament() {
   const { paraSelectsdestructuringYMap } = useFormEntity();
 
 const responsableOptions = () =>
-    paraSelectsdestructuringYMap(useUsers, true, "id", "username");
+    paraSelectsdestructuringYMap(useUser, true, "id", "username");
 
   const configuracionFormulario = (entidad) => ({
     nombre: entidad?.nombre || "",

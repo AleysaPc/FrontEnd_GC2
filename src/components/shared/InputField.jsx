@@ -1,6 +1,12 @@
 import { useState } from "react";
 
-export function InputField({ label, type = "text", value, ...props }) {
+export function InputField({
+  label,
+  type = "text",
+  value,
+  formValue,   // 👈 lo extraes
+  ...props
+}) {
   const [showPassword, setShowPassword] = useState(false);
 
   const isPassword = type === "password";
@@ -14,7 +20,7 @@ export function InputField({ label, type = "text", value, ...props }) {
 
       <input
         type={inputType}
-        {...props}
+        {...props}   // 👈 aquí ya NO va formValue
         className={`w-full p-2 text-sm border border-gray-300 rounded ${
           isPassword ? "pr-10" : ""
         }`}

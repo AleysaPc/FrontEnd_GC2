@@ -1,9 +1,9 @@
 import { useFormEntity } from "../../utils/useFormEntity";
 import {
-  useRoles,
+  useRolesList,
   useUserMutations,
   useInstituciones,
-  useDepartamentos,
+  useDepartamentoList,
 } from "../../hooks/useEntities";
 import { InputField } from "../../components/shared/InputField";
 import { SelectField } from "../../components/shared/SelectField";
@@ -18,12 +18,10 @@ export default function CreateUser() {
   const { paraSelectsdestructuringYMap } = useFormEntity();
 
   // Selects
-  const departamentosOptions = paraSelectsdestructuringYMap(
-    useDepartamentos,
-    true,
-    "id",
-    "nombre"
-  );
+  const { data: departamentoData } = useDepartamentoList({ all_data: true });
+  const departamentosOptions = departamentoData?.data
+    ? options(departamentoData.data, "id", "nombre")
+    : [];
   //Institución
   const {
     data: institucionesData,
@@ -32,11 +30,15 @@ export default function CreateUser() {
   } = useInstituciones({ all_data: true });
 
   //Rol
-  const { data: roleData } = useRoles({ all_data: true });
-  const rolesOptions = roleData?.data
-    ? options(roleData.data, "id", "name")
-    : [];
+  const {
+    data: rolesData,
+    isLoading: loadingRoles,
+    error: errorRoles,
+  } = useRolesList({ all_data: true });
+  const rolesArray = rolesData?.data || [];
 
+  const rolesOptions = () =>
+    rolesArray ? options(rolesArray, "id", "name") : [];
   const institucionesArray = institucionesData?.data || [];
 
   const institucionOptions = () =>
@@ -65,23 +67,27 @@ export default function CreateUser() {
     celular: "",
     institucion: "",
     id_institucion: "",
-    id_roles: "",
+    id_roles:"",
+    roles: "",
     id_departamento: "",
     notes: "",
     imagen: "",
   };
 
   // Datos adicionales para envío
-  const camposExtras = (formValues) => ({
-    rol: formValues.id_rol ? Number(formValues.id_rol) : null,
-    departamento: formValues.id_departamento
-      ? Number(formValues.id_departamento)
-      : null,
-    institucion: formValues.id_institucion
-      ? Number(formValues.id_institucion)
-      : null,
-    imagen: formValues.imagen || null,
-  });
+  const camposExtras = (formValues) => {
+    const rolId = Number(formValues.id_roles);
+    return {
+      roles: rolId ? [{ id: rolId }] : [],
+      departamento: formValues.id_departamento
+        ? Number(formValues.id_departamento)
+        : null,
+      institucion: formValues.id_institucion
+        ? Number(formValues.id_institucion)
+        : null,
+      imagen: formValues.imagen || null,
+    };
+  };
 
   const paraEnvio = (formValues) => ({
     link: "/userList",
@@ -194,7 +200,8 @@ export default function CreateUser() {
       component: SelectField,
       label: "Rol",
       name: "id_roles",
-      options: rolesOptions,
+      options: rolesOptions(),
+      formValue: formValues.id_roles,
       onChange: manejarEntradas.handleInputChange,
     },
     {

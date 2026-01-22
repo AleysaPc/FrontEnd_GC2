@@ -1,8 +1,8 @@
 import {
-  useRoles,
+  useRolesList,
   useUserMutations,
   useUser,
-  useDepartamentos,
+  useDepartamentoList,
   useInstituciones,
 } from "../../hooks/useEntities";
 import { InputField } from "../../components/shared/InputField";
@@ -29,7 +29,7 @@ export default function EditUser() {
     data: rolesData,
     isLoading: loadingRoles,
     error: errorRoles,
-  } = useRoles({ all_data: true });
+  } = useRolesList({ all_data: true });
   const rolesArray = rolesData?.data || [];
 
   const {
@@ -43,7 +43,7 @@ export default function EditUser() {
     data: departamentosData,
     isLoading: loadingDepartamentos,
     error: errorDepartamentos,
-  } = useDepartamentos({ all_data: true });
+} = useDepartamentoList({ all_data: true });
 
   const departamentosArray = departamentosData?.data || [];
   const institucionOptions = () =>
@@ -52,7 +52,7 @@ export default function EditUser() {
       : [];
 
   const rolesOptions = () =>
-    rolesArray ? options(rolesArray, "id_rol", "name") : [];
+    rolesArray ? options(rolesArray, "id", "name") : [];
 
   const departamentosOptions = () =>
     departamentosArray ? options(departamentosArray, "id", "nombre") : [];
@@ -72,7 +72,8 @@ export default function EditUser() {
     cargo: entidad?.cargo || "",
     telefono: entidad?.telefono || "",
     celular: entidad?.celular || "",
-    rol: entidad?.rol || "",
+    roles: entidad?.roles || "",
+    id_roles: entidad?.roles_id || "",
     institucion: entidad?.institucion || "",
     departamento: entidad?.departamento || "",
     is_active: entidad?.is_active || false,
@@ -83,14 +84,19 @@ export default function EditUser() {
   });
 
   // Datos adicionales para envío
-  const camposExtras = (formValues) => ({
-    departamento: Number(formValues.departamento),
-    institucion: Number(formValues.institucion),
-    rol: Number(formValues.rol),
-    new_password: formValues.new_password || undefined,
-    imagen: formValues.imagen || null,
-  });
+  const camposExtras = (formValues) => {
+    // Obtener el ID del rol seleccionado
+    const rolId = Number(formValues.roles);
 
+    return {
+      departamento: Number(formValues.departamento),
+      institucion: Number(formValues.institucion),
+      // Envía un array de objetos con el formato que espera el backend
+      roles: rolId ? [{ id: rolId }] : [],
+      new_password: formValues.new_password || undefined,
+      imagen: formValues.imagen || null,
+    };
+  };
   const paraEnvio = (formValues) => ({
     entityId: formValues.id,
     link: "/userList",
@@ -193,9 +199,9 @@ export default function EditUser() {
     {
       component: SelectField,
       label: "Rol",
-      name: "rol",
+      name: "roles",
       options: rolesOptions(),
-      formValue: formValues.rol,
+      formValue: formValues.roles,
       onChange: manejarEntradas.handleInputChange,
       actionButtons: [
         {

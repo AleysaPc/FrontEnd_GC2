@@ -1,5 +1,5 @@
 import EntityList from "../../../components/shared/EntityList";
-import { useRoles, useRolMutations } from "../../../hooks/useEntities";
+import { useRolesList, useRolMutations } from "../../../hooks/useEntities";
 import { ActionButton } from "../../../components/shared/ActionButton";
 import { FaEdit, FaTrash, FaPlus } from "react-icons/fa";
 import { toast } from "react-hot-toast";
@@ -51,7 +51,7 @@ export default function RolList() {
     subTitle: "Listado de roles",
     loadingMessage: "Cargando roles...",
     errorMessage: "Error al obtener los roles",
-    fetchDataHook: useRoles,
+    fetchDataHook: useRolesList,
     all_data: false,
     itemKey: "id",
     entityFields: useFields,

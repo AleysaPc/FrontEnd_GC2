@@ -4,7 +4,7 @@ import { ToggleSwitch } from "../../../components/shared/ToggleSwitch";
 import  CreateEntity from "../../../components/shared/CreateEntity";
 import { FaPlus, FaBackspace } from "react-icons/fa";
 import { useDepartamentoMutations } from "../../../hooks/useEntities";
-import { useDepartamentos } from "../../../hooks/useEntities";
+import { useDepartamentoList } from "../../../hooks/useEntities";
 
 export default function CreateDepartament() {
     const { paraSelectsdestructuringYMap } = useFormEntity();
@@ -57,7 +57,7 @@ export default function CreateDepartament() {
     return (
         <CreateEntity
             useEntityMutations={useDepartamentoMutations}
-            useEntity={useDepartamentos}
+            useEntity={useDepartamentoList}
             configForm={configuracionFormulario}
             paraEnvio={paraEnvio}
             construirCampos={construirCampos}

@@ -8,11 +8,15 @@ import {
 } from "../api/correspondencia.api";
 import useData from "./useData";
 import {
-  CustomUsersAPI,
+  CustomUserListApi,
   RolesApi,
+  RolListApi,
   PasswordResetAPI,
   DepartamentosApi,
+  DepartamentoListApi,
   PermisosApi,
+  CustomUsersAPi,
+  PermisoListApi,
 } from "../api/usuario.api";
 import { useMutationWithToast } from "./useMutationWithToast";
 import { ContactoApi, InstitucionApi } from "../api/contacto.api";
@@ -20,38 +24,6 @@ import { DocumentoApi, PlantillaDocumentoApi } from "../api/documento.api";
 
 // Default stale time for queries (5 minutes)
 const DEFAULT_STALE_TIME = 1000 * 60 * 5;
-
-//productos
-export const useProducts = (
-  params = {},
-  enabled = true,
-  staleTime = 1000 * 60 * 5
-) => {
-  const defaultParams = {
-    all_data: false,
-    page: 1,
-    per_page: 10,
-    filters: {},
-    ordering: "",
-    search: "",
-  };
-
-  const mergedParams =
-    //params sobreescribe defaultParams si hay campos repetidos
-    { ...defaultParams, ...params };
-  return useData(
-    ProductosAPI,
-    "productos",
-    null,
-    mergedParams,
-    staleTime,
-    enabled
-  );
-};
-
-//para obtener un solo producto
-export const useProduct = (id) =>
-  useData(ProductosAPI, "producto", id, {}, 1000 * 60 * 5, !!id);
 
 //Correspondencia
 export const useCorrespondencias = (
@@ -223,9 +195,8 @@ export const useAccionCorrespondencia = (id) =>
 export const useAccionCorrespondenciaMutations = () =>
   useEntityMutations(AccionCorrespondenciaApi, "acciones");
 
-
-//users
-export const useUsers = (
+//UsersList
+export const useCustomUserList = (
   params = {},
   enable = true,
   staleTime = 1000 * 60 * 5
@@ -243,8 +214,8 @@ export const useUsers = (
     //params sobreescribe defaultParams si hay campos repetidos
     { ...defaultParams, ...params };
   return useData(
-    CustomUsersAPI,
-    "users",
+    CustomUserListApi,
+    "usuarios-list",
     null,
     mergedParams,
     staleTime,
@@ -252,12 +223,11 @@ export const useUsers = (
   );
 };
 export const useUser = (id) =>
-  useData(CustomUsersAPI, "user", id, {}, 1000 * 60 * 5, !!id);
-export const useUserMutations = () =>
-  useEntityMutations(CustomUsersAPI, "Usuario");
+  useData(CustomUsersAPi, "user", id, {}, 1000 * 60 * 5, !!id);
+export const useUserMutations = () => useEntityMutations(CustomUsersAPi, "Usuario");
 
-//roles
-export const useRoles = (
+//Permisos
+export const usePermisoList = (
   params = {},
   enable = true,
   staleTime = 1000 * 60 * 5
@@ -274,11 +244,35 @@ export const useRoles = (
   const mergedParams =
     //params sobreescribe defaultParams si hay campos repetidos
     { ...defaultParams, ...params };
-  return useData(RolesApi, "roles", null, mergedParams, staleTime, enable);
+  return useData(PermisoListApi, "permisos-list", null, mergedParams, staleTime, enable);
+};
+export const usePermiso = (id) =>
+  useData(PermisosApi, "permisos", id, {}, 1000 * 60 * 5, !!id);
+export const usePermisosMutations = () => useEntityMutations(PermisosApi, "permisos");
+
+//roles
+export const useRolesList = (
+  params = {},
+  enable = true,
+  staleTime = 1000 * 60 * 5
+) => {
+  const defaultParams = {
+    all_data: false,
+    page: 1,
+    per_page: 10,
+    filters: {},
+    ordering: "",
+    search: "",
+  };
+
+  const mergedParams =
+    //params sobreescribe defaultParams si hay campos repetidos
+    { ...defaultParams, ...params };
+  return useData(RolListApi, "roles-list", null, mergedParams, staleTime, enable);
 };
 export const useRol = (id) =>
-  useData(RolesApi, "rol", id, {}, 1000 * 60 * 5, !!id);
-export const useRolMutations = () => useEntityMutations(RolesApi, "Rol");
+  useData(RolesApi, "roles", id, {}, 1000 * 60 * 5, !!id);
+export const useRolMutations = () => useEntityMutations(RolesApi, "roles");
 
 // password reset
 export const usePasswordResetConfirm = () => {
@@ -299,7 +293,7 @@ export const usePasswordResetRequest = () => {
 };
 
 //Departamentos
-export const useDepartamentos = (
+export const useDepartamentoList = (
   params = {},
   enable = true,
   staleTime = 1000 * 60 * 5
@@ -317,8 +311,8 @@ export const useDepartamentos = (
     //params sobreescribe defaultParams si hay campos repetidos
     { ...defaultParams, ...params };
   return useData(
-    DepartamentosApi,
-    "departamentos",
+    DepartamentoListApi,
+    "departamentos-list",
     null,
     mergedParams,
     staleTime,

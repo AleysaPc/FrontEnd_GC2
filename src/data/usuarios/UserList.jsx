@@ -1,7 +1,7 @@
 import { StatusBadge } from "../../components/shared/StatusBadge";
 import FormattedDate from "../../components/shared/FormattedDate";
 import EntityList from "../../components/shared/EntityList";
-import { useUsers } from "../../hooks/useEntities";
+import { useCustomUserList } from "../../hooks/useEntities";
 import { FaUber } from "react-icons/fa";
 import { ActionButton } from "../../components/shared/ActionButton";
 import { FaEdit, FaEye } from "react-icons/fa";
@@ -46,7 +46,7 @@ function UserList() {
       ),
       {
         duration: Infinity, // ⏳ hasta que el usuario decida
-      }
+      },
     );
   };
   const userFields = () => [
@@ -89,7 +89,12 @@ function UserList() {
       render: (row) => `${row.last_name ?? ""} ${row.second_last_name ?? ""}`,
     },
 
-    { key: "rol", label: "Rol" },
+    {
+      key: "roles",
+      label: "Rol",
+      render: (item) =>
+        Array.isArray(item.roles) ? item.roles.join(", ") : "Sin roles",
+    },
     { key: "nombre_departamento", label: "Departamento" },
 
     {
@@ -104,7 +109,7 @@ function UserList() {
     subTitle: "Listado de usuarios",
     loadingMessage: "Cargando usuarios...",
     errorMessage: "Error al obtener los usuarios",
-    fetchDataHook: useUsers,
+    fetchDataHook: useCustomUserList,
     all_data: false,
     itemKey: "id",
     entityFields: userFields,

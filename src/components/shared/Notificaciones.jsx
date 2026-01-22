@@ -24,8 +24,6 @@ const Notificaciones = () => {
     }
   }, [data]);
 
-  console.log("DATOS DE LA NOTIICAIÓN QUE SE OBTIENE?", data)
-
   // Contar cuántas notificaciones no han sido vistas
   const count = notificaciones.filter((noti) => !noti.visto).length;
 

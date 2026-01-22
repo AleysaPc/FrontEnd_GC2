@@ -12,6 +12,13 @@ const Navbar = ({ toggleSidebar, user }) => {
   const api = createApiInstance();
 
   const handleGenerarPreSello = async () => {
+    const confirmado = window.confirm(
+      "¿Confirma la generación del sello de correspondencia?\n\n" +
+        "Esta acción generará un nuevo número de registro y no podrá deshacerse."
+    );
+
+    if (!confirmado) return;
+
     try {
       const { data } = await api.post("/correspondencia/generar_pre_sello/");
 
@@ -27,7 +34,7 @@ const Navbar = ({ toggleSidebar, user }) => {
 
       // Sello
       const selloX = pageWidth - 100;
-      const selloY = 8;
+      const selloY = 26;
       const selloWidth = 90;
 
       // Marco azul
