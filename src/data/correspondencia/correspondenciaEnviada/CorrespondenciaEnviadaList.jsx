@@ -90,7 +90,7 @@ function CorrespondenciaEnviadaList() {
         ...params,
         filters: {
           ...params.filters,
-          estado: "enviado", // filtro por estado enviado
+          estado: "aprobado", // filtro por estado enviado
         },
       }),
     //

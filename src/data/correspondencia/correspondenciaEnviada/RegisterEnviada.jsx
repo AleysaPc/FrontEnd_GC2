@@ -2,7 +2,7 @@ import {
   useCorrespondenciaElaboradaMutations,
   useCorrespondenciaElaborada,
   useContactos,
-  useUsers,
+  useCustomUserList,
 } from "../../../hooks/useEntities";
 
 import { useFormEntity } from "../../../utils/useFormEntity";
@@ -30,7 +30,7 @@ export default function RegisterEnviada() {
   const idUsuario = obtenerIdUser();
 
   // Usuarios
-  const { data: usuariosData } = useUsers({ all_data: true });
+  const { data: usuariosData } = useCustomUserList({ all_data: true });
   const usuariosArray = usuariosData?.data || [];
 
   // Contactos

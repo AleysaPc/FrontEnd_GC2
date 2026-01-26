@@ -4,7 +4,7 @@ import CreateEntity from "../../../components/shared/CreateEntity";
 import {
   useContactos,
   useCorrespondenciaRecibidaMutations,
-  useUsers,
+  useCustomUserList,
 } from "../../../hooks/useEntities";
 import {
   FaBackspace,
@@ -38,7 +38,7 @@ export default function createRecibida() {
     data: usuariosData,
     isLoading: loadingUsuarios,
     error: errorUsuarios,
-  } = useUsers({ all_data: true });
+  } = useCustomUserList({ all_data: true });
 
   // Asegurarnos de que los datos sean arrays
   const contactosArray = contactosData?.data || [];
@@ -102,6 +102,7 @@ export default function createRecibida() {
     comentario_derivacion: "",
     documentos: [],
     usuarios: [], // Changed from usuario to usuarios and made it an array
+    usuario: logicaNegocio.idUsuario,
   };
   const camposExtras = (formValues) => ({
     contacto: Number(formValues.contacto),
@@ -116,6 +117,7 @@ export default function createRecibida() {
     data: {
       ...camposExtras(formValues),
       comentario_derivacion: formValues.comentario_derivacion || "",
+      usuario: formValues.usuario || "",
     },
   });
 

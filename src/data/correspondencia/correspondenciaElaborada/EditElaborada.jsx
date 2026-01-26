@@ -2,8 +2,8 @@ import {
   useCorrespondenciaElaboradaMutations,
   useCorrespondenciaElaborada,
   useContactos,
-  useUsers,
   usePlantillaDocumentos,
+  useCustomUserList,
 } from "../../../hooks/useEntities";
 import { useFormEntity } from "../../../utils/useFormEntity";
 import { obtenerIdUser } from "../../../utils/auth";
@@ -41,7 +41,7 @@ export default function EditElaborada() {
     data: usuariosData,
     isLoading: loadingUsuarios,
     error: errorUsuarios,
-  } = useUsers({ all_data: true });
+  } = useCustomUserList({ all_data: true });
   const {
     data: plantillasData,
     isLoading: loadingPlantillas,

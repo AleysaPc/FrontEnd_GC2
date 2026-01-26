@@ -2,7 +2,7 @@
 import Modal from "../../../components/shared/Modal";
 import {
   useAccionCorrespondenciaMutations,
-  useUsers,
+  useCustomUserList,
 } from "../../../hooks/useEntities";
 import { useFormEntity } from "../../../utils/useFormEntity";
 import { UserDropdownSelect } from "../../../components/shared/UserDropdownSelect";
@@ -16,7 +16,7 @@ export default function TestDerivar({ isOpen, onClose, id }) {
     data: usuariosData,
     isLoading: loadingUsuarios,
     error: errorUsuarios,
-  } = useUsers({ all_data: true }); //hace un request al backend y trae todos los usu
+  } = useCustomUserList({ all_data: true }); //hace un request al backend y trae todos los usu
 
   const usuariosArray = usuariosData?.data || []; // es un array de objetos de usuario.
   const { options } = useFormEntity();

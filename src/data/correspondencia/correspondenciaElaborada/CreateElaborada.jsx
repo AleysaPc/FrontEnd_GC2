@@ -3,9 +3,9 @@ import {
   usePlantillaDocumentos,
   useCorrespondenciaElaboradaMutations,
   useContactos,
-  useUsers,
   useCorrespondenciaRecibida,
   useUser,
+  useCustomUserList,
 } from "../../../hooks/useEntities";
 import { InputField } from "../../../components/shared/InputField";
 import { SelectField } from "../../../components/shared/SelectField";
@@ -62,7 +62,7 @@ export default function CreateElaborada() {
     data: usuariosData,
     isLoading: loadingUsuarios,
     error: errorUsuarios,
-  } = useUsers({ all_data: true });
+  } = useCustomUserList({ all_data: true });
 
   const plantillasArray = plantillasData?.data || [];
   const contactosArray = contactosData?.data || [];

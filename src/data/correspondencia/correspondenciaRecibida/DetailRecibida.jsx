@@ -26,6 +26,7 @@ export default function DetailRecibida() {
     useCorrespondenciaRecibida(id);
 
   const correspondencia = response?.data;
+  console.log("Datossss:", correspondencia)
   const documentos = correspondencia?.documentos || [];
 
   useEffect(() => {
