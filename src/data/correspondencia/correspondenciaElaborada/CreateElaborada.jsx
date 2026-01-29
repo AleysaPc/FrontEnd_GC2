@@ -9,7 +9,13 @@ import {
 } from "../../../hooks/useEntities";
 import { InputField } from "../../../components/shared/InputField";
 import { SelectField } from "../../../components/shared/SelectField";
-import { FaPlus, FaBackspace, FaEye, FaArrowLeft, FaTimes } from "react-icons/fa";
+import {
+  FaPlus,
+  FaBackspace,
+  FaEye,
+  FaArrowLeft,
+  FaTimes,
+} from "react-icons/fa";
 import CreateEntity from "../../../components/shared/CreateEntity";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
@@ -68,6 +74,18 @@ export default function CreateElaborada() {
   const contactosArray = contactosData?.data || [];
   const usuariosArray = usuariosData?.data || [];
 
+  // Filtrar plantillas para  ambito externo
+  const obtenerPlantillaPorAmbito = (ambito) => {
+    if (!plantillasArray) return [];
+
+    //si es externo -> excluir memorando
+    if (ambito === "externo") {
+      return plantillasArray.filter(
+        (p) => p.tipo !== "memorando" && p.tipo !== "resolucion",
+      );
+    }
+    return plantillasArray;
+  };
   const plantillaOptions = () =>
     plantillasArray
       ? options(plantillasArray, "id_plantilla", "nombre_plantilla")
@@ -117,11 +135,21 @@ export default function CreateElaborada() {
     };
   };
   //Se envia el payload
-  const paraEnvio = (formValues) => ({
-    link: "/elaboradaList",
-    params: camposExtras(formValues),
-    comentario_derivacion: formValues.comentario_derivacion || "",
-  });
+  const paraEnvio = (formValues) => {
+    let link;
+
+    if (formValues.ambito === "interno") {
+      link = "/internalCorrespondenceList";
+    } else {
+      link = "/externalCorrespondenceList";
+    }
+
+    return {
+      link,
+      params: camposExtras(formValues),
+      comentario_derivacion: formValues.comentario_derivacion || "",
+    };
+  };
 
   // Construcción dinámica de campos del formulario
   const construirCampos = (formValues, manejarEntradas) => {
@@ -131,6 +159,10 @@ export default function CreateElaborada() {
         target: { name: "usuario", value: usuario.email },
       });
     }
+    const plantillasFiltradas = obtenerPlantillaPorAmbito(formValues.ambito);
+    const plantillaOptionsFiltradas = () =>
+      options(plantillasFiltradas, "id_plantilla", "nombre_plantilla");
+
     const {
       campoAmbito,
       campoPlantilla,
@@ -140,8 +172,8 @@ export default function CreateElaborada() {
       campoDerivarUsuarios,
       campoComentarioDerivacion,
     } = buildCommonFields({
-      plantillasArray,
-      plantillaOptions,
+      plantillasArray: plantillasFiltradas,
+      plantillaOptions: plantillaOptionsFiltradas,
       contactoOptions,
       usuarioOptions,
       loadingPlantillas,
@@ -154,9 +186,7 @@ export default function CreateElaborada() {
       setTipoPlantillaSeleccionada,
     });
 
-    if (
-      tipoPlantillaSeleccionada === "nota") {
-
+    if (tipoPlantillaSeleccionada === "nota") {
       const tipoDestinatario =
         formValues.ambito === "interno" ? "interno" : "externo";
       return [
@@ -369,7 +399,7 @@ export default function CreateElaborada() {
         label: "Cancelar",
         icon: FaTimes,
         estilos:
-          "border-white-700 rounded-lg bg-green-700 text-white p-2 hover:bg-red-700 hover:text-white-600"
+          "border-white-700 rounded-lg bg-green-700 text-white p-2 hover:bg-red-700 hover:text-white-600",
       },
     ],
   };

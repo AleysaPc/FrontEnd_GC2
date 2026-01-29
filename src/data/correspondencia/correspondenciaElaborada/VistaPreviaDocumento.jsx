@@ -24,7 +24,7 @@ export default function VistaPreviaDocumento() {
         if (!id_correspondencia) return;
 
         const response = await axios.get(
-          `http://localhost:8000/api/v1/correspondencia/elaborada/${id_correspondencia}/html/`
+          `http://localhost:8000/api/v1/correspondencia/elaborada/${id_correspondencia}/html/`,
         );
         setContenidoHTML(response.data.contenido_html);
       } catch (error) {
@@ -47,7 +47,7 @@ export default function VistaPreviaDocumento() {
             label: "Volver",
             icon: FaArrowLeft,
             estilos:
-             "border-white-700 rounded-lg bg-green-700 text-white p-2 hover:bg-white hover:text-green-700",
+              "border-white-700 rounded-lg bg-green-700 text-white p-2 hover:bg-white hover:text-green-700",
           },
           {
             to: `http://localhost:8000/api/v1/correspondencia/elaborada/${id_correspondencia}/pdf/`,
@@ -61,7 +61,7 @@ export default function VistaPreviaDocumento() {
             icon: FaShare,
             onClick: () => setMostrarModalDerivar(true),
             estilos:
-             "border-white-700 rounded-lg bg-green-700 text-white p-2 hover:bg-white hover:text-green-700",
+              "border-white-700 rounded-lg bg-green-700 text-white p-2 hover:bg-white hover:text-green-700",
           },
         ]}
       />
@@ -78,7 +78,7 @@ export default function VistaPreviaDocumento() {
           {/* Contenido dinámico */}
           <div
             style={{
-              padding: "0.5cm 2.5cm 2cm 3.5cm",
+              padding: "0.5cm 2.5cm 0cm 3.5cm",
               boxSizing: "border-box",
             }}
             dangerouslySetInnerHTML={{ __html: contenidoHTML }}
@@ -89,6 +89,10 @@ export default function VistaPreviaDocumento() {
             alt="Membrete inferior"
             className="h-40 w-40 mx-auto block"
           />
+          {/* Texto bajo membrete */}
+          <p className="text-center text-gray-900 font-semibold text-base my-6">
+            P´ COMITE EJECUTIVO
+          </p>
 
           {/* Membrete inferior */}
           <img

@@ -70,7 +70,8 @@ export default function externalCorrespondenceList() {
     },
     {
       key: "datos_contacto",
-      label: "Destinatario",
+      label: "Destinatario",              //.trim() solo si es un string
+      render: (item) => item.datos_contacto || "Afiliados",
     },
 
     { key: "estado", label: "Estado",

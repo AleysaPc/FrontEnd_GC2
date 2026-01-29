@@ -16,6 +16,7 @@ import { UserDropdownSelect } from "../../../components/shared/UserDropdownSelec
 import { TextAreaField } from "../../../components/shared/TextAreaField";
 import { CKEditorField } from "../../../components/shared/CKEditorField";
 import { useEffect, useState } from "react";
+import { campoDestinatario, campoReferencia } from "./fieldFactories";
 
 export default function EditElaborada() {
   const { options } = useFormEntity();
@@ -84,7 +85,7 @@ export default function EditElaborada() {
 
     const usuarios = Array.isArray(entidad?.data?.usuarios)
       ? entidad.data.usuarios.map((user) =>
-          typeof user === "object" ? user.id : Number(user)
+          typeof user === "object" ? user.id : Number(user),
         )
       : [];
 
@@ -120,6 +121,9 @@ export default function EditElaborada() {
       usuarios: usuarios,
       comentario_derivacion: entidad?.data?.comentario_derivacion || "",
       plantilla_id: entidad?.data?.plantilla?.id_plantilla || "",
+      destino_interno: entidad?.data?.destino_interno
+        ? { ...entidad.data.destino_interno }
+        : { id: "", email: "", nombre: "" },
     };
   };
 
@@ -153,14 +157,25 @@ export default function EditElaborada() {
         : [],
       comentario_derivacion: formValues.comentario_derivacion || "",
       usuario: logicaNegocio.idUsuario,
+      destino_interno: formValues.destino_interno || {},
     };
   };
 
-  const paraEnvio = (formValues) => ({
-    entityId: formValues.id_correspondencia,
-    link: "/ElaboradaList",
-    data: camposExtras(formValues),
-  });
+  const paraEnvio = (formValues) => {
+    // Determinar link según el ámbito
+    const link =
+      formValues.ambito === "interno"
+        ? "/internalCorrespondenceList"
+        : "/externalCorrespondenceList";
+
+    // Retornar objeto unificado
+    return {
+      entityId: formValues.id_correspondencia,
+      link,
+      data: camposExtras(formValues),
+      comentario_derivacion: formValues.comentario_derivacion || "",
+    };
+  };
 
   // --- Construcción de campos dinámicos ---
   const construirCampos = (formValues, manejarEntradas) => {
@@ -172,7 +187,7 @@ export default function EditElaborada() {
       onChange: (e) => {
         manejarEntradas.handleInputChange(e);
         const seleccionada = plantillasArray.find(
-          (p) => p.id_plantilla === Number(e.target.value)
+          (p) => p.id_plantilla === Number(e.target.value),
         );
         setTipoPlantillaSeleccionada(seleccionada?.tipo || "");
       },
@@ -216,17 +231,30 @@ export default function EditElaborada() {
       name: "comentario_derivacion",
       onChange: manejarEntradas.handleInputChange,
     };
+    //--------------------------------
+    //Determinar tipo de destinatario
+    //--------------------------------
+    let tipoDestinatario;
+    if (formValues.destino_interno) {
+      tipoDestinatario = "interno";
+    } else {
+      tipoDestinatario = "externo";
+    }
 
     if (tipoPlantillaSeleccionada === "nota") {
       return [
         campoPlantilla,
-        {
-          component: InputField,
-          label: "Referencia",
-          name: "referencia",
-          onChange: manejarEntradas.handleInputChange,
-          required: true,
-        },
+        campoDestinatario({
+          contactoOptions,
+          usuarioOptions,
+          manejarEntradas,
+          loadingContactos,
+          errorContactos,
+          loadingUsuarios,
+          errorUsuarios,
+          tipoDestinatario,
+        }),
+        campoReferencia(manejarEntradas),
         {
           component: CKEditorField,
           label: "Desarrollo",
@@ -243,39 +271,11 @@ export default function EditElaborada() {
           onChange: manejarEntradas.handleInputChange,
           required: true,
         },
-        {
-          component: InputField,
-          label: "Comentario (Opcional)",
-          name: "comentario",
-          onChange: manejarEntradas.handleInputChange,
-        },
-        {
-          component: SelectField,
-          label: "Destinatario",
-          name: "contacto",
-          options: contactoOptions(),
-          onChange: manejarEntradas.handleInputChange,
-          actionButtons: [
-            {
-              to: `/editContacto/${formValues.contacto}`,
-              icon: FaPencilAlt,
-              estilos:
-                "text-yellow-600 hover:bg-yellow-600 hover:text-white p-1",
-            },
-            {
-              to: "/createContacto",
-              icon: FaPlus,
-              estilos: "text-green-600 hover:bg-green-600 hover:text-white p-1",
-            },
-            {
-              to: "/contactoList",
-              icon: FaEye,
-              estilos: "text-blue-600 hover:bg-blue-600 hover:text-white p-1",
-            },
-          ],
-          isLoading: loadingContactos,
-          error: errorContactos,
-        },
+        campoPrioridad,
+        campoEstado,
+        campoDerivarUsuarios,
+        campoComentarioDerivacion,
+
         {
           component: MultipleInputs,
           label: "Documento",
@@ -289,10 +289,10 @@ export default function EditElaborada() {
         campoComentarioDerivacion,
       ];
     }
-
     if (
       tipoPlantillaSeleccionada === "comunicado" ||
-      tipoPlantillaSeleccionada === "convocatoria"
+      tipoPlantillaSeleccionada === "resolucion" ||
+      tipoPlantillaSeleccionada === "memorando"
     ) {
       return [
         campoPlantilla,
@@ -323,32 +323,61 @@ export default function EditElaborada() {
       return [
         campoPlantilla,
         {
-          component: SelectField,
-          label: "Destinatario",
-          name: "contacto",
-          options: contactoOptions(),
+          component: InputField,
+          label: "Referencia",
+          name: "referencia",
           onChange: manejarEntradas.handleInputChange,
-          actionButtons: [
-            {
-              to: `/editContacto/${formValues.contacto}`,
-              icon: FaPencilAlt,
-              estilos:
-                "text-yellow-600 hover:bg-yellow-600 hover:text-white p-1",
-            },
-            {
-              to: "/createContacto",
-              icon: FaPlus,
-              estilos: "text-green-600 hover:bg-green-600 hover:text-white p-1",
-            },
-            {
-              to: "/contactoList",
-              icon: FaEye,
-              estilos: "text-blue-600 hover:bg-blue-600 hover:text-white p-1",
-            },
-          ],
-          isLoading: loadingContactos,
-          error: errorContactos,
+          required: true,
         },
+        campoDestinatario({
+          contactoOptions,
+          usuarioOptions,
+          manejarEntradas,
+          loadingContactos,
+          errorContactos,
+          loadingUsuarios,
+          errorUsuarios,
+          tipoDestinatario,
+        }),
+        {
+          component: CKEditorField,
+          label: "Introducción",
+          name: "descripcion_introduccion",
+          value: formValues.descripcion_introduccion,
+          onChange: manejarEntradas.handleInputChange,
+        },
+        {
+          component: CKEditorField,
+          label: "Desarrollo",
+          name: "descripcion_desarrollo",
+          value: formValues.descripcion_desarrollo,
+          onChange: manejarEntradas.handleInputChange,
+          required: true,
+        },
+        {
+          component: CKEditorField,
+          label: "Conclusión",
+          name: "descripcion_conclusion",
+          value: formValues.descripcion_conclusion,
+          onChange: manejarEntradas.handleInputChange,
+          required: true,
+        },
+        {
+          component: MultipleInputs,
+          label: "Documento",
+          name: "documentos",
+          type: "file",
+          onChange: manejarEntradas.handleInputChange,
+        },
+        campoPrioridad,
+        campoEstado,
+        campoDerivarUsuarios,
+        campoComentarioDerivacion,
+      ];
+    }
+    if (tipoPlantillaSeleccionada === "convocatoria") {
+      return [
+        campoPlantilla,
         {
           component: CKEditorField,
           label: "Introducción",

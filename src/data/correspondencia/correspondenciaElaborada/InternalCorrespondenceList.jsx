@@ -76,21 +76,13 @@ export default function internalCorrespondenciaList() {
       render: (item) => item.referencia?.trim() || "Sin referencia",
     },
     {
-      key: "destinatario",
+      key: "destino_interno",
       label: "Destinatario",
       render: (item) => {
-        // Caso contacto externo (string)
-        if (item.datos_contacto && item.datos_contacto.trim()) {
-          return item.datos_contacto || "No disponible"; // <- usar el campo email si existe
+        if (item.destino_interno_info?.email) {
+          return item.destino_interno_info.email;
         }
-        // Caso destino interno (objeto)
-        else if (item.destino_interno) {
-          return item.destino_interno?.email || "No disponible";
-        }
-        // Ninguno definido
-        else {
-          return "No disponible";
-        }
+        return "General"
       },
     },
 
