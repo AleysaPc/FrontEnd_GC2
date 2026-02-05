@@ -273,9 +273,6 @@ export default function EditElaborada() {
         },
         campoPrioridad,
         campoEstado,
-        campoDerivarUsuarios,
-        campoComentarioDerivacion,
-
         {
           component: MultipleInputs,
           label: "Documento",
@@ -283,8 +280,6 @@ export default function EditElaborada() {
           type: "file",
           onChange: manejarEntradas.handleInputChange,
         },
-        campoPrioridad,
-        campoEstado,
         campoDerivarUsuarios,
         campoComentarioDerivacion,
       ];
@@ -296,6 +291,7 @@ export default function EditElaborada() {
     ) {
       return [
         campoPlantilla,
+        campoReferencia(manejarEntradas),
         {
           component: CKEditorField,
           label: "Desarrollo",

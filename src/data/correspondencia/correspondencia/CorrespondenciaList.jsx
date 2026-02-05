@@ -30,38 +30,40 @@ function CorrespondenciaList() {
     {
       key: "actions",
       label: "Acciones",
-      render: (item) => (
-        <div className="flex gap-2">
-          <ActionButton
-            to={`/detailRecibida/${item.id_correspondencia}`}
-            icon={FaFolderOpen}
-            title="Ver detalles del documento"
-            estilos="hover:bg-blue-600 hover:text-white text-gray-500 rounded-md flex items-center gap-2 transition duration-200 p-1"
-          />
-          <ActionButton
-            to={`/editRecibida/${item.id_correspondencia}`}
-            icon={FaEdit}
-            title="Editar"
-            toBack="/correspondenciaList"
-            estilos="hover:bg-orange-600 hover:text-white text-gray-500 rounded-md flex items-center gap-2 transition duration-200 p-1"
-          />
+      render: (item) => {
+        const isRecibida = item.tipo === "recibido";
+        const detailPath = isRecibida
+          ? `/detailRecibida/${item.id_correspondencia}`
+          : `/detailEnviada/${item.id_correspondencia}`;
+        const editPath = isRecibida
+          ? `/editRecibida/${item.id_correspondencia}`
+          : `/editElaborada/${item.id_correspondencia}`;
 
-          <button
-            onClick={() => handleOpenModal(item.id_correspondencia)} // ✅ Abre el modal correctamente
-            title="Ver historial"
-            className="hover:bg-green-600 hover:text-white text-gray-500 rounded-md flex items-center gap-2 transition duration-200 p-1"
-            aria-label="Ver historial"
-          >
-            <FaStream />
-          </button>
-
-          <Trazabilidad
-            visible={mostrarHistorial}
-            onClose={() => setMostrarHistorial(false)}
-            correspondenciaId={correspondenciaId} // ✅ Corregido
-          />
-        </div>
-      ),
+        return (
+          <div className="flex gap-2">
+            <ActionButton
+              to={detailPath}
+              icon={FaEye}
+              title="Ver detalles del documento"
+              estilos="hover:bg-gray-600 hover:text-gray-100 text-gray-500 rounded-md flex items-center gap-2 transition duration-200 p-1"
+            />
+            <button
+              onClick={() => handleOpenModal(item.id_correspondencia)} // Abre modal con ID
+              title="Ver historial"
+              className="hover:bg-gray-600 hover:text-gray-100 text-gray-500 rounded-md flex items-center gap-2 transition duration-200 p-1"
+              aria-label="Ver historial"
+            >
+              <FaStream />
+            </button>
+            <ActionButton
+              to={editPath}
+              icon={FaEdit}
+              title="Editar"
+              estilos="hover:bg-gray-600 hover:text-gray-100 text-gray-500 rounded-md flex items-center gap-2 transition duration-200 p-1"
+            />
+          </div>
+        );
+      },
     },
 
     {

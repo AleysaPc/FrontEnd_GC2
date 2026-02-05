@@ -27,14 +27,28 @@ export default function DetailEnviada() {
 
   const correspondencia = response?.data;
   const documentos = correspondencia?.documentos || [];
+  // URL de respaldo: PDF generado por backend cuando no hay archivo físico
+  const pdfFallbackUrl = id
+    ? `${import.meta.env.VITE_API_BASE_URL}/correspondencia/elaborada/${id}/pdf/`
+    : "";
 
   useEffect(() => {
     if (documentos.length > 0) {
-      setDocumentoActivo(documentos[0].archivo);
+      const archivo = documentos[0]?.archivo || "";
+      // Si el archivo no es URL válida, usar el PDF generado
+      setDocumentoActivo(archivo.startsWith("http") ? archivo : pdfFallbackUrl);
+      return;
     }
-  }, [documentos]);
+    // Si no hay documentos, mostrar PDF generado
+    if (pdfFallbackUrl) {
+      setDocumentoActivo(pdfFallbackUrl);
+    }
+  }, [documentos, pdfFallbackUrl]);
 
-  const isUrlValid = documentoActivo && documentoActivo.startsWith("http");
+  // Acepta URLs normales y blob: (por si luego se genera PDF en frontend)
+  const isUrlValid =
+    documentoActivo &&
+    (documentoActivo.startsWith("http") || documentoActivo.startsWith("blob:"));
 
   // 👉 hooks ya están definidos: ahora puedes hacer returns condicionales
   if (isLoadingCorrespondencia) {
@@ -142,8 +156,14 @@ export default function DetailEnviada() {
                     icon={FaFile}
                     onClick={() => {
                       if (doc.archivo) {
+                        // Mostrar en visor y abrir en nueva pestaña
+                        setDocumentoActivo(doc.archivo);
                         window.open(doc.archivo, "_blank");
                       } else {
+                        // Si no hay archivo, usar PDF generado
+                        if (pdfFallbackUrl) {
+                          setDocumentoActivo(pdfFallbackUrl);
+                        }
                         navigate(
                           `/vistaPdfDocumento/${correspondencia.id_correspondencia}`
                         );

@@ -6,9 +6,7 @@ import EntityList from "../../../components/shared/EntityList";
 import Trazabilidad from "../../../components/shared/Trazabilidad";
 
 export default function externalCorrespondenceList() {
-
   const [modalVisible, setModalVisible] = useState(false);
-
 
   const [correspondenciaId, setCorrespondenciaId] = useState(null);
   const { data, isLoading, error } = useCorrespondenciaElaboradas({
@@ -23,7 +21,7 @@ export default function externalCorrespondenceList() {
 
   const handleCloseModal = () => {
     setModalVisible(false);
-    setCorrespondenciaId(null)
+    setCorrespondenciaId(null);
   };
 
   const useFields = () => [
@@ -32,7 +30,7 @@ export default function externalCorrespondenceList() {
       key: "actions",
       label: "Acciones",
       render: (
-        item //render es una función que recibe los datos de la fila actual, permite hacer "acciones sobre la fila"
+        item, //render es una función que recibe los datos de la fila actual, permite hacer "acciones sobre la fila"
       ) => (
         //item es el objeto, la fila completa de los datos "." siver para acceder a la propiedad.
         <div className="flex gap-2">
@@ -70,16 +68,18 @@ export default function externalCorrespondenceList() {
     },
     {
       key: "datos_contacto",
-      label: "Destinatario",              //.trim() solo si es un string
+      label: "Destinatario", //.trim() solo si es un string
       render: (item) => item.datos_contacto || "Afiliados",
     },
 
-    { key: "estado", label: "Estado",
+    {
+      key: "estado",
+      label: "Estado",
       render: (item) =>
         item.estado
           ? item.estado.charAt(0).toUpperCase() + item.estado.slice(1)
           : "Sin estado",
-     },
+    },
     {
       key: "email",
       label: "Elaborado por",
@@ -102,15 +102,22 @@ export default function externalCorrespondenceList() {
     all_data: false,
     itemKey: "id_correspondencia",
     entityFields: useFields,
+    filtros: [
+      { name: "plantilla__tipo", placeholder: "Tipo Documento" },
+      { name: "referencia", placeholder: "Referencia" },
+    ],
+    ordenes: [
+      { name: "tipo", label: "Tipo" },
+      { name: "fecha_registro", label: "Fecha de Registro" },
+    ],
   };
   return (
     <>
       <EntityList entityData={entityData} />
-      <Trazabilidad 
+      <Trazabilidad
         visible={modalVisible}
         onClose={handleCloseModal}
         correspondenciaId={correspondenciaId}
-
       />
     </>
   );

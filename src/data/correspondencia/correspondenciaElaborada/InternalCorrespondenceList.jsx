@@ -82,7 +82,7 @@ export default function internalCorrespondenciaList() {
         if (item.destino_interno_info?.email) {
           return item.destino_interno_info.email;
         }
-        return "General"
+        return "Directorio"
       },
     },
 
@@ -117,6 +117,10 @@ export default function internalCorrespondenciaList() {
     all_data: false,
     itemKey: "id_correspondencia",
     entityFields: useFields,
+    filtros: [
+      { name: "plantilla__tipo", placeholder: "Tipo Documento" },
+      { name: "referencia", placeholder: "Referencia" },
+    ],
   };
   //EntityList es un componente genérico que recibe la configuración entityData.
   return (

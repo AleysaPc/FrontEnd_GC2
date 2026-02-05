@@ -63,7 +63,7 @@ const HistorialDocumento = lazy(() =>
 const HojaDeRuta = lazy(()=>import("../components/shared/HojadeRuta"));
 const InternalCorrespondenceList = lazy(()=>import("../data/correspondencia/correspondenciaElaborada/InternalCorrespondenceList"));
 const ExternalCorrespondenceList = lazy(()=>import("../data/correspondencia/correspondenciaElaborada/ExternalCorrespondenceList"))
-
+const CorrespondenciaEnviadaListInternal = lazy(()=>import("../data/correspondencia/correspondenciaEnviada/CorrespondenciaEnviadaListInternal"))
 export const correspondenciaRoutes = [
   // rutas de correspondencia
   {
@@ -77,6 +77,10 @@ export const correspondenciaRoutes = [
   {
     path: "/correspondenciaEnviadaList",
     element: <CorrespondenciaEnviadaList />,
+  },
+   {
+    path: "/correspondenciaEnviadaListInternal",
+    element: <CorrespondenciaEnviadaListInternal />,
   },
   {
     path: "/registerEnviada/:id",

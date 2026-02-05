@@ -91,7 +91,7 @@ function CorrespondenciaEnviadaList() {
         filters: {
           ...params.filters,
           estado: "aprobado", // filtro por estado enviado
-          ambito: "externo",
+          ambito: "interno",
         },
       }),
     //

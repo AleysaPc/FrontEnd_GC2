@@ -28,6 +28,7 @@ export const menus = [
       { label: "Correspondencias", path: "/correspondenciaList" },
       { label: "Recibidos", path: "/correspondenciaRecibidaList" },
       { label: "Enviados", path: "/correspondenciaEnviadaList" },
+      { label: "Internos", path: "/correspondenciaEnviadaListInternal" },
       
     ],
   },

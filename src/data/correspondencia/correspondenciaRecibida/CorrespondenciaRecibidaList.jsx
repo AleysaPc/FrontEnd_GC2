@@ -86,9 +86,9 @@ function CorrespondenciaRecibidaList() {
       key: "prioridad",
       label: "Prioridad",
       render: (item) =>
-        item.estado
-          ? item.estado.charAt(0).toUpperCase() + item.estado.slice(1)
-          : "Sin estado",
+        item.prioridad
+          ? item.prioridad.charAt(0).toUpperCase() + item.prioridad.slice(1)
+          : "No Especificado",
     },
     {
       key: "estado",

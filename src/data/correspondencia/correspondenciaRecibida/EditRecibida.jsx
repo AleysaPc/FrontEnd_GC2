@@ -10,7 +10,7 @@ import { SelectField } from "../../../components/shared/SelectField";
 import EditEntity from "../../../components/shared/EditEntity";
 import { FaBackspace, FaEye, FaPencilAlt, FaPlus } from "react-icons/fa";
 import { MultipleInputs } from "../../../components/shared/MultipleInputs";
-import { useUsers } from "../../../hooks/useEntities";
+import { useCustomUserList } from "../../../hooks/useEntities";
 import { TextAreaField } from "../../../components/shared/TextAreaField";
 import { UserDropdownSelect } from "../../../components/shared/UserDropdownSelect";
 
@@ -28,7 +28,7 @@ export default function editEnviada() {
     data: usuariosData,
     isLoading: loadingUsuarios,
     error: errorUsuarios,
-  } = useUsers({ all_data: true });
+  } = useCustomUserList({ all_data: true });
   const usuariosArray = usuariosData?.data || [];
 
   const { options } = useFormEntity();

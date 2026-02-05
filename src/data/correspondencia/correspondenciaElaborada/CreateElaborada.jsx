@@ -230,6 +230,7 @@ export default function CreateElaborada() {
     ) {
       return [
         campoPlantilla,
+        campoReferencia(manejarEntradas),
         {
           component: CKEditorField,
           label: "Descripción",
@@ -249,6 +250,7 @@ export default function CreateElaborada() {
     if (tipoPlantillaSeleccionada === "convocatoria") {
       return [
         campoPlantilla,
+        campoReferencia(manejarEntradas),
         {
           component: CKEditorField,
           label: "Contenido",
