@@ -19,6 +19,7 @@ function EntityList({ entityData }) {
     actions = [],
     icon,
     filtros,
+    filtrosAvanzados,
     ordenes,
   } = entityData;
 
@@ -122,6 +123,7 @@ function EntityList({ entityData }) {
       <FiltroBusquedaOrden
         onChange={manejarFiltro}
         filtros={filtros}
+        filtrosAvanzados={filtrosAvanzados}
         ordenes={ordenes}
         placeholderSearch="Search"
       />

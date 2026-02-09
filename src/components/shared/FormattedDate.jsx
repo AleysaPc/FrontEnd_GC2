@@ -1,5 +1,5 @@
 const FormattedDateTime = ({ dateTime, format = "DD/MMM/YYYY HH:mm:ss" }) => {
-  if (!dateTime) return "No registrado";
+  if (!dateTime) return "No requiere";
 
   // Creamos un objeto Date desde la cadena
   const fecha = new Date(dateTime);

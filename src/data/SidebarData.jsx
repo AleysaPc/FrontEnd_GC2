@@ -22,13 +22,13 @@ export const menus = [
     ],
   },
   {
-    title: "Registros",
+    title: "Registros Oficiales",
     icon: RiArchiveDrawerFill,
     items: [
-      { label: "Correspondencias", path: "/correspondenciaList" },
       { label: "Recibidos", path: "/correspondenciaRecibidaList" },
-      { label: "Enviados", path: "/correspondenciaEnviadaList" },
-      { label: "Internos", path: "/correspondenciaEnviadaListInternal" },
+      { label: "Enviados Externos", path: "/correspondenciaEnviadaList" },
+      { label: "Enviados Internos", path: "/correspondenciaEnviadaListInternal" },
+      { label: "Correspondencias", path: "/correspondenciaList" },
       
     ],
   },

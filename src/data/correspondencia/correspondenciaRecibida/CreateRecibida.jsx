@@ -85,6 +85,7 @@ export default function createRecibida() {
     { id: "en_revision", nombre: "En revisión" },
     { id: "aprobado", nombre: "Aprobado" },
     { id: "rechazado", nombre: "Rechazado" },
+    { id: "archivado", nombre: "Archivado"}
   ];
 
   const configuracionFormulario = {

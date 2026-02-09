@@ -89,14 +89,19 @@ export default function ListEnviados() {
     itemKey: "id_correspondencia", //Debe ser igual al modelo
     entityFields: useFields,
     icon: FaAngleUp,
-    // actions: [
-    //   {
-    //     to: "/createCorrespondencia",
-    //     label: "Crear Correspondencia",
-    //     estilos:
-    //       "bg-purple-500 hover:bg-purple-800 text-white px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",
-    //   },
-    //],
+    filtros: [
+      { name: "cite", placeholder: "CITE " },
+      { name: "referencia", placeholder: "Referencia" },
+      
+    ],
+    filtrosAvanzados: [
+      { name: "plantilla__tipo", placeholder: "Tipo Documento" },
+      { name: "contacto_nombre_completo", placeholder: "Destinatario" },
+      {
+        name: "contacto__institucion__razon_social",
+        placeholder: "Institución",
+      },
+    ],
   };
   return (
     <>

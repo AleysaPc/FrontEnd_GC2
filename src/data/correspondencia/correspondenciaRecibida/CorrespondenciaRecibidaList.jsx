@@ -124,6 +124,9 @@ function CorrespondenciaRecibidaList() {
     filtros: [
       { name: "nro_registro", placeholder: "Nro. Registro" },
       { name: "referencia", placeholder: "Referencia" },
+    ],
+    filtrosAvanzados: [
+      { name: "contacto_nombre_completo", placeholder: "Remitente" },
       {
         name: "contacto__institucion__razon_social",
         placeholder: "Institución",

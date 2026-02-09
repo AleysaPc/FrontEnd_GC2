@@ -3,12 +3,14 @@ import { useState } from "react";
 function FiltroBusquedaOrden({
   onChange,
   filtros = [],
+  filtrosAvanzados = [],
   ordenes = [],
   placeholderSearch,
 }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [ordering, setOrdering] = useState("");
   const [filterValues, setFilterValues] = useState({});
+  const [mostrarAvanzados, setMostrarAvanzados] = useState(false);
 
   const manejarCambioFiltro = (e, name) => {
     const value = e.target.value;
@@ -80,6 +82,29 @@ function FiltroBusquedaOrden({
           className="border px-2 py-1 rounded w-48"
         />
       ))}
+
+      {filtrosAvanzados.length > 0 && (
+        <button
+          type="button"
+          onClick={() => setMostrarAvanzados((prev) => !prev)}
+          className="border px-2 py-1 rounded text-sm bg-gray-100 hover:bg-gray-200"
+        >
+          {mostrarAvanzados ? "Ocultar filtros" : "Más filtros"}
+        </button>
+      )}
+
+      {mostrarAvanzados &&
+        filtrosAvanzados.map((filtro) => (
+          <input
+            key={filtro.name}
+            type="text"
+            placeholder={filtro.placeholder}
+            value={filterValues[filtro.name] || ""}
+            onChange={(e) => manejarCambioFiltro(e, filtro.name)}
+            onKeyDown={(e) => manejarEnterFiltro(e, filtro.name)}
+            className="border px-2 py-1 rounded w-48"
+          />
+        ))}
 
       <select
         value={ordering}

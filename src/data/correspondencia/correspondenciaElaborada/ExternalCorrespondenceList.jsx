@@ -96,6 +96,7 @@ export default function externalCorrespondenceList() {
         ...params,
         filters: {
           ...params.filters,
+          estado__in: ["borrador", "en_revision", "aprobado", "rechazado",],
           ambito: "externo",
         },
       }),
@@ -106,6 +107,8 @@ export default function externalCorrespondenceList() {
       { name: "plantilla__tipo", placeholder: "Tipo Documento" },
       { name: "referencia", placeholder: "Referencia" },
     ],
+    filtrosAvanzados: [  { name: "contacto_nombre_completo", placeholder: "Destinatario" },
+      { name: "contacto__institucion__razon_social", placeholder: "Institución" },],
     ordenes: [
       { name: "tipo", label: "Tipo" },
       { name: "fecha_registro", label: "Fecha de Registro" },

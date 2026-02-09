@@ -111,6 +111,7 @@ export default function internalCorrespondenciaList() {
         ...params,
         filters: {
           ...params.filters,
+          estado__in: ["borrador", "en_revision", "aprobado", "rechazado",],
           ambito: "interno", // Filtro para mostrar solo documentos enviados
         },
       }),

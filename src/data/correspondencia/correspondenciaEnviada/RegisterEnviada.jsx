@@ -1,7 +1,6 @@
 import {
   useCorrespondenciaElaboradaMutations,
   useCorrespondenciaElaborada,
-  useContactos,
   useCustomUserList,
 } from "../../../hooks/useEntities";
 
@@ -33,18 +32,11 @@ export default function RegisterEnviada() {
   const { data: usuariosData } = useCustomUserList({ all_data: true });
   const usuariosArray = usuariosData?.data || [];
 
-  // Contactos
-  const { data: contactosData } = useContactos({ all_data: true });
-  const contactosArray = contactosData?.data || [];
-
   // Todos los usuarios como opciones de destino
   const usuariosDestinoOptions = usuariosArray.map((user) => ({
     id: user.id,
     nombre: user.email,
   }));
-
-  const contactoOptions = () =>
-    options(contactosArray, "id_contacto", "nombre_completo");
 
   const usuarioOptions = () => options(usuariosArray, "id", "email");
 
@@ -70,6 +62,7 @@ export default function RegisterEnviada() {
   };
 
   const configuracionFormulario = (entidad) => ({
+    ambito: entidad?.data?.ambito || "",
     fecha_envio: entidad?.data?.fecha_envio || "",
     hora_envio: entidad?.data?.hora_envio || "",
     fecha_recepcion: entidad?.data?.fecha_recepcion || "",
@@ -79,7 +72,6 @@ export default function RegisterEnviada() {
     paginas: entidad?.data?.paginas || "",
     comentario: entidad?.data?.comentario || "",
     comentario_derivacion: "",
-    contacto: entidad?.data?.contacto || "",
     documentos: Array.isArray(entidad?.data?.documentos)
       ? entidad.data.documentos
       : [],
@@ -101,7 +93,6 @@ export default function RegisterEnviada() {
       : [];
 
     return {
-      contacto: Number(form.contacto),
       usuario: idUsuario,
       comentario: form.comentario,
       estado_entrega: form.estado_entrega,
@@ -116,7 +107,10 @@ export default function RegisterEnviada() {
 
   const paraEnvio = (form) => ({
     entityId: form.id_correspondencia,
-    link: "/correspondenciaEnviadaList",
+    link:
+      form.ambito === "interno"
+        ? "/correspondenciaEnviadaListInternal"
+        : "/correspondenciaEnviadaList",
     params: camposExtras(form),
   });
 

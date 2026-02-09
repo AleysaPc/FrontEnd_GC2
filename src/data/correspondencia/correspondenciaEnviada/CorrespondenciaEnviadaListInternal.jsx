@@ -72,9 +72,22 @@ function CorrespondenciaEnviadaList() {
       render: (item) => item.referencia,
     },
     {
-      key: "datos_contacto",
+      key: "destino_interno",
       label: "Remitente",
-      render: (item) => `${item.datos_contacto || "Sin remitente"}`,
+      render: (item) => {
+        const user = item?.destino_interno_info;
+        if (!user) return "Directorio";
+        const nombre = [
+          user.first_name,
+          user.second_name,
+          user.last_name,
+          user.second_last_name,
+        ]
+          .filter(Boolean)
+          .join(" ")
+          .trim();
+        return nombre || user.email || "Sin remitente";
+      },
     },
   ];
 
@@ -90,7 +103,7 @@ function CorrespondenciaEnviadaList() {
         ...params,
         filters: {
           ...params.filters,
-          estado: "aprobado", // filtro por estado enviado
+          estado: "enviado", // filtro por estado enviado
           ambito: "interno",
         },
       }),
@@ -109,10 +122,11 @@ function CorrespondenciaEnviadaList() {
     filtros: [
       { name: "cite", placeholder: "CITE " },
       { name: "referencia", placeholder: "Referencia" },
-      { name: "contacto_nombre_completo", placeholder: "Destinatario" },
+    ],
+    filtrosAvanzados: [
       {
-        name: "contacto__institucion__razon_social",
-        placeholder: "Institución",
+        name: "destino_interno",
+        placeholder: "Destinatario",
       },
     ],
     ordenes: [

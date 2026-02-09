@@ -73,14 +73,14 @@ function CorrespondenciaEnviadaList() {
     },
     {
       key: "datos_contacto",
-      label: "Remitente",
-      render: (item) => `${item.datos_contacto || "Sin remitente"}`,
+      label: "Destinatario",
+      render: (item) => `${item.datos_contacto || "Afiliados"}`,
     },
   ];
 
   const entityData = {
     title: "Correspondencias Enviadas",
-    subTitle: "Listado de correspondencias oficialmente enviadas",
+    subTitle: "Correspondencias externas",
     loadingMessage: "Cargando correspondencias enviadas...",
     errorMessage: "Error al obtener las correspondencias enviadas",
 
@@ -90,7 +90,7 @@ function CorrespondenciaEnviadaList() {
         ...params,
         filters: {
           ...params.filters,
-          estado: "aprobado", // filtro por estado enviado
+          estado: "enviado", // filtro por estado enviado
           ambito: "externo",
         },
       }),
@@ -109,6 +109,10 @@ function CorrespondenciaEnviadaList() {
     filtros: [
       { name: "cite", placeholder: "CITE " },
       { name: "referencia", placeholder: "Referencia" },
+      
+    ],
+    filtrosAvanzados: [
+      { name: "plantilla__tipo", placeholder: "Tipo Documento" },
       { name: "contacto_nombre_completo", placeholder: "Destinatario" },
       {
         name: "contacto__institucion__razon_social",
@@ -119,7 +123,7 @@ function CorrespondenciaEnviadaList() {
       { name: "cite", label: "CITE" },
       { name: "fecha_envio", label: "Fecha de Envio" },
     ],
-    mostrarBusquedaSemantica: true,
+    mostrarBusquedaSemantica: false,
   };
 
   return (

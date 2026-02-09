@@ -68,7 +68,7 @@ function CorrespondenciaList() {
 
     {
       key: "tipo",
-      label: "Tipo",
+      label: "Tipo", render: (item) => item.tipo == "enviado" || item.tipo == "recibido" ? item.tipo.charAt(0).toUpperCase() + item.tipo.slice(1) : "Sin tipo",
     },
     {
       key: "fecha_registro",
@@ -80,9 +80,9 @@ function CorrespondenciaList() {
       key: "prioridad",
       label: "Prioridad",
       render: (item) =>
-        item.estado
-          ? item.estado.charAt(0).toUpperCase() + item.estado.slice(1)
-          : "Sin estado",
+        item.prioridad
+          ? item.prioridad.charAt(0).toUpperCase() + item.prioridad.slice(1)
+          : "Sin prioridad",
     },
     {
       key: "estado",
@@ -95,6 +95,8 @@ function CorrespondenciaList() {
     {
       key: "contacto",
       label: "Destinatario",
+      render: (item) =>
+        item.contacto ? item.contacto : "General",
     },
   ];
 
@@ -103,13 +105,22 @@ function CorrespondenciaList() {
     subTitle: "Listado de correspondencia",
     loadingMessage: "Cargando correspondencia...",
     errorMessage: "Error al obtener la correspondencia",
-    fetchDataHook: useCorrespondencias,
+    fetchDataHook: (params = {}) =>
+    useCorrespondencias({
+      ...params,
+        filters: {
+          ...params.filters,
+          estado__in: ["enviado", "archivado"],
+        },
+    }),
     all_data: false, // true para obtener todos los datos, false para paginación
     itemKey: "id_correspondencia", //Debe ser igual al modelo
     entityFields: useFields,
     filtros: [
       { name: "tipo", placeholder: "Tipo" },
       { name: "referencia", placeholder: "Referencia" },
+    ],
+    filtrosAvanzados: [
       { name: "contacto_nombre_completo", placeholder: "Destinatario" }, // nuevo campo unificado
       {
         name: "contacto__institucion__razon_social",
