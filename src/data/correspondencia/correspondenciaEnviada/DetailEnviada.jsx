@@ -1,5 +1,9 @@
-import { useParams } from "react-router-dom";
-import { useCorrespondenciaElaborada } from "../../../hooks/useEntities";
+﻿import { useParams } from "react-router-dom";
+import {
+  useCorrespondencia,
+  useCorrespondenciaElaborada,
+  useCorrespondenciaRecibida,
+} from "../../../hooks/useEntities";
 import { useState, useEffect } from "react";
 import { ActionButton } from "../../../components/shared/ActionButton";
 import VisorPDF from "../../../components/shared/VisorPdf";
@@ -26,6 +30,12 @@ export default function DetailEnviada() {
     useCorrespondenciaElaborada(id);
 
   const correspondencia = response?.data;
+  const respuestaPadreId = correspondencia?.respuesta_a;
+  const { data: dataRespuestaPadreGeneral } = useCorrespondencia(respuestaPadreId);
+  const { data: dataRespuestaPadreRecibida } =
+    useCorrespondenciaRecibida(respuestaPadreId);
+  const { data: dataRespuestaPadreElaborada } =
+    useCorrespondenciaElaborada(respuestaPadreId);
   const documentos = correspondencia?.documentos || [];
   // URL de respaldo: PDF generado por backend cuando no hay archivo físico
   const pdfFallbackUrl = id
@@ -50,7 +60,6 @@ export default function DetailEnviada() {
     documentoActivo &&
     (documentoActivo.startsWith("http") || documentoActivo.startsWith("blob:"));
 
-  // 👉 hooks ya están definidos: ahora puedes hacer returns condicionales
   if (isLoadingCorrespondencia) {
     return <div>Cargando...</div>;
   }
@@ -61,6 +70,20 @@ export default function DetailEnviada() {
 
   const tieneAcciones =
     correspondencia.acciones && correspondencia.acciones.length > 0;
+
+  const numeroRespuesta =
+    correspondencia.nro_registro_respuesta ||
+    dataRespuestaPadreRecibida?.data?.nro_registro ||
+    dataRespuestaPadreElaborada?.data?.cite ||
+    dataRespuestaPadreGeneral?.data?.nro_registro ||
+    dataRespuestaPadreGeneral?.data?.cite ||
+    (respuestaPadreId ? `#${respuestaPadreId}` : null);
+
+  const referenciaRespuesta =
+    dataRespuestaPadreRecibida?.data?.referencia ||
+    dataRespuestaPadreElaborada?.data?.referencia ||
+    dataRespuestaPadreGeneral?.data?.referencia ||
+    "Sin referencia";
 
   return (
     <div className="p-4">
@@ -182,6 +205,23 @@ export default function DetailEnviada() {
         </div>
       </div>
 
+      {respuestaPadreId ? (
+        <div className="bg-white p-6 rounded-lg shadow-md mb-6">
+          <h3 className="text-xl font-bold mb-4">Recorrido Relacional</h3>
+          <div className="space-y-3">
+            <div className="border rounded-md bg-blue-100 px-3 py-2">
+              <p className="text-sm font-semibold text-amber-900">
+                Este documento es respuesta a:
+              </p>
+              <p className="text-xs text-blue-800">
+                {`${numeroRespuesta || "Sin numero"} - ${referenciaRespuesta}`}
+              </p>
+            </div>
+            <p className="text-sm text-gray-500">Sin respuestas relacionadas.</p>
+          </div>
+        </div>
+      ) : null}
+
       <h3 className="text-xl font-bold mb-4">Historial de Derivaciones</h3>
       <div className="space-y-4">
         {tieneAcciones ? (
@@ -200,7 +240,7 @@ export default function DetailEnviada() {
 
                   <p className="font-medium text-gray-700 mt-4">Fecha:</p>
                   <p className="text-gray-900">
-                    {new Date(accion.fecha).toLocaleString()}
+                    {new Date(accion.fecha_inicio).toLocaleString()}
                   </p>
                 </div>
 
@@ -230,3 +270,4 @@ export default function DetailEnviada() {
     </div>
   );
 }
+

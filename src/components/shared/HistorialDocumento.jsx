@@ -1,6 +1,16 @@
 import { useParams } from "react-router-dom";
 import { Navigation } from "../shared/Navigation";
-import { FaArrowLeft, FaFile, FaCheck, FaTimes, FaPaperPlane, FaExclamationTriangle, FaReply, FaFolder } from "react-icons/fa";
+import {
+  FaArrowLeft,
+  FaFile,
+  FaCheck,
+  FaTimes,
+  FaPaperPlane,
+  FaExclamationTriangle,
+  FaReply,
+  FaFolder,
+  FaCheckCircle,
+} from "react-icons/fa";
 import { useCorrespondenciaRecibida } from "../../hooks/useEntities";
 import FormattedDateTime from "../shared/FormattedDate";
 
@@ -10,17 +20,35 @@ export default function HistorialDocumento() {
   const correspondencia = response?.data;
 
   if (isLoading) return <div className="p-4">Cargando historial...</div>;
-  if (error) return <div className="p-4 text-red-600">Error al cargar la correspondencia.</div>;
-  if (!correspondencia) return <div className="p-4">No se encontró la correspondencia.</div>;
+  if (error)
+    return (
+      <div className="p-4 text-red-600">
+        Error al cargar la correspondencia.
+      </div>
+    );
+  if (!correspondencia)
+    return <div className="p-4">No se encontró la correspondencia.</div>;
 
-  // Orden cronológico: primera acción primero
-  const acciones = (correspondencia.acciones || []).sort(
-    (a, b) => new Date(a.fecha_inicio) - new Date(b.fecha_inicio)
-  );
+  const obtenerAccionesRecursivas = (respuestas = []) =>
+    respuestas.flatMap((respuesta) => [
+      ...(respuesta.acciones || []).map((accion) => ({
+        ...accion,
+        _respuesta_contexto: {
+          id: respuesta.id_correspondencia,
+          cite: respuesta.cite,
+          referencia: respuesta.referencia,
+        },
+      })),
+      ...obtenerAccionesRecursivas(respuesta.respuestas || []),
+    ]);
 
-  // Icono según tipo de acción
+  const acciones = [
+    ...(correspondencia.acciones || []),
+    ...obtenerAccionesRecursivas(correspondencia.respuestas || []),
+  ].sort((a, b) => new Date(a.fecha_inicio) - new Date(b.fecha_inicio));
+
   const getIconoAccion = (tipo) => {
-    switch (tipo) {
+    switch ((tipo || "").toLowerCase()) {
       case "derivado":
         return <FaPaperPlane className="text-orange-500" />;
       case "observado":
@@ -33,6 +61,8 @@ export default function HistorialDocumento() {
         return <FaCheck className="text-green-500" />;
       case "archivado":
         return <FaFolder className="text-gray-500" />;
+      case "respondido":
+        return <FaCheckCircle className="text-green-500" />;
       default:
         return null;
     }
@@ -56,10 +86,14 @@ export default function HistorialDocumento() {
       />
 
       <div className="mt-6 bg-white rounded-lg shadow-md p-4">
-        <h3 className="text-xl font-semibold mb-4 text-center">Acciones realizadas</h3>
+        <h3 className="text-xl font-semibold mb-4 text-center">
+          Acciones realizadas
+        </h3>
 
         {acciones.length === 0 ? (
-          <p className="text-gray-500">No hay acciones registradas para este documento.</p>
+          <p className="text-gray-500">
+            No hay acciones registradas para este documento.
+          </p>
         ) : (
           <div className="overflow-x-auto">
             <table className="min-w-full border border-gray-200">
@@ -68,42 +102,81 @@ export default function HistorialDocumento() {
                   <th className="px-4 py-2 border-b text-left">#</th>
                   <th className="px-4 py-2 border-b text-left">Acción</th>
                   <th className="px-4 py-2 border-b text-left">Fecha y Hora</th>
-                  <th className="px-4 py-2 border-b text-left">Usuario Origen</th>
-                  <th className="px-4 py-2 border-b text-left">Usuario Destino</th>
+                  <th className="px-4 py-2 border-b text-left">
+                    Usuario Origen
+                  </th>
+                  <th className="px-4 py-2 border-b text-left">
+                    Usuario Destino
+                  </th>
                   <th className="px-4 py-2 border-b text-left">Visto</th>
                   <th className="px-4 py-2 border-b text-left">Fecha visto</th>
                   <th className="px-4 py-2 border-b text-left">Estado</th>
+                  <th className="px-4 py-2 border-b text-left">
+                    Respuesta vinculada
+                  </th>
                   <th className="px-4 py-2 border-b text-left">Comentario</th>
                 </tr>
               </thead>
               <tbody>
                 {acciones.map((accion, index) => (
-                  <tr key={accion.id} className="hover:bg-gray-50">
+                  <tr key={accion.id || index} className="hover:bg-gray-50">
                     <td className="px-4 py-2 border-b">{index + 1}</td>
                     <td className="px-4 py-12 flex items-center gap-1 border-b">
                       {getIconoAccion(accion.accion)}
-                      <span>{accion.accion.toUpperCase()}</span>
+                      <span>{(accion.accion || "").toUpperCase()}</span>
                     </td>
                     <td className="px-4 py-2 border-b">
                       <FormattedDateTime dateTime={accion.fecha_inicio} />
                     </td>
                     <td className="px-4 py-2 border-b">
                       {accion.usuario_origen
-                        ? `${accion.usuario_origen.email} - ${accion.usuario_origen.nombre_departamento || "Desconocido"}`
+                        ? `${accion.usuario_origen.email} - ${
+                            accion.usuario_origen.nombre_departamento ||
+                            "Desconocido"
+                          }`
                         : "Desconocido"}
                     </td>
                     <td className="px-4 py-2 border-b">
                       {accion.usuario_destino
-                        ? `${accion.usuario_destino.email} - ${accion.usuario_destino.nombre_departamento || "Desconocido"}`
+                        ? `${accion.usuario_destino.email} - ${
+                            accion.usuario_destino.nombre_departamento ||
+                            "Desconocido"
+                          }`
                         : "Desconocido"}
                     </td>
-                    <td className="px-4 py-2 border-b">{accion.visto ? "Sí" : "No"}</td>
                     <td className="px-4 py-2 border-b">
-                      {accion.visto && accion.fecha_visto ? <FormattedDateTime dateTime={accion.fecha_visto} /> : "-"}
+                      {accion.visto ? "Sí" : "No"}
                     </td>
-                    <td className="px-4 py-2 border-b">{accion.estado || "-"}</td>
-                    <td className="px-4 py-2 border-b" title={accion.comentario || ""}>
-                      {accion.comentario ? (accion.comentario.length > 40 ? accion.comentario.slice(0, 40) + "..." : accion.comentario) : "-"}
+                    <td className="px-4 py-2 border-b">
+                      {accion.visto && accion.fecha_visto ? (
+                        <FormattedDateTime dateTime={accion.fecha_visto} />
+                      ) : (
+                        "-"
+                      )}
+                    </td>
+                    <td className="px-4 py-2 border-b">
+                      {accion.estado_resultante || "-"}
+                    </td>
+                    <td className="px-4 py-2 border-b">
+                      {accion._respuesta_contexto
+                        ? `${
+                            accion._respuesta_contexto.cite ||
+                            `#${accion._respuesta_contexto.id}`
+                          } - ${
+                            accion._respuesta_contexto.referencia ||
+                            "Sin referencia"
+                          }`
+                        : "-"}
+                    </td>
+                    <td
+                      className="px-4 py-2 border-b"
+                      title={accion.comentario || ""}
+                    >
+                      {accion.comentario
+                        ? accion.comentario.length > 40
+                          ? `${accion.comentario.slice(0, 40)}...`
+                          : accion.comentario
+                        : "-"}
                     </td>
                   </tr>
                 ))}

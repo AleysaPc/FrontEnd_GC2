@@ -8,21 +8,22 @@ import { useState } from "react";
 import FormattedDateTime from "../../../components/shared/FormattedDate";
 
 function CorrespondenciaEnviadaList() {
-
   const [modalVisible, setModalVisible] = useState(false);
-    const [correspondenciaId, setCorrespondenciaId] = useState(null);
-  
-    const { data, isLoading, error } = useCorrespondenciaElaboradas({ all_data: true });
-  
-    const handleOpenModal = (idCorrespondencia) => {
-      setCorrespondenciaId(idCorrespondencia);
-      setModalVisible(true);
-    };
-  
-    const handleCloseModal = () => {
-      setModalVisible(false);
-      setCorrespondenciaId(null);
-    };
+  const [correspondenciaId, setCorrespondenciaId] = useState(null);
+
+  const { data, isLoading, error } = useCorrespondenciaElaboradas({
+    all_data: true,
+  });
+
+  const handleOpenModal = (idCorrespondencia) => {
+    setCorrespondenciaId(idCorrespondencia);
+    setModalVisible(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalVisible(false);
+    setCorrespondenciaId(null);
+  };
   const useFields = () => [
     { key: "index", label: "#" },
     {
@@ -54,17 +55,22 @@ function CorrespondenciaEnviadaList() {
       ),
     },
     {
+      key: "similitud",
+      label: "Similitud (%)",
+      render: (item) => {
+        if (!item.similitud) return "--";
+        const similPercent = ((1 - item.similitud) * 100).toFixed(2);
+        return `${similPercent}%`;
+      },
+    },
+    {
       key: "cite",
       label: "CITE",
     },
     {
       key: "fecha_envio",
       label: "Fecha de Envio",
-      render: (item) => (
-        <FormattedDateTime
-          dateTime={item.fecha_envio}
-        />
-      ),
+      render: (item) => <FormattedDateTime dateTime={item.fecha_envio} />,
     },
     {
       key: "referencia",
@@ -114,10 +120,10 @@ function CorrespondenciaEnviadaList() {
     clavesBusqueda: ["referencia"],
     actions: [
       {
-              to: "/createElaborada",
-              icon: FaPlus,
-              estilos: "text-white bg-green-600 rounded-full p-2",
-            },
+        to: "/createElaborada",
+        icon: FaPlus,
+        estilos: "text-white bg-green-600 rounded-full p-2",
+      },
     ],
     filtros: [
       { name: "cite", placeholder: "CITE " },

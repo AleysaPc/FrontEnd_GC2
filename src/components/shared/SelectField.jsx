@@ -5,7 +5,8 @@ export function SelectField({
   onChange, 
   options = [],
   isLoading = false,
-  error = null
+  error = null,
+  required = true
 }) {
     return (
       <div>
@@ -21,7 +22,7 @@ export function SelectField({
             value={value || ""}
             onChange={onChange}
             className="w-full p-2 text-sm border border-gray-300 rounded"
-            required
+            required={required}
           >
             <option value="" disabled>Selecciona una opción</option>
             {options.map(({ id, nombre }) => (

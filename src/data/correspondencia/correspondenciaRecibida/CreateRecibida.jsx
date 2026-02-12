@@ -3,6 +3,7 @@ import { MultipleInputs } from "../../../components/shared/MultipleInputs";
 import CreateEntity from "../../../components/shared/CreateEntity";
 import {
   useContactos,
+  useCorrespondencias,
   useCorrespondenciaRecibidaMutations,
   useCustomUserList,
 } from "../../../hooks/useEntities";
@@ -39,10 +40,16 @@ export default function createRecibida() {
     isLoading: loadingUsuarios,
     error: errorUsuarios,
   } = useCustomUserList({ all_data: true });
+  const {
+    data: correspondenciasData,
+    isLoading: loadingRelacionadas,
+    error: errorRelacionadas,
+  } = useCorrespondencias({ all_data: true });
 
   // Asegurarnos de que los datos sean arrays
   const contactosArray = contactosData?.data || [];
   const usuariosArray = usuariosData?.data || [];
+  const correspondenciasArray = correspondenciasData?.data || [];
 
   const { options } = useFormEntity();
 
@@ -53,6 +60,11 @@ export default function createRecibida() {
 
   const usuarioOptions = () =>
     usuariosArray ? options(usuariosArray, "id", "email") : [];
+  const relacionadaOptions = () =>
+    correspondenciasArray.map((item) => ({
+      id: item.id_correspondencia,
+      nombre: `#${item.id_correspondencia} - ${item.tipo || "doc"} - ${item.referencia || "Sin referencia"}`,
+    }));
 
   // Manejo de errores
   useEffect(() => {
@@ -62,13 +74,16 @@ export default function createRecibida() {
     if (errorUsuarios) {
       console.error("Error al cargar usuarios:", errorUsuarios);
     }
-  }, [errorContactos, errorUsuarios]);
+    if (errorRelacionadas) {
+      console.error("Error al cargar correspondencias relacionadas:", errorRelacionadas);
+    }
+  }, [errorContactos, errorUsuarios, errorRelacionadas]);
 
-  if (loadingContactos || loadingUsuarios) {
+  if (loadingContactos || loadingUsuarios || loadingRelacionadas) {
     return <div className="text-center">Cargando datos...</div>;
   }
 
-  if (errorContactos || errorUsuarios) {
+  if (errorContactos || errorUsuarios || errorRelacionadas) {
     return (
       <div className="text-red-500 text-center">Error al cargar datos</div>
     );
@@ -101,12 +116,16 @@ export default function createRecibida() {
     comentario: "",
     contacto: "",
     comentario_derivacion: "",
+    relacionada_a: "",
     documentos: [],
     usuarios: [], // Changed from usuario to usuarios and made it an array
     usuario: logicaNegocio.idUsuario,
   };
   const camposExtras = (formValues) => ({
     contacto: Number(formValues.contacto),
+    relacionada_a: formValues.relacionada_a
+      ? Number(formValues.relacionada_a)
+      : null,
     usuarios: Array.isArray(formValues.usuarios)
       ? formValues.usuarios.map(Number)
       : [],
@@ -115,6 +134,10 @@ export default function createRecibida() {
 
   const paraEnvio = (formValues) => ({
     link: "/correspondenciaRecibidaList",
+    params: {
+      fecha_respuesta: formValues.fecha_respuesta?.trim() || null,
+      fecha_recepcion: formValues.fecha_recepcion?.trim() || null,
+    },
     data: {
       ...camposExtras(formValues),
       comentario_derivacion: formValues.comentario_derivacion || "",
@@ -209,6 +232,16 @@ export default function createRecibida() {
       options: opcionEstado,
       onChange: manejarEntradas.handleInputChange,
       required: true,
+    },
+    {
+      component: SelectField,
+      label: "Se relaciona con (Opcional)",
+      name: "relacionada_a",
+      options: relacionadaOptions(),
+      onChange: manejarEntradas.handleInputChange,
+      required: false,
+      isLoading: loadingRelacionadas,
+      error: errorRelacionadas,
     },
 
     {

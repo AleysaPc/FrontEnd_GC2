@@ -2,6 +2,7 @@ import { useFormEntity } from "../../../utils/useFormEntity";
 import {
   usePlantillaDocumentos,
   useCorrespondenciaElaboradaMutations,
+  useCorrespondenciaElaborada,
   useContactos,
   useCorrespondenciaRecibida,
   useUser,
@@ -45,13 +46,19 @@ export default function CreateElaborada() {
   const { data: userResponse } = useUser(userId); //Obtiene datos del usuario completo
   const usuario = userResponse?.data;
 
-  // Trae el documento que estamos respondiendo
-  const { data: respuestaData } = useCorrespondenciaRecibida(respuestaAId);
+  // Trae el documento que estamos respondiendo (puede ser recibida o elaborada)
+  const { data: respuestaRecibidaData } = useCorrespondenciaRecibida(respuestaAId);
+  const { data: respuestaElaboradaData } = useCorrespondenciaElaborada(respuestaAId);
   useEffect(() => {
-    if (respuestaData?.data?.nro_registro) {
-      setNroRegistroRespuesta(respuestaData.data.nro_registro);
-    }
-  }, [respuestaData]);
+    const recibida = respuestaRecibidaData?.data;
+    const elaborada = respuestaElaboradaData?.data;
+    const numeroPadre =
+      recibida?.nro_registro ||
+      elaborada?.cite ||
+      elaborada?.nro_registro_respuesta ||
+      "";
+    setNroRegistroRespuesta(numeroPadre);
+  }, [respuestaRecibidaData, respuestaElaboradaData]);
 
   // Carga de datos para selects Hook de datos selects
   const {

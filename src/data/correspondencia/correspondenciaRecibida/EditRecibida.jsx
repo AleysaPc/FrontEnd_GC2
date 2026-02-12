@@ -1,6 +1,7 @@
 import {
   useCorrespondenciaRecibidaMutations,
   useCorrespondenciaRecibida,
+  useCorrespondencias,
 } from "../../../hooks/useEntities";
 import { useContactos } from "../../../hooks/useEntities";
 import { useFormEntity } from "../../../utils/useFormEntity";
@@ -30,6 +31,12 @@ export default function editEnviada() {
     error: errorUsuarios,
   } = useCustomUserList({ all_data: true });
   const usuariosArray = usuariosData?.data || [];
+  const {
+    data: correspondenciasData,
+    isLoading: loadingRelacionadas,
+    error: errorRelacionadas,
+  } = useCorrespondencias({ all_data: true });
+  const correspondenciasArray = correspondenciasData?.data || [];
 
   const { options } = useFormEntity();
 
@@ -40,6 +47,11 @@ export default function editEnviada() {
 
   const usuarioOptions = () =>
     usuariosArray ? options(usuariosArray, "id", "email") : [];
+  const relacionadaOptions = () =>
+    correspondenciasArray.map((item) => ({
+      id: item.id_correspondencia,
+      nombre: `#${item.id_correspondencia} - ${item.tipo || "doc"} - ${item.referencia || "Sin referencia"}`,
+    }));
 
   const estadoOptions = [
     { id: "enviado", nombre: "Enviado" },
@@ -76,6 +88,7 @@ export default function editEnviada() {
       prioridad: entidad?.data?.prioridad || "",
       estado: entidad?.data?.estado || "",
       fecha_respuesta: entidad?.data?.fecha_respuesta || "",
+      relacionada_a: entidad?.data?.relacionada_a || "",
       documentos: Array.isArray(entidad?.data?.documentos)
         ? entidad.data.documentos
         : [],
@@ -86,6 +99,9 @@ export default function editEnviada() {
 
   const camposExtras = (formValues) => ({
     contacto: Number(formValues.contacto),
+    relacionada_a: formValues.relacionada_a
+      ? Number(formValues.relacionada_a)
+      : null,
     usuario: logicaNegocio.idUsuario,
     usuarios: Array.isArray(formValues.usuarios)
       ? formValues.usuarios.map(Number)
@@ -186,6 +202,16 @@ export default function editEnviada() {
       name: "estado",
       options: estadoOptions,
       onChange: manejarEntradas.handleInputChange,
+    },
+    {
+      component: SelectField,
+      label: "Se relaciona con (Opcional)",
+      name: "relacionada_a",
+      options: relacionadaOptions(),
+      onChange: manejarEntradas.handleInputChange,
+      required: false,
+      isLoading: loadingRelacionadas,
+      error: errorRelacionadas,
     },
     {
       component: MultipleInputs,
