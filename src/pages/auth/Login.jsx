@@ -42,12 +42,12 @@ const Login = () => {
   };
 
   return (
-    <div className="flex justify-center items-center w-full h-screen bg-gradient-to-r from-green-900 via-green-800 to-green-900">
+    <div className="flex justify-center items-center w-full h-screen bg-gradient-to-r from-green-700 via-green-600 to-green-500">
       <div className="w-full max-w-sm bg-white p-8 rounded-xl shadow-lg">
         {/* Logo y nombre */}
         <div className="flex flex-col items-center mb-6">
           <img src="/LogoFed.PNG" alt="Logo de la Empresa" className="h-16 mb-2" />
-          <h1 className="text-center text-xl font-bold bg-gradient-to-r from-red-800 via-red-700 to-green-900 text-transparent bg-clip-text">
+          <h1 className="text-center text-xl font-bold bg-gradient-to-r from-red-800 via-red-800 to-red-800 text-transparent bg-clip-text">
             FEDERACIÓN DE TRABAJADORES LA PAZ
           </h1>
         </div>

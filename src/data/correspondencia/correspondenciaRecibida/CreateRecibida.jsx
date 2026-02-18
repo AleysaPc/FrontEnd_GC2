@@ -60,6 +60,7 @@ export default function createRecibida() {
 
   const usuarioOptions = () =>
     usuariosArray ? options(usuariosArray, "id", "email") : [];
+  
   const relacionadaOptions = () =>
     correspondenciasArray.map((item) => ({
       id: item.id_correspondencia,

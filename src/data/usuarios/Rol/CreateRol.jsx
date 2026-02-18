@@ -1,22 +1,25 @@
-import { InputField } from "../../../components/shared/InputField";
+﻿import { InputField } from "../../../components/shared/InputField";
 import CreateEntity from "../../../components/shared/CreateEntity";
-import { useRolesList, useRolMutations } from "../../../hooks/useEntities";
+import { useRolMutations, usePermisoList } from "../../../hooks/useEntities";
 import { FaPlus } from "react-icons/fa";
 import SelectorPermisos from "../../../components/shared/SelectorPermisos";
-import { usePermisoList } from "../../../hooks/useEntities";
 
 export default function CreateRol() {
-  // 1️⃣ Obtenemos los permisos desde la API
-  const { data: permisosData, isLoading, error } = usePermisoList();
-  console.log("Todos los datos?",permisosData)
-  
+  const { data: permisosData, isLoading, error } = usePermisoList({
+    all_data: true,
+    per_page: 1000,
+  });
 
   if (isLoading) return <div>Cargando permisos...</div>;
   if (error) return <div>Error cargando permisos</div>;
 
+  const permisos = Array.isArray(permisosData?.data)
+    ? permisosData.data
+    : permisosData?.data?.results || [];
+
   const estadoInicial = {
     name: "",
-    permissions: [], // IDs de permisos seleccionados
+    permissions: [],
   };
 
   const camposExtras = (formValues) => ({
@@ -39,9 +42,8 @@ export default function CreateRol() {
     },
     {
       component: SelectorPermisos,
-      // 2️⃣ Cambiado de data → results y garantizado array vacío por defecto
-      permisosData: permisosData?.data?.results || [],
-      value: formValues.permissions || [], // 3️⃣ Garantizamos array vacío
+      permisosData: permisos,
+      value: formValues.permissions || [],
       onChange: (ids) => {
         manejarEntradas.handleInputChange({
           target: {

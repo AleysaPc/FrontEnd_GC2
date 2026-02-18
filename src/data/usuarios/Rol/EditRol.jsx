@@ -1,18 +1,22 @@
-import { useRol, useRolMutations, usePermisoList } from "../../../hooks/useEntities";
+﻿import { useRol, useRolMutations, usePermisoList } from "../../../hooks/useEntities";
 import { InputField } from "../../../components/shared/InputField";
 import { FaBackspace, FaPencilAlt } from "react-icons/fa";
 import EditEntity from "../../../components/shared/EditEntity";
 import SelectorPermisos from "../../../components/shared/SelectorPermisos";
 
 export default function EditRol() {
-  // Obtenemos los permisos desde la API
-  const { data: permisosData, isLoading, error } = usePermisoList();
-  console.log("Todos los datos?", permisosData);
+  const { data: permisosData, isLoading, error } = usePermisoList({
+    all_data: true,
+    per_page: 1000,
+  });
+
+  const permisos = Array.isArray(permisosData?.data)
+    ? permisosData.data
+    : permisosData?.data?.results || [];
 
   if (isLoading) return <div>Cargando permisos...</div>;
   if (error) return <div>Error cargando permisos</div>;
 
-  // Configuración inicial del formulario con datos de la API
   const configuracionFormulario = (rolResponse) => {
     const rol = rolResponse?.data;
 
@@ -22,13 +26,11 @@ export default function EditRol() {
     };
   };
 
-  // Parámetros de envío al backend
   const paraEnvio = (formValues) => ({
     entityId: formValues.id,
     link: "/rolList",
   });
 
-  // Campos del formulario
   const construirCampos = (formValues, manejarEntradas) => [
     {
       component: InputField,
@@ -40,7 +42,7 @@ export default function EditRol() {
     },
     {
       component: SelectorPermisos,
-      permisosData: permisosData?.data?.results || [],
+      permisosData: permisos,
       value: formValues.permissions || [],
       onChange: (ids) => {
         manejarEntradas.handleInputChange({
@@ -52,7 +54,6 @@ export default function EditRol() {
     },
   ];
 
-  // Configuración de la navegación
   const paraNavegacion = {
     title: "Editar Rol",
     subTitle: "Formulario para editar un rol",

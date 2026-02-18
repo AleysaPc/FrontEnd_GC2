@@ -12,8 +12,8 @@ const PasswordResetRequest = () => {
   };
 
   return (
-    <div className="flex justify-center items-center w-full h-screen bg-gradient-to-r from-green-400 via-indigo-400 to-orange-500">
-      <div className="w-full max-w-sm bg-white p-8 rounded-xl shadow-lg">
+    <div className="flex justify-center items-center w-full h-screen bg-gradient-to-r from-green-700 via-green-600 to-green-500">
+      <div className="w-full max-w-sm bg-white p-8 rounded-xl shadow-lg border-cyan-700">
         <h2 className="text-3xl text-center font-bold text-teal-600 mb-6">
           Solicitar restablecimiento de contraseña
         </h2>

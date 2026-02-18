@@ -71,7 +71,7 @@ const PasswordReset = () => {
               onClick={togglePasswordVisibility}
               className="absolute right-2 top-2 text-gray-500"
             >
-              {showPassword ? "🙈" : "👁️"}
+              {showPassword ? "🔓" : "🔒"}
             </button>
           </div>
         </div>
@@ -108,7 +108,7 @@ const PasswordReset = () => {
               onClick={togglePasswordVisibility}
               className="absolute right-2 top-2 text-gray-500"
             >
-              {showPassword ? "🙈" : "👁️"}
+              {showPassword ? "🔓" : "🔒"}
             </button>
           </div>
         </div>
