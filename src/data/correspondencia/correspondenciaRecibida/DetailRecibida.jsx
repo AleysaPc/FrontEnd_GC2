@@ -15,6 +15,7 @@ import {
 import TestDerivar from "../correspondencia/TestDerivar";
 import { useNavigate } from "react-router-dom";
 import FormattedDateTime from "../../../components/shared/FormattedDate";
+import RecorridoRelacional from "../../../components/shared/RecorridoRelacional";
 
 export default function DetailRecibida() {
   const { id } = useParams();
@@ -249,54 +250,7 @@ export default function DetailRecibida() {
         </div>
       </div>
 
-      <h3 className="text-xl font-bold mb-4">Recorrido Relacional</h3>
-      <div className="bg-white p-6 rounded-lg shadow-md mb-6">
-        <div className="space-y-3">
-          {correspondencia.relacionada_a_info ? (
-            <div className="border rounded-md bg-indigo-50 px-3 py-2">
-              <p className="text-sm font-semibold text-indigo-900">
-                Documento anterior relacionado
-              </p>
-              <p className="text-xs text-indigo-800">
-                {`${correspondencia.relacionada_a_info.numero || "Sin numero"} - ${
-                  correspondencia.relacionada_a_info.referencia || "Sin referencia"
-                }`}
-              </p>
-            </div>
-          ) : null}
-
-          <div className="border rounded-md bg-blue-50 px-3 py-2">
-            <div className="flex items-center justify-between gap-2">
-              <p className="text-sm font-semibold text-blue-900">Documento actual</p>
-              <span
-                className={`text-[11px] uppercase tracking-wide px-2 py-0.5 rounded-full ${estadoVisual(
-                  correspondencia.estado
-                )}`}
-              >
-                {correspondencia.estado || "sin_estado"}
-              </span>
-            </div>
-            <p className="text-xs text-blue-800">
-              {`${correspondencia.nro_registro || `#${correspondencia.id_correspondencia}`} - ${
-                correspondencia.referencia || "Sin referencia"
-              }`}
-            </p>
-          </div>
-
-          {correspondencia.respuestas?.length > 0 ? (
-            <div>
-              <p className="text-sm font-semibold text-gray-700 mb-2">
-                Respuestas generadas (con estado)
-              </p>
-              {renderRespuestaTree(correspondencia.respuestas)}
-            </div>
-          ) : (
-            <p className="text-sm text-gray-500">
-              Aún no hay respuestas registradas para este documento.
-            </p>
-          )}
-        </div>
-      </div>
+      <RecorridoRelacional correspondencia={correspondencia} />
 
       {/* Historial unificado */}
       <h3 className="text-xl font-bold mb-4">Historial de Derivaciones</h3>

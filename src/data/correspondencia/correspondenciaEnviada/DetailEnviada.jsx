@@ -17,6 +17,7 @@ import {
 } from "react-icons/fa";
 import TestDerivar from "../correspondencia/TestDerivar";
 import { useNavigate } from "react-router-dom";
+import RecorridoRelacional from "../../../components/shared/RecorridoRelacional";
 
 export default function DetailEnviada() {
   const { id } = useParams();
@@ -31,7 +32,8 @@ export default function DetailEnviada() {
 
   const correspondencia = response?.data;
   const respuestaPadreId = correspondencia?.respuesta_a;
-  const { data: dataRespuestaPadreGeneral } = useCorrespondencia(respuestaPadreId);
+  const { data: dataRespuestaPadreGeneral } =
+    useCorrespondencia(respuestaPadreId);
   const { data: dataRespuestaPadreRecibida } =
     useCorrespondenciaRecibida(respuestaPadreId);
   const { data: dataRespuestaPadreElaborada } =
@@ -147,15 +149,15 @@ export default function DetailEnviada() {
               Fecha de seguimiento:
             </p>
             <p className="text-gray-900 capitalize">
-            {new Date(correspondencia.fecha_seguimiento).toLocaleString()}
+              {new Date(correspondencia.fecha_seguimiento).toLocaleString()}
               <br />
-            </p> <p className="font-medium text-blue-700 mt-4">
+            </p>{" "}
+            <p className="font-medium text-blue-700 mt-4">
               Fecha y hora de Elaboracion:
             </p>
             <p className="text-gray-900 capitalize">
-            {new Date(correspondencia.fecha_elaboracion).toLocaleString()}
+              {new Date(correspondencia.fecha_elaboracion).toLocaleString()}
             </p>
-
           </div>
 
           <div className="space-y-1 w-9/10">
@@ -188,7 +190,7 @@ export default function DetailEnviada() {
                           setDocumentoActivo(pdfFallbackUrl);
                         }
                         navigate(
-                          `/vistaPdfDocumento/${correspondencia.id_correspondencia}`
+                          `/vistaPdfDocumento/${correspondencia.id_correspondencia}`,
                         );
                       }
                     }}
@@ -205,22 +207,12 @@ export default function DetailEnviada() {
         </div>
       </div>
 
-      {respuestaPadreId ? (
-        <div className="bg-white p-6 rounded-lg shadow-md mb-6">
-          <h3 className="text-xl font-bold mb-4">Recorrido Relacional</h3>
-          <div className="space-y-3">
-            <div className="border rounded-md bg-blue-100 px-3 py-2">
-              <p className="text-sm font-semibold text-amber-900">
-                Este documento es respuesta a:
-              </p>
-              <p className="text-xs text-blue-800">
-                {`${numeroRespuesta || "Sin numero"} - ${referenciaRespuesta}`}
-              </p>
-            </div>
-            <p className="text-sm text-gray-500">Sin respuestas relacionadas.</p>
-          </div>
-        </div>
-      ) : null}
+      <RecorridoRelacional
+        correspondencia={correspondencia}
+        esEnviada={true}
+        numeroRespuesta={numeroRespuesta}
+        referenciaRespuesta={referenciaRespuesta}
+      />
 
       <h3 className="text-xl font-bold mb-4">Historial de Derivaciones</h3>
       <div className="space-y-4">
@@ -270,4 +262,3 @@ export default function DetailEnviada() {
     </div>
   );
 }
-

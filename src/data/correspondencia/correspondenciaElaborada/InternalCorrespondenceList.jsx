@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { FaEdit, FaEye, FaStream } from "react-icons/fa";
+import { FaEdit, FaEye, FaInfo, FaStream } from "react-icons/fa";
 import { ActionButton } from "../../../components/shared/ActionButton";
 import { useCorrespondenciaElaboradas } from "../../../hooks/useEntities";
 import EntityList from "../../../components/shared/EntityList";
@@ -48,6 +48,12 @@ export default function internalCorrespondenciaList() {
             icon={FaEye}
             ttile={"Vista previa del documento"}
             estilos="hover:bg-blue-600 hover:text-white text-gray-500 rounded-md flex items-center gap-2 p-1"
+          />
+          <ActionButton
+            to={`/detailEnviada/${item.id_correspondencia}`}
+            icon={FaInfo}
+            title="Ver detalles del documento"
+            estilos="hover:bg-gray-600 hover:text-gray-100 text-gray-500 rounded-md flex items-center gap-2 transition duration-200 p-1"
           />
           <button
             onClick={() => handleOpenModal(item.id_correspondencia)}

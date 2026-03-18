@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { FaEdit, FaEye, FaStream } from "react-icons/fa";
+import { FaEdit, FaEye, FaInfo, FaStream } from "react-icons/fa";
 import { ActionButton } from "../../../components/shared/ActionButton";
 import { useCorrespondenciaElaboradas } from "../../../hooks/useEntities";
 import EntityList from "../../../components/shared/EntityList";
@@ -39,6 +39,12 @@ export default function externalCorrespondenceList() {
             icon={FaEye}
             ttile={"Vista previa del documento"}
             estilos="hover:bg-blue-600 hover:text-white text-gray-500 rounded-md flex items-center gap-2 p-1"
+          />
+          <ActionButton
+            to={`/detailEnviada/${item.id_correspondencia}`}
+            icon={FaInfo}
+            title="Ver detalles del documento"
+            estilos="hover:bg-gray-600 hover:text-gray-100 text-gray-500 rounded-md flex items-center gap-2 transition duration-200 p-1"
           />
           <button
             onClick={() => handleOpenModal(item.id_correspondencia)}
@@ -96,7 +102,7 @@ export default function externalCorrespondenceList() {
         ...params,
         filters: {
           ...params.filters,
-          estado__in: ["borrador", "en_revision", "aprobado", "rechazado",],
+          estado__in: ["borrador", "en_revision", "aprobado", "rechazado"],
           ambito: "externo",
         },
       }),
@@ -107,8 +113,13 @@ export default function externalCorrespondenceList() {
       { name: "plantilla__tipo", placeholder: "Tipo Documento" },
       { name: "referencia", placeholder: "Referencia" },
     ],
-    filtrosAvanzados: [  { name: "contacto_nombre_completo", placeholder: "Destinatario" },
-      { name: "contacto__institucion__razon_social", placeholder: "Institución" },],
+    filtrosAvanzados: [
+      { name: "contacto_nombre_completo", placeholder: "Destinatario" },
+      {
+        name: "contacto__institucion__razon_social",
+        placeholder: "Institución",
+      },
+    ],
     ordenes: [
       { name: "tipo", label: "Tipo" },
       { name: "fecha_registro", label: "Fecha de Registro" },

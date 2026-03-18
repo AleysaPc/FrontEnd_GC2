@@ -58,8 +58,9 @@ function CorrespondenciaRecibidaList() {
       key: "similitud",
       label: "Similitud (%)",
       render: (item) => {
-        if (!item.similitud) return "--";
-        const similPercent = ((1 - item.similitud) * 100).toFixed(2);
+        const similitud = Number(item.similitud);
+        if (Number.isNaN(similitud)) return "--";
+        const similPercent = ((1 - similitud) * 100).toFixed(2);
         return `${similPercent}%`;
       },
     },
