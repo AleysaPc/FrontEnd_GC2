@@ -39,6 +39,7 @@ export default function DetailRecibida() {
       setDocumentoActivo(fullUrl);
     }
   }, [documentos]);
+  const isUrlValid = documentoActivo && documentoActivo.startsWith("http");
 
   if (isLoadingCorrespondencia) {
     return <div>Cargando...</div>;
