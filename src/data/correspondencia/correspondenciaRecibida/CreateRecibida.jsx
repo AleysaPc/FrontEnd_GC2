@@ -20,7 +20,7 @@ import { SelectField } from "../../../components/shared/SelectField";
 import { UserDropdownSelect } from "../../../components/shared/UserDropdownSelect";
 import { useEffect } from "react";
 import FormattedDate from "../../../components/shared/FormattedDate";
-import { TextAreaField } from "c:/Users/Admin/Desktop/SystemGC2/Frontend/src/components/shared/TextAreaField";
+import { TextAreaField } from "../../../components/shared/TextAreaField";
 
 export default function createRecibida() {
   const { paraSelectsdestructuringYMap } = useFormEntity();
