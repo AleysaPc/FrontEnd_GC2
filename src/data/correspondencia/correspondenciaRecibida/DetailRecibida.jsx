@@ -29,13 +29,16 @@ export default function DetailRecibida() {
   const correspondencia = response?.data;
   const documentos = correspondencia?.documentos || [];
 
+  // En el useEffect
   useEffect(() => {
     if (documentos.length > 0) {
-      setDocumentoActivo(documentos[0].archivo);
+      const baseUrl = "https://backendgc2-production.up.railway.app";
+      const fullUrl = documentos[0].archivo.startsWith("http")
+        ? documentos[0].archivo
+        : `${baseUrl}${documentos[0].archivo}`;
+      setDocumentoActivo(fullUrl);
     }
   }, [documentos]);
-
-  const isUrlValid = documentoActivo && documentoActivo.startsWith("http");
 
   if (isLoadingCorrespondencia) {
     return <div>Cargando...</div>;
@@ -62,7 +65,9 @@ export default function DetailRecibida() {
     ...(correspondencia.acciones || []),
     ...obtenerAccionesRecursivas(correspondencia.respuestas || []),
   ];
-  accionesUnificadas.sort((a, b) => new Date(a.fecha_inicio) - new Date(b.fecha_inicio));
+  accionesUnificadas.sort(
+    (a, b) => new Date(a.fecha_inicio) - new Date(b.fecha_inicio),
+  );
 
   const estadoVisual = (estado) => {
     const key = (estado || "").toLowerCase();
@@ -96,7 +101,7 @@ export default function DetailRecibida() {
       >
         <div
           className={`border rounded-md px-3 py-2 mb-2 ${tarjetaRespuestaVisual(
-            respuesta.estado
+            respuesta.estado,
           )}`}
         >
           <p className="text-[11px] uppercase tracking-wide text-slate-600 mb-1">
@@ -108,7 +113,7 @@ export default function DetailRecibida() {
             </p>
             <span
               className={`text-[11px] uppercase tracking-wide px-2 py-0.5 rounded-full ${estadoVisual(
-                respuesta.estado
+                respuesta.estado,
               )}`}
             >
               {respuesta.estado || "sin_estado"}
@@ -163,7 +168,7 @@ export default function DetailRecibida() {
             icon: FaFile,
             estilos:
               "bg-white hover:bg-red-800 text-black px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",
-          }
+          },
         ]}
         subTitle={`Información del Documento: ${correspondencia.nro_registro}`}
         icon={FaFileSignature}
@@ -182,10 +187,10 @@ export default function DetailRecibida() {
               {correspondencia.referencia}
             </p>
             <p className="text-gray-900">
-              <span className="font-medium text-blue-700">Fecha y hora de recepción:</span>{" "}
-              <FormattedDateTime
-                dateTime={correspondencia.fecha_recepcion}
-              />
+              <span className="font-medium text-blue-700">
+                Fecha y hora de recepción:
+              </span>{" "}
+              <FormattedDateTime dateTime={correspondencia.fecha_recepcion} />
             </p>
             <p className="text-gray-900">
               <span className="font-medium text-blue-700">Contacto:</span>{" "}
@@ -197,9 +202,12 @@ export default function DetailRecibida() {
             </p>
             {correspondencia.relacionada_a_info ? (
               <p className="text-gray-900">
-                <span className="font-medium text-blue-700">Relacionada con:</span>{" "}
+                <span className="font-medium text-blue-700">
+                  Relacionada con:
+                </span>{" "}
                 {`${correspondencia.relacionada_a_info.numero || "Sin numero"} - ${
-                  correspondencia.relacionada_a_info.referencia || "Sin referencia"
+                  correspondencia.relacionada_a_info.referencia ||
+                  "Sin referencia"
                 }`}
               </p>
             ) : null}
@@ -235,7 +243,9 @@ export default function DetailRecibida() {
                     if (doc.archivo) {
                       window.open(doc.archivo, "_blank");
                     } else {
-                      navigate(`/vistaPdfDocumento/${correspondencia.id_correspondencia}`);
+                      navigate(
+                        `/vistaPdfDocumento/${correspondencia.id_correspondencia}`,
+                      );
                     }
                   }}
                   estilos={`px-4 py-2 border rounded-md ${
@@ -257,8 +267,13 @@ export default function DetailRecibida() {
       <div className="space-y-4">
         {accionesUnificadas.length > 0 ? (
           accionesUnificadas.map((accion, index) => (
-            <div key={accion.id || index} className="bg-white p-6 rounded-lg shadow-md">
-              <h4 className="text-lg font-semibold mb-2">Derivación #{index + 1}</h4>
+            <div
+              key={accion.id || index}
+              className="bg-white p-6 rounded-lg shadow-md"
+            >
+              <h4 className="text-lg font-semibold mb-2">
+                Derivación #{index + 1}
+              </h4>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <p className="font-medium text-gray-700">Tipo de Acción:</p>
@@ -269,20 +284,31 @@ export default function DetailRecibida() {
                       {accion._respuesta_contexto.cite ||
                         `#${accion._respuesta_contexto.id}`}{" "}
                       -{" "}
-                      {accion._respuesta_contexto.referencia || "Sin referencia"}
+                      {accion._respuesta_contexto.referencia ||
+                        "Sin referencia"}
                     </p>
                   ) : null}
-                  <p className="font-medium text-gray-700 mt-4">Derivado por:</p>
-                  <p className="text-gray-900">{accion.usuario_origen?.email || "No especificado"}</p>
+                  <p className="font-medium text-gray-700 mt-4">
+                    Derivado por:
+                  </p>
+                  <p className="text-gray-900">
+                    {accion.usuario_origen?.email || "No especificado"}
+                  </p>
                   <p className="font-medium text-gray-700 mt-4">Fecha:</p>
-                  <p className="text-gray-900"><FormattedDateTime dateTime={accion.fecha_inicio} /></p>
+                  <p className="text-gray-900">
+                    <FormattedDateTime dateTime={accion.fecha_inicio} />
+                  </p>
                 </div>
 
                 <div className="space-y-2">
                   <p className="font-medium text-gray-700">Usuario Destino:</p>
-                  <p className="text-gray-900">{accion.usuario_destino?.email || "No especificado"}</p>
+                  <p className="text-gray-900">
+                    {accion.usuario_destino?.email || "No especificado"}
+                  </p>
                   <p className="font-medium text-gray-700 mt-4">Comentario:</p>
-                  <p className="text-gray-900">{accion.comentario || "Sin comentarios"}</p>
+                  <p className="text-gray-900">
+                    {accion.comentario || "Sin comentarios"}
+                  </p>
                 </div>
               </div>
             </div>
@@ -299,4 +325,3 @@ export default function DetailRecibida() {
     </div>
   );
 }
-
