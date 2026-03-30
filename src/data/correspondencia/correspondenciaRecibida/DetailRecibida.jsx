@@ -32,10 +32,18 @@ export default function DetailRecibida() {
   // En el useEffect
   useEffect(() => {
     if (documentos.length > 0) {
-      const baseUrl = "https://backendgc2-production.up.railway.app";
-      const fullUrl = documentos[0].archivo.startsWith("http")
-        ? documentos[0].archivo
-        : `${baseUrl}${documentos[0].archivo}`;
+      console.log("Documento original:", documentos[0].archivo);
+
+      // Si ya es una URL completa, reemplaza http por https
+      let fullUrl;
+      if (documentos[0].archivo.startsWith("http")) {
+        fullUrl = documentos[0].archivo.replace("http://", "https://");
+      } else {
+        const baseUrl = "https://backendgc2-production.up.railway.app";
+        fullUrl = `${baseUrl}${documentos[0].archivo}`;
+      }
+
+      console.log("URL completa:", fullUrl);
       setDocumentoActivo(fullUrl);
     }
   }, [documentos]);
