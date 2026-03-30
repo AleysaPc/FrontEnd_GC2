@@ -7,10 +7,20 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# Dependencies
 node_modules
+
+# Build outputs
 dist
 dist-ssr
 *.local
+
+# Environment files
+.env
+.env.local
+.env.development
+.env.production
+.env.test
 
 # Editor directories and files
 .vscode/*
@@ -23,5 +33,8 @@ dist-ssr
 *.sln
 *.sw?
 
-.env# Flowbite React
+# Flowbite React
 .flowbite-react/
+
+# Railway
+.railway/
