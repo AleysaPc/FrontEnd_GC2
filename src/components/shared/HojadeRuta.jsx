@@ -1,13 +1,14 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useCorrespondenciaRecibida } from "../../hooks/useEntities";
 import { useState, useEffect, useRef } from "react";
 import { ActionButton } from "../../components/shared/ActionButton";
 import FormattedDateTime from "../../components/shared/FormattedDate";
 import html2pdf from "html2pdf.js";
-import { FaFile } from "react-icons/fa";
+import { FaFile, FaArrowLeft } from "react-icons/fa";
 
 export default function HojadeRuta() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const printRef = useRef();
   const [documentoActivo, setDocumentoActivo] = useState("");
 
@@ -57,12 +58,21 @@ export default function HojadeRuta() {
 
   return (
     <div className="p-4">
-      <button
-        onClick={handlePrint}
-        className="bg-blue-600 text-white px-4 py-2 rounded-md mb-4"
-      >
-        Imprimir / Descargar PDF
-      </button>
+      <div className="flex gap-4 mb-4">
+        <button
+          onClick={handlePrint}
+          className="bg-blue-600 text-white px-4 py-2 rounded-md"
+        >
+          Imprimir / Descargar PDF
+        </button>
+        <button
+          onClick={() => navigate(-1)}
+          className="bg-gray-600 text-white px-4 py-2 rounded-md flex items-center gap-2"
+        >
+          <FaArrowLeft />
+          Volver
+        </button>
+      </div>
 
       <div ref={printRef} className="bg-white p-6 rounded-lg shadow-md">
         <h2 className="text-2xl font-bold text-center mb-4">

@@ -139,6 +139,7 @@ export default function CreateElaborada() {
       respuesta_a: respuestaAId ? Number(respuestaAId) : null,
       comentario_derivacion: formValues.comentario_derivacion || "",
       ambito: formValues.ambito,
+      usuario_id: userId,
     };
   };
   //Se envia el payload
@@ -260,8 +261,9 @@ export default function CreateElaborada() {
         campoReferencia(manejarEntradas),
         {
           component: CKEditorField,
-          label: "Contenido",
+          label: "Contenido - Campo obligatorio",
           name: "descripcion_introduccion",
+          required: true,
           value: formValues.descripcion_introduccion,
           onChange: manejarEntradas.handleInputChange,
         },
@@ -401,14 +403,14 @@ export default function CreateElaborada() {
     subTitle: `Correspondencia Interna/Externa${
       nroRegistroRespuesta ? ` - Respuesta a: ${nroRegistroRespuesta}` : ""
     }`,
-    icon: FaPlus,
+    //icon: FaPlus,
     actions: [
       {
         to: -1,
         label: "Cancelar",
         icon: FaTimes,
         estilos:
-          "border-white-700 rounded-lg bg-green-700 text-white p-2 hover:bg-red-700 hover:text-white-600",
+          "border-white-700 rounded-lg bg-gray-100 text-black p-2 hover:bg-red-700 hover:text-white-600",
       },
     ],
   };

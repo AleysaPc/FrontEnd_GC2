@@ -43,6 +43,7 @@ export const campoReferencia = (manejarEntradas) => ({
   component: InputField,
   label: "Referencia",
   name: "referencia",
+  required: true,
   onChange: manejarEntradas.handleInputChange,
 });
 /**

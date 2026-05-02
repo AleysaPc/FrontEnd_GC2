@@ -57,7 +57,7 @@ export default function CreateInstitucion() {
     const paraNavegacion = {
         title : "Crear Institucion",
         subTitle : "Formulario para crear institucion",
-        icon : FaPlus,
+        //icon : FaPlus,
         actions : [
             {
                 to : -1,

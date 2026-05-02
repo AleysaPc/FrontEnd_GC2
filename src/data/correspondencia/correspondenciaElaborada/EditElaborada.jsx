@@ -10,7 +10,7 @@ import { obtenerIdUser } from "../../../utils/auth";
 import { InputField } from "../../../components/shared/InputField";
 import { SelectField } from "../../../components/shared/SelectField";
 import EditEntity from "../../../components/shared/EditEntity";
-import { FaBackspace, FaEye, FaPencilAlt, FaPlus } from "react-icons/fa";
+import { FaArrowLeft, FaBackspace, FaEye, FaPencilAlt, FaPlus } from "react-icons/fa";
 import { MultipleInputs } from "../../../components/shared/MultipleInputs";
 import { UserDropdownSelect } from "../../../components/shared/UserDropdownSelect";
 import { TextAreaField } from "../../../components/shared/TextAreaField";
@@ -436,9 +436,9 @@ export default function EditElaborada() {
       {
         to: -1,
         label: "Volver",
-        icon: FaBackspace,
+        icon: FaArrowLeft,
         estilos:
-          "bg-gray-500 hover:bg-gray-800 text-white px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",
+          "bg-white hover:bg-gray-300 text-black px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",
       },
     ],
   };

@@ -97,21 +97,21 @@ export default function DetailEnviada() {
             label: "Generar respuesta",
             icon: FaFileMedical,
             estilos:
-              "bg-white hover:bg-orange-500 text-black px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",
+              "bg-white hover:bg-gray-300 text-black px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",
           },
           {
             label: "Derivar",
             icon: FaShare,
             onClick: () => setMostrarModalDerivar(true),
             estilos:
-              "bg-white hover:bg-green-400 text-black px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",
+              "bg-white hover:bg-gray-300 text-black px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",
           },
           {
             to: -1,
             label: "Volver",
             icon: FaArrowLeft,
             estilos:
-              "bg-white hover:bg-red-800 text-black px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",
+              "bg-white hover:bg-gray-300 text-black px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",
           },
         ]}
         subTitle={`Información del Documento: ${correspondencia.cite}`}
@@ -133,7 +133,9 @@ export default function DetailEnviada() {
               {new Date(correspondencia.fecha_envio).toLocaleString()}
             </p>
             <p className="font-medium text-blue-700 mt-4">Destinatario:</p>
-            <p className="text-gray-900">{correspondencia.datos_contacto}</p>
+            <p className="text-gray-900">
+              {correspondencia.datos_contacto || "Afiliados"}
+            </p>
             <p className="font-medium text-blue-700 mt-4">Descripción:</p>
             <p className="text-gray-900">{correspondencia.descripcion}</p>
             <hr />
@@ -148,10 +150,11 @@ export default function DetailEnviada() {
             <p className="font-medium text-blue-700 mt-4">
               Fecha de seguimiento:
             </p>
-            <p className="text-gray-900 capitalize">
-              {new Date(correspondencia.fecha_seguimiento).toLocaleString()}
-              <br />
-            </p>{" "}
+            <p className="text-gray-900">
+              {correspondencia.fecha_seguimiento
+                ? new Date(correspondencia.fecha_seguimiento).toLocaleString()
+                : "No registrada"}
+            </p>
             <p className="font-medium text-blue-700 mt-4">
               Fecha y hora de Elaboracion:
             </p>

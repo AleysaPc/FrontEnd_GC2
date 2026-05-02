@@ -154,7 +154,7 @@ export default function createRecibida() {
             label="Fecha Recepción"
             name="fecha_recepcion"
             type="datetime-local"
-            required={false}
+            required={true}
             value={formValues.fecha_recepcion || ""}
             onChange={manejarEntradas.handleInputChange}
           />
@@ -215,6 +215,7 @@ export default function createRecibida() {
       label: "Fojas",
       name: "paginas",
       type: "number",
+      defaultValue: 1,
       required: true,
       onChange: manejarEntradas.handleInputChange,
     },
@@ -256,6 +257,7 @@ export default function createRecibida() {
       component: UserDropdownSelect,
       label: "Derivar a:",
       name: "usuarios",
+      required: true,
       options: usuarioOptions(),
       onChange: (name, value) =>
         manejarEntradas.handleToggleChange(name)(value),
@@ -266,7 +268,7 @@ export default function createRecibida() {
       component: TextAreaField,
       label: "Comentario",
       name: "comentario_derivacion",
-      required: false,
+      required: true,
       onChange: manejarEntradas.handleInputChange,
     },
   ];
@@ -274,7 +276,6 @@ export default function createRecibida() {
   const paraNavegacion = {
     title: "Registrar",
     subTitle: "Nueva correspondencia recibida",
-    icon: FaPlus,
     actions: [
       {
         to: "/correspondenciaList",

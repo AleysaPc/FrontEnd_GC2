@@ -86,10 +86,18 @@ export default function externalCorrespondenceList() {
           ? item.estado.charAt(0).toUpperCase() + item.estado.slice(1)
           : "Sin estado",
     },
-    {
+   {
       key: "email",
       label: "Elaborado por",
-      render: (item) => item.usuario?.email || "No especificado",
+      render: (item) => {
+        const usuario = item.usuario;
+        if (usuario) {
+          const nombreCompleto =
+            `${usuario.first_name || ""} ${usuario.second_name || ""} ${usuario.last_name || ""} ${usuario.second_last_name || ""}`.trim();
+          return nombreCompleto || "No especificado";
+        }
+        return "No especificado";
+      },
     },
   ];
   const entityData = {

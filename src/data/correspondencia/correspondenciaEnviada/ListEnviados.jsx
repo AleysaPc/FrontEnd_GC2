@@ -88,7 +88,7 @@ export default function ListEnviados() {
     all_data: false, // true para obtener todos los datos, false para paginación
     itemKey: "id_correspondencia", //Debe ser igual al modelo
     entityFields: useFields,
-    icon: FaAngleUp,
+    //icon: FaAngleUp,
     filtros: [
       { name: "cite", placeholder: "CITE " },
       { name: "referencia", placeholder: "Referencia" },

@@ -9,7 +9,7 @@ import { UserDropdownSelect } from "../../../components/shared/UserDropdownSelec
 import { InputField } from "../../../components/shared/InputField";
 import { SelectField } from "../../../components/shared/SelectField";
 import CreateEntity from "../../../components/shared/CreateEntity";
-import { FaShareSquare } from "react-icons/fa";
+import { FaArrowRight, FaShareSquare } from "react-icons/fa";
 
 export default function TestDerivar({ isOpen, onClose, id }) {
   const {
@@ -23,8 +23,8 @@ export default function TestDerivar({ isOpen, onClose, id }) {
 
   //Aquí options es una función (definida en useFormEntity) que transforma tu array de usuarios en un array de opciones para el dropdown
   const usuarioOptions = () =>
-    usuariosArray ? options(usuariosArray, "id", "email",) : [];
-    console.log("Opciones de usuarios destino:", usuarioOptions());
+    usuariosArray ? options(usuariosArray, "id", "email") : [];
+  console.log("Opciones de usuarios destino:", usuarioOptions());
 
   //De acuerdo al modelo
   const accionOptions = [
@@ -55,12 +55,12 @@ export default function TestDerivar({ isOpen, onClose, id }) {
   });
 
   const paraEnvio = (formValues) => ({
-      link: "/correspondenciaRecibidaList",
-      data: {
-        ...camposExtras(formValues),
-        usuario_destino_id: formValues.usuario_destino_id,
-      }
-    });
+    link: "/correspondenciaRecibidaList",
+    data: {
+      ...camposExtras(formValues),
+      usuario_destino_id: formValues.usuario_destino_id,
+    },
+  });
 
   const construirCampos = (formValues, manejarEntradas) => [
     {
@@ -80,7 +80,7 @@ export default function TestDerivar({ isOpen, onClose, id }) {
         manejarEntradas.handleToggleChange(name)(value),
       isLoading: loadingUsuarios,
       error: errorUsuarios,
-    }, 
+    },
     {
       component: InputField,
       label: "Comentario",
@@ -102,7 +102,7 @@ export default function TestDerivar({ isOpen, onClose, id }) {
           title: `Derivar`,
           subTitle: "",
           icon: FaShareSquare,
-          actions: [], 
+          actions: [],
         }}
       />
     </Modal>

@@ -78,7 +78,7 @@ export default function HistorialDocumento() {
             label: "Volver",
             icon: FaArrowLeft,
             estilos:
-              "bg-white hover:bg-red-800 text-black px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",
+              "bg-white hover:bg-red-700 text-black px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",
           },
         ]}
         subTitle={`Historial del Documento: ${correspondencia?.nro_registro}`}

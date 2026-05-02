@@ -39,7 +39,7 @@ export default function internalCorrespondenciaList() {
       key: "actions",
       label: "Acciones",
       render: (
-        item //render es una función que recibe los datos de la fila actual, permite hacer "acciones sobre la fila"
+        item, //render es una función que recibe los datos de la fila actual, permite hacer "acciones sobre la fila"
       ) => (
         //item es el objeto, la fila completa de los datos "." siver para acceder a la propiedad.
         <div className="flex gap-2">
@@ -88,7 +88,7 @@ export default function internalCorrespondenciaList() {
         if (item.destino_interno_info?.email) {
           return item.destino_interno_info.email;
         }
-        return "Directorio"
+        return "Directorio";
       },
     },
 
@@ -103,7 +103,15 @@ export default function internalCorrespondenciaList() {
     {
       key: "email",
       label: "Elaborado por",
-      render: (item) => item.usuario?.email || "No especificado",
+      render: (item) => {
+        const usuario = item.usuario;
+        if (usuario) {
+          const nombreCompleto =
+            `${usuario.first_name || ""} ${usuario.second_name || ""} ${usuario.last_name || ""} ${usuario.second_last_name || ""}`.trim();
+          return nombreCompleto || "No especificado";
+        }
+        return "No especificado";
+      },
     },
   ];
 
@@ -117,7 +125,7 @@ export default function internalCorrespondenciaList() {
         ...params,
         filters: {
           ...params.filters,
-          estado__in: ["borrador", "en_revision", "aprobado", "rechazado",],
+          estado__in: ["borrador", "en_revision", "aprobado", "rechazado"],
           ambito: "interno", // Filtro para mostrar solo documentos enviados
         },
       }),

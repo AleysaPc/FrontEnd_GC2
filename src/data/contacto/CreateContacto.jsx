@@ -176,7 +176,7 @@ export default function CreateContacto() {
   const paraNavegacion = {
     title: "Registrar Contacto",
     subTitle: "Contacto",
-    icon: FaPlus,
+    //icon: FaPlus,
     actions: [
       {
         to: cameFrom === "CreateRecibida" ? "/createRecibida" : "/contactoList",

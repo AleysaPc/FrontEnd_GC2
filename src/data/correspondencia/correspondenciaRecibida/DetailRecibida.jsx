@@ -39,10 +39,21 @@ export default function DetailRecibida() {
       if (documentos[0].archivo.startsWith("http")) {
         fullUrl = documentos[0].archivo.replace("http://", "https://");
       } else {
-        const baseUrl = "https://backendgc2-production.up.railway.app";
+        // Detectar si estamos en desarrollo
+        const isDevelopment =
+          window.location.hostname === "localhost" ||
+          window.location.hostname === "127.0.0.1";
+
+        if (isDevelopment) {
+          // Desarrollo: usar HTTP para el backend
+          const baseUrl = "http://localhost:8000";
+        } else {
+          // Producción: usar HTTPS
+          const baseUrl = "https://backendgc2-production.up.railway.app";
+        }
+
         fullUrl = `${baseUrl}${documentos[0].archivo}`;
       }
-
       console.log("URL completa:", fullUrl);
       setDocumentoActivo(fullUrl);
     }
@@ -148,39 +159,40 @@ export default function DetailRecibida() {
             label: "Generar respuesta",
             icon: FaFileMedical,
             estilos:
-              "bg-white hover:bg-orange-500 text-black px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",
+              "bg-white hover:bg-gray-300 text-black px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",
           },
           {
             label: "Derivar",
             icon: FaShare,
             onClick: () => setMostrarModalDerivar(true),
             estilos:
-              "bg-white hover:bg-green-400 text-black px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",
-          },
-          {
-            to: -1,
-            label: "Volver",
-            icon: FaArrowLeft,
-            estilos:
-              "bg-white hover:bg-red-800 text-black px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",
+              "bg-white hover:bg-gray-300 text-black px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",
           },
           {
             to: `/historial/${id}`,
             label: "Historial",
             icon: FaStopwatch,
             estilos:
-              "bg-white hover:bg-red-800 text-black px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",
+              "bg-white hover:bg-gray-300 text-black px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",
           },
           {
             to: `/hojaDeRuta/${id}`,
             label: "Hoja de Ruta",
             icon: FaFile,
             estilos:
-              "bg-white hover:bg-red-800 text-black px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",
+              "bg-white hover:bg-gray-300 text-black px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",
+          },
+          {
+            to: -1,
+            label: "Volver",
+            icon: FaArrowLeft,
+            estilos:
+              "bg-white hover:bg-gray-300 text-black px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",
           },
         ]}
+
         subTitle={`Información del Documento: ${correspondencia.nro_registro}`}
-        icon={FaFileSignature}
+        //icon={FaFileSignature}
       />
 
       {/* Datos generales del documento */}
