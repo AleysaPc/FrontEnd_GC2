@@ -1,8 +1,8 @@
-import React from "react";
 import useLogout from "../../hooks/useLogout";
 import { FaUser, FaPrint } from "react-icons/fa";
 import Dropdown from "../shared/Dropdown";
 import Notificaciones from "../shared/Notificaciones";
+import Alertas from "../shared/Alertas"
 import { Link } from "react-router-dom";
 import jsPDF from "jspdf";
 import { createApiInstance } from "../../api/api.Base"; // ✅ tu instancia con token
@@ -101,7 +101,8 @@ const Navbar = ({ toggleSidebar, user }) => {
       </div>
 
       <div className="flex items-center space-x-4">
-        <Notificaciones />
+        <Notificaciones /> {/*Campana para derivaciones */}
+        <Alertas /> {/* 🕐 Campana para alertas */}
         <Dropdown
           icon={FaUser}
           label={user?.email || "Usuario"}

@@ -209,9 +209,15 @@ export default function DetailRecibida() {
             </p>
             <p className="text-gray-900">
               <span className="font-medium text-blue-700">
-                Fecha y hora de recepción:
+                Fecha/Hora de recepción:
               </span>{" "}
               <FormattedDateTime dateTime={correspondencia.fecha_recepcion} />
+            </p>
+            <p className="text-gray-900">
+              <span className="font-medium text-blue-700">
+                Fecha/Hora respuesta:
+              </span>{" "}
+              <FormattedDateTime dateTime={correspondencia.fecha_respuesta} />
             </p>
             <p className="text-gray-900">
               <span className="font-medium text-blue-700">Contacto:</span>{" "}
