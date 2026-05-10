@@ -29,10 +29,19 @@ const marcarComoVista = async (alerta) => {
 
       //Invalidar al query para forzar refresco
       queryClient.invalidateQueries(['alertasPendientes']);
+
+      //Cerrar el panel de alertas 
+      setMostrarAlertas(false);
     
   
-    //Navegar al documenot
-    navigate(`/detailRecibida/${alerta.correspondencia_id}`);
+    //Navegar al documento
+    if (alerta.tipo_correspondencia === "recibida") {
+     navigate(`/detailRecibida/${alerta.correspondencia_id}`);
+    }else if (alerta.tipo_correspondencia === "elaborada") {
+    navigate(`/detailEnviada/${alerta.correspondencia_id}`);
+    } else {
+      navigate(`/detailRecibida/${alerta.correspondencia_id}`);
+    }
   } catch (error) {
     console.error("Error marcando alerta como vista", error);
   }
@@ -82,8 +91,13 @@ return (
                 </span>
                 <div className="flex-1">
                   <div className="font-medium text-sm">
-                    {alerta.referencia ||
-                      (alerta.nro_registro ? `Registro #${alerta.nro_registro}` : `Documento #${alerta.correspondencia_id}`)}
+                    {alerta.tipo_correspondencia === "elaborada" && alerta.cite && (
+                      <span>CITE: {alerta.cite}</span>
+                    )}
+                    {alerta.tipo_correspondencia === "recibida" && alerta.nro_registro && (
+                      <span>Nro Registro: {alerta.nro_registro}</span>
+                    )}
+                    {alerta.referencia}
                   </div>
                   <div className="text-xs text-gray-600 capitalize">
                       {alerta.tipo_alerta.replace('_', ' ')} - {alerta.nivel_alerta}
