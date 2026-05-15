@@ -6,10 +6,35 @@ import Alertas from "../shared/Alertas"
 import { Link } from "react-router-dom";
 import jsPDF from "jspdf";
 import { createApiInstance } from "../../api/api.Base"; // ✅ tu instancia con token
+import { useEffect, useState} from "react";
+
 
 const Navbar = ({ toggleSidebar, user }) => {
   const logoutUser = useLogout();
   const api = createApiInstance();
+
+  //Estado par amostra el número actual-siguiente
+  const [registroInfo, setRegistroInfo] = useState(null);
+
+  //Obtener proximo número de registro
+  const obtenerProximoRegistro = async () => {
+    try {
+      const { data } = await api.get(
+        "/correspondencia/proximo_nro_registro/"
+      );
+      setRegistroInfo(data);
+
+    } catch (error) {
+      console.error(
+        "Error obteniendo próximo registro:",
+        error
+      );
+    }
+  };
+  //Ejecutar al cargar el navar
+  useEffect(() => {
+    obtenerProximoRegistro();
+  },[]);
 
   const handleGenerarPreSello = async () => {
     const confirmado = window.confirm(
@@ -83,7 +108,6 @@ const Navbar = ({ toggleSidebar, user }) => {
       alert("Error al generar pre-sello");
     }
   };
-
   return (
     <nav className="bg-green-700 text-white flex justify-between items-center p-3 sticky top-0 z-50 shadow-md h-16">
       <button
@@ -98,6 +122,16 @@ const Navbar = ({ toggleSidebar, user }) => {
         <Link to="/home" aria-label="Ir al inicio">
           Sistema de Gestión de Correspondencia
         </Link>
+        {
+          registroInfo && (
+            <span className="text-xs text-green-100">
+              Próximo registro:{" "}
+              <strong>
+                {registroInfo.siguiente}
+              </strong>
+            </span>
+          )
+        }
       </div>
 
       <div className="flex items-center space-x-4">
