@@ -10,11 +10,12 @@ import {
   FaClock,
   FaCheckCircle,
   FaExclamationTriangle,
-  FaSellcast,
 } from "react-icons/fa";
+import { useSello } from "../hooks/useSello";
 
-import SelloDigitalRecibida from "../components/shared/SelloDigital";
 function Home() {
+  // Para sello
+  const { registroQuery } = useSello();
   //Obtener datos para estadísticas
   const { data: recibidas } = useCorrespondenciaRecibidas({ all_data: true });
   const { data: elaboradas } = useCorrespondenciaElaboradas({ all_data: true });
@@ -76,15 +77,27 @@ function Home() {
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
-      {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">
-          Dashboard de Correspondencia
-        </h1>
+      {/* Header -    flex convierte el contenedor en flexbox los hijo se colocan horizontalmente
+                          justify-between hace que los elementos se pongan uno al lado de otro*/}
+      <div className="flex justify-between items-center mb-8">
+        {/*Div principal*/}
         <div>
-          hola
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+            Dashboard de Correspondencia
+          </h1>
+          <p className="text-gray-600">
+            Vista general de la gestión documental
+          </p>
         </div>
-        <p className="text-gray-600">Vista general de la gestión documental</p>
+        <div className="text-center p-4 bg-purple-50 rounded-lg border-4 border-red-800">
+          <div className="text-2xl font-bold text-red-800">
+            <div className="text-sm text-gray-600 ">
+              Siguiente Nro. registro
+            </div>
+            {/* Llamarlo como un componente...!!! */}
+            <p>{registroQuery.data?.siguiente}</p>
+          </div>
+        </div>
       </div>
 
       {/* Grid de tarjetas */}
@@ -93,7 +106,7 @@ function Home() {
           icon={<FaInbox />}
           title="Correspondencia Recibida"
           value={totalRecibidas}
-          color="text-blue-600"
+          color="text-[rgba(10,89,92,0.9)]"
           bgColor="bg-white"
         />
 
@@ -101,14 +114,14 @@ function Home() {
           icon={<FaPaperPlane />}
           title="Correspondencia Externa"
           value={totalEnviadasExternas}
-          color="text-green-600"
+          color="text-[rgba(10,89,92,0.9)]"
           bgColor="bg-white"
         />
         <StatCard
           icon={<FaPaperPlane />}
           title="Enviadas Internas"
           value={totalEnviadasInternas}
-          color="text-indigo-600"
+          color="text-[rgba(10,89,92,0.9)]"
           bgColor="bg-white"
         />
 
@@ -116,7 +129,7 @@ function Home() {
           icon={<FaClock />}
           title="Pendientes por Responder"
           value={totalRecibidasNoRespondidas}
-          color="text-orange-600"
+          color="text-[rgba(10,89,92,0.9)]"
           bgColor="bg-white"
         />
 
@@ -124,7 +137,7 @@ function Home() {
           icon={<FaExclamationTriangle />}
           title="Pendientes por Enviar"
           value={totalElaboradasNoEnviadas}
-          color="text-red-600"
+          color="text-[rgba(10,89,92,0.9)]"
           bgColor="bg-white"
         />
 
@@ -132,7 +145,7 @@ function Home() {
           icon={<FaCheckCircle />}
           title="Total Documentos"
           value={totalRecibidas + totalEnviadasExternas + totalEnviadasInternas}
-          color="text-indigo-600"
+          color="text-[rgba(10,89,92,0.9)]"
           bgColor="bg-white"
         />
 
@@ -140,7 +153,7 @@ function Home() {
           icon={<FaFileAlt />}
           title="Documentos Elaborados"
           value={totalElaboradas}
-          color="text-purple-600"
+          color="text-[rgba(10,89,92,0.9)]"
           bgColor="bg-white"
         />
       </div>
@@ -169,17 +182,7 @@ function Home() {
             </div>
             <div className="text-sm text-gray-600">Documentos Procesados</div>
           </div>
-          <div>
-            <div className="text-center p-4 bg-purple-50 rounded-lg">
-              <div className="text-2xl font-bold text-purple-600">
-                {/* Llamarlo como un componente...!!! */}
-                <SelloDigitalRecibida />
-              </div>
-              <div className="text-sm text-gray-600">
-                Sello digital siguiente
-              </div>
-            </div>
-          </div>
+          <div></div>
         </div>
       </div>
     </div>
