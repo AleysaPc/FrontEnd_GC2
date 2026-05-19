@@ -1,6 +1,7 @@
-import { FaFileMedical, FaUser } from "react-icons/fa";
+import { FaBarcode, FaBars, FaChartLine, FaFileMedical, FaUser } from "react-icons/fa";
 import { RiArchiveDrawerFill, RiContactsBookFill } from "react-icons/ri";
 import { IoCreateSharp } from "react-icons/io5";
+import { BarChart } from "recharts";
 
 export const menus = [
   {
@@ -10,8 +11,8 @@ export const menus = [
       { label: "Recibido", path: "/createRecibida" },
       { label: "Enviado", path: "/listEnviados" },
     ],
-   //roleRequired: "administrador",
-  },  
+    //roleRequired: "administrador",
+  },
   {
     title: "Crear Documento",
     icon: IoCreateSharp,
@@ -27,9 +28,11 @@ export const menus = [
     items: [
       { label: "Recibidos", path: "/correspondenciaRecibidaList" },
       { label: "Enviados Externos", path: "/correspondenciaEnviadaList" },
-      { label: "Enviados Internos", path: "/correspondenciaEnviadaListInternal" },
+      {
+        label: "Enviados Internos",
+        path: "/correspondenciaEnviadaListInternal",
+      },
       { label: "Correspondencias", path: "/correspondenciaList" },
-      
     ],
   },
   {
@@ -40,13 +43,13 @@ export const menus = [
       { label: "Crear Contacto", path: "/createContacto" },
       { label: "Lista de instituciones", path: "/institucionList" },
       { label: "Crear institucion", path: "/createInstitucion" },
-      
     ],
   },
   {
     title: "Usuarios",
     icon: FaUser,
-    items: [{ label: "Lista de Usuarios", path: "/userList" },
+    items: [
+      { label: "Lista de Usuarios", path: "/userList" },
       { label: "Nuevo Usuario", path: "/createUser" },
       { label: "Lista de roles", path: "/rolList" },
       { label: "Crear rol", path: "/createRol" },
@@ -54,5 +57,10 @@ export const menus = [
       { label: "Crear departamento", path: "/createDepartament" },
     ],
     //leRequired: "administrador",
+  },
+  {
+    title: "Estadísticas",
+    icon: FaChartLine,
+    items: [{label: "Estadísticas",path: "/dashboard",} ],
   },
 ];

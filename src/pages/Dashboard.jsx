@@ -1,9 +1,8 @@
 import CustomLineChart from "../components/shared/charts/LineChart";
 import MultiLineChart from "../components/shared/charts/MultiLineChart";
 import CustomPieChart from "../components/shared/charts/PieChart";
-import CustomBarChart from "../components/shared/charts/BarChart";
 import CustomAreaChart from "../components/shared/charts/AreaChart";
-import StackedBarChart from "../components/shared/charts/StackedBarChart"
+import DoubleBarChart from "../components/shared/charts/DoubleBarChart";
 import StatCard from "../components/shared/charts/StatCard";
 import { useQuery } from "@tanstack/react-query"; //Query es como un robot asistente, pide y guarda datos, sabe cuando se carga o hay un error y se actualiza
 import { createApiInstance } from "../api/api.Base";
@@ -24,6 +23,38 @@ const Dashboard = () => {
       `/correspondencia/estadisticas/?periodo=${periodo}&cantidad=${cantidad}`,
     );
     return data;
+  };
+
+  // EXPORTAR EXCEL
+  const exportarExcel = async () => {
+    try {
+      const response = await api.get(
+        `/correspondencia/exportar-excel/?periodo=${periodo}&cantidad=${cantidad}`,
+        {
+          responseType: "blob", // importante para archivos
+        },
+      );
+
+      // Crear URL temporal del archivo
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+
+      // Crear enlace de descarga
+      const link = document.createElement("a");
+      link.href = url;
+
+      // Nombre del archivo
+      link.setAttribute("download", `reporte_${periodo}_${cantidad}.xlsx`);
+
+      // Descargar
+      document.body.appendChild(link);
+      link.click();
+
+      // Limpiar memoria
+      link.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Error exportando Excel:", error);
+    }
   };
 
   //QUERY
@@ -106,6 +137,12 @@ const Dashboard = () => {
               </>
             )}
           </select>
+          <button
+            onClick={exportarExcel}
+            className="bg-green-600 text-white px-4 py-2 rounded"
+          >
+            Exportar Excel
+          </button>
         </div>
 
         {/* Métricas rápidas */}
@@ -190,12 +227,9 @@ const Dashboard = () => {
             />
           </div>
           <div className="grid grid-cols-1 gap-6 mt-6">
-            <CustomBarChart
+            <DoubleBarChart
               data={estadisticas.tipos_documentos}
-              dataKey="cantidad"
-              nameKey="tipo"
-              title="📂 Tipos de Documentos"
-              color="#f59e0b"
+              title="📂 Tipos de Documento por Ámbito"
             />
             <MultiLineChart
               data={estadisticas.procesados_por_dia}
