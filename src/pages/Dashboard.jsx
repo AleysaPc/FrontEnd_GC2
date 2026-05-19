@@ -3,32 +3,37 @@ import MultiLineChart from "../components/shared/charts/MultiLineChart";
 import CustomPieChart from "../components/shared/charts/PieChart";
 import CustomBarChart from "../components/shared/charts/BarChart";
 import CustomAreaChart from "../components/shared/charts/AreaChart";
-import StackedBarChart from "../components/shared/charts/StackedBarChart";
+import StackedBarChart from "../components/shared/charts/StackedBarChart"
 import StatCard from "../components/shared/charts/StatCard";
 import { useQuery } from "@tanstack/react-query"; //Query es como un robot asistente, pide y guarda datos, sabe cuando se carga o hay un error y se actualiza
 import { createApiInstance } from "../api/api.Base";
-import { useState } from "react"
+import { useState } from "react";
 
 const api = createApiInstance();
 
+//Componente principal
 const Dashboard = () => {
-  //Componente principal
-  const [dias, setDias] = useState(7);
+  //Estados
+  const [periodo, setPeriodo] = useState("dia");
+  const [cantidad, setCantidad] = useState(7);
 
+  //Petición
   const obtenerEstadisticas = async () => {
     //axios hace la petición
-    const { data } = await api.get((`/correspondencia/estadisticas/?dias=${dias}`),
+    const { data } = await api.get(
+      `/correspondencia/estadisticas/?periodo=${periodo}&cantidad=${cantidad}`,
     );
     return data;
   };
 
+  //QUERY
   // Obtener datos reales del backend
   const {
     data: estadisticas, //datos del servidor
     isLoading, //estado de carga
     error, //estado de error
   } = useQuery({
-    queryKey: ["estadisticas-dashboard", dias],
+    queryKey: ["estadisticas-dashboard", periodo, cantidad],
     queryFn: obtenerEstadisticas,
     refetchInterval: 60000, // Refrescar cada minuto
   });
@@ -40,6 +45,7 @@ const Dashboard = () => {
   if (error)
     return <div className="p-6 text-red-600">Error al cargar estadísticas</div>;
 
+  //Render o renderizado proceso para tranformar codigo-datos  en una imagen visualizable
   return (
     //min-h-screen  ocupa toda la pantalla | bg-gray-50 fondo gris clarito | p-6 padding de 6
     <div className="min-h-screen bg-gray-50 p-6">
@@ -52,13 +58,62 @@ const Dashboard = () => {
             Estadísticas en tiempo real del sistema
           </p>
         </div>
+        {/* CONTROLES */}
+        <div className="flex gap-4 mb-6">
+          {/* PERIODO */}
+          <select
+            value={periodo}
+            onChange={(e) => setPeriodo(e.target.value)}
+            className="border rounded bg-slate-800 text-white p-2"
+          >
+            <option value="dia">Días</option>
+            <option value="semana">Semanas</option>
+            <option value="mes">Meses</option>
+            <option value="gestion">Gestiones</option>
+          </select>
+          {/* CANTIDAD */}
+          <select
+            value={cantidad}
+            onChange={(e) => setCantidad(Number(e.target.value))}
+            className="border rounded bg-slate-800 text-white p-2"
+          >
+            {periodo === "dia" && (
+              <>
+                <option value={7}>7 días </option>
+                <option value={15}>15 días </option>
+                <option value={30}>30 días </option>
+              </>
+            )}
+            {periodo === "semana" && (
+              <>
+                <option value={1}>1 semana </option>
+                <option value={2}>2 semanas </option>
+                <option value={4}>4 semanas </option>
+              </>
+            )}
+            {periodo === "mes" && (
+              <>
+                <option value={3}>3 meses </option>
+                <option value={6}>6 meses </option>
+                <option value={12}>12 meses </option>
+              </>
+            )}
+            {periodo === "gestion" && (
+              <>
+                <option value={1}>1 gestión</option>
+                <option value={3}>3 gestiones</option>
+                <option value={5}>5 gestiones</option>
+              </>
+            )}
+          </select>
+        </div>
 
         {/* Métricas rápidas */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
           <StatCard //Cajitas con información rápida
             title="Tiempo Promedio Respuesta"
             value={`${estadisticas.tiempo_promedio_respuesta}h`}
-            subtitle="Última semana"
+            subtitle="Promedio"
             color="blue"
           />
           <StatCard
@@ -69,7 +124,7 @@ const Dashboard = () => {
           />
           <StatCard
             title="Día Mayor Actividad"
-            value={estadisticas.dias_mayor_actividad?.[0]?.dia || "N/A"}
+            value={estadisticas.dias_mayor_actividad?.[0]?.fecha || "N/A"}
             subtitle={`${estadisticas.dias_mayor_actividad?.[0]?.cantidad || 0} documentos`}
             color="purple"
           />
@@ -83,34 +138,26 @@ const Dashboard = () => {
 
         {/* Gráficas de Correspondencia */}
         <div className="mb-8">
-          <select
-              value={dias}
-              onChange={(e) => setDias(e.target.value)}
-              className="border rounded bg-slate-800 text-white p-2 mb-4"
-            >
-              <option value="7">7 días</option>
-              <option value="30">30 días</option>
-              <option value="90">90 días</option>
-            </select>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <CustomLineChart
-              data={estadisticas.recibida_semanal}
+              data={estadisticas.recibida_data}
               dataKey="cantidad"
-              nameKey="semana"
-              title="📥 Correspondencia Recibida Semanal"
+              nameKey="fecha"
+              title="📥 Correspondencia Recibida"
               color="#3b82f6"
             />
             <CustomLineChart
-              data={estadisticas.enviada_semanal}
+              data={estadisticas.enviada_data}
               dataKey="cantidad"
-              nameKey="semana"
-              title="📤 Correspondencia Enviada Semanal"
+              nameKey="fecha"
+              title="📤 Correspondencia Enviada"
               color="#10b981"
             />
           </div>
           <div className="grid grid-cols-1 gap-6 mt-6">
             <MultiLineChart
               data={estadisticas.recibida_vs_enviada}
+              nameKey="fecha"
               lines={[
                 { dataKey: "recibida", name: "Recibida" },
                 { dataKey: "enviada", name: "Enviada" },
@@ -118,10 +165,10 @@ const Dashboard = () => {
               title="📊 Correspondencia Recibida vs Enviada"
             />
             <CustomAreaChart
-              data={estadisticas.flujo_mensual}
+              data={estadisticas.flujo_correspondencia}
               dataKey="cantidad"
-              nameKey="mes"
-              title="📅 Flujo Mensual de Correspondencia"
+              nameKey="fecha"
+              title="📅 Flujo de Correspondencia"
               color="#8b5cf6"
             />
           </div>
@@ -150,9 +197,9 @@ const Dashboard = () => {
               title="📂 Tipos de Documentos"
               color="#f59e0b"
             />
-            <StackedBarChart
+            <MultiLineChart
               data={estadisticas.procesados_por_dia}
-              bars={[
+              lines={[
                 { dataKey: "procesados", name: "Procesados" },
                 { dataKey: "pendientes", name: "Pendientes" },
               ]}
