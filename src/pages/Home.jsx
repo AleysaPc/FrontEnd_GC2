@@ -15,7 +15,7 @@ import { useSello } from "../hooks/useSello";
 
 function Home() {
   // Para sello
-  const { registroQuery } = useSello();
+  const { registroQuery, handleGenerarNroSiguiente } = useSello();
   //Obtener datos para estadísticas
   const { data: recibidas } = useCorrespondenciaRecibidas({ all_data: true });
   const { data: elaboradas } = useCorrespondenciaElaboradas({ all_data: true });
@@ -89,7 +89,9 @@ function Home() {
             Vista general de la gestión documental
           </p>
         </div>
-        <div className="text-center p-4 bg-purple-50 rounded-lg border-4 border-red-800">
+        <button 
+        onClick={handleGenerarNroSiguiente}>
+          <div className="text-center p-4 bg-purple-50 rounded-lg border-4 border-red-800">
           <div className="text-2xl font-bold text-red-800">
             <div className="text-sm text-gray-600 ">
               Siguiente Nro. registro
@@ -98,6 +100,7 @@ function Home() {
             <p>{registroQuery.data?.siguiente}</p>
           </div>
         </div>
+        </button>
       </div>
 
       {/* Grid de tarjetas */}

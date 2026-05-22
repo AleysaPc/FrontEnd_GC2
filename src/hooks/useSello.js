@@ -1,39 +1,58 @@
 import { useQuery } from "@tanstack/react-query";
-import { getProximoRegistro, generarPreSello } from "../api/selloService";
+import {
+  getProximoRegistro,
+  generarPreSello,
+} from "../api/selloService";
 import { jsPDF } from "jspdf";
 
 export const useSello = () => {
-  
+  //QUERY
   const registroQuery = useQuery({
     queryKey: ["proximo_registro"],
     queryFn: getProximoRegistro, //Función que llama a la API
     refetchInterval: 5000,
   });
 
+  //GENERAR PDF SELLO
   const generarPDFSello = async () => {
     if (!window.confirm("¿Confirma la generación del sello?")) return;
 
-    const data = await generarPreSello(); //Trae los datos del Backend
-    const doc = new jsPDF();
+    try {
+      const data = await generarPreSello(); //Trae los datos del Backend
+      const doc = new jsPDF();
 
-    const config = {
-      x: doc.internal.pageSize.getWidth() - 100,
-      y: 26,
-      w: 90,
-      h: 50,
-    };
+      const config = {
+        x: doc.internal.pageSize.getWidth() - 100,
+        y: 26,
+        w: 90,
+        h: 50,
+      };
 
-    drawBorder(doc, config);
-    drawLogo(doc, config);
-    drawTitle(doc, config);
-    drawDate(doc, config, data);
-    drawRegister(doc, config, data);
-    drawSignature(doc, config);
+      drawBorder(doc, config);
+      drawLogo(doc, config);
+      drawTitle(doc, config);
+      drawDate(doc, config, data);
+      drawRegister(doc, config, data);
+      drawSignature(doc, config);
 
-    window.open(URL.createObjectURL(doc.output("blob")));
+      window.open(URL.createObjectURL(doc.output("blob")));
+    } catch (error) {
+      console.error("Error al generar el sello:", error);
+    }
   };
 
-  return { registroQuery, generarPDFSello };
+  //GENERAR NÚMERO SIGUIENTE
+  const handleGenerarNroSiguiente = async () => {
+    if (!window.confirm("¿Siguiente número de registro?")) return;
+    try {
+      await generarPreSello();
+      //refetch the query to update the data
+      registroQuery.refetch();
+    } catch (error) {
+      console.error("Error al generar el sello:", error);
+    }
+  };
+  return { registroQuery, generarPDFSello, handleGenerarNroSiguiente };
 };
 
 /* ================= HELPERS ================= */
@@ -66,7 +85,7 @@ const drawDate = (doc, c, data) => {
     `Fecha/Hora: ${new Date(data.fecha_generacion).toLocaleString()}`,
     c.x + c.w / 2,
     c.y + 22,
-    { align: "center" }
+    { align: "center" },
   );
 };
 
