@@ -101,8 +101,13 @@ export default function CreateElaborada() {
     contactosArray
       ? options(contactosArray, "id_contacto", "nombre_completo")
       : [];
-  const usuarioOptions = () =>
-    usuariosArray ? options(usuariosArray, "id", "email") : [];
+ const usuarioOptions = () =>
+  usuariosArray
+    ? usuariosArray.map((u) => ({
+        id: u.id,
+        nombre: `${u.first_name || ""} ${u.last_name || ""} - ${u.nombre_departamento || ""}`,
+      }))
+    : [];
 
   // Configuración inicial del formulario
   const configuracionFormulario = {

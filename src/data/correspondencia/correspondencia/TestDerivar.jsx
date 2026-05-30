@@ -23,8 +23,12 @@ export default function TestDerivar({ isOpen, onClose, id }) {
 
   //Aquí options es una función (definida en useFormEntity) que transforma tu array de usuarios en un array de opciones para el dropdown
   const usuarioOptions = () =>
-    usuariosArray ? options(usuariosArray, "id", "email") : [];
-  console.log("Opciones de usuarios destino:", usuarioOptions());
+  usuariosArray
+    ? usuariosArray.map((u) => ({
+        id: u.id,
+        nombre: `${u.first_name || ""} ${u.last_name || ""} - ${u.nombre_departamento || ""}`,
+      }))
+    : [];
 
   //De acuerdo al modelo
   const accionOptions = [

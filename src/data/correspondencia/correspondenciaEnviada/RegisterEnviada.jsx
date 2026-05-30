@@ -35,7 +35,9 @@ export default function RegisterEnviada() {
   // Todos los usuarios como opciones de destino
   const usuariosDestinoOptions = usuariosArray.map((user) => ({
     id: user.id,
-    nombre: user.email,
+    nombre:
+      `${user.first_name || ""} ${user.last_name || ""}`.trim() +
+      ` - ${user.nombre_departamento || "Sin depto"}`,
   }));
 
   const usuarioOptions = () => options(usuariosArray, "id", "email");
@@ -246,7 +248,7 @@ export default function RegisterEnviada() {
         label: " Cancelar",
         icon: FaTimes,
         estilos:
-          "border-white-700 rounded-lg bg-green-700 text-white p-2 hover:bg-red-700 hover:text-white-600"
+          "border-white-700 rounded-lg bg-green-700 text-white p-2 hover:bg-red-700 hover:text-white-600",
       },
     ],
   };

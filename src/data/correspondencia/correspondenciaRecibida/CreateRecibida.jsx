@@ -65,7 +65,12 @@ export default function createRecibida() {
       : [];
 
   const usuarioOptions = () =>
-    usuariosArray ? options(usuariosArray, "id", "email") : [];
+  usuariosArray
+    ? usuariosArray.map((u) => ({
+        id: u.id,
+        nombre: `${u.first_name || ""} ${u.last_name || ""} - ${u.nombre_departamento || ""}`,
+      }))
+    : [];
 
   const relacionadaOptions = () =>
     correspondenciasArray.map((item) => ({
