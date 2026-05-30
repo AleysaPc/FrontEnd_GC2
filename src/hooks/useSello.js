@@ -1,10 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
-import {
-  getProximoRegistro,
-  generarPreSello,
-} from "../api/selloService";
+import { getProximoRegistro, generarPreSello } from "../api/selloService";
 import { jsPDF } from "jspdf";
-
+import Swal from "sweetalert2";
 export const useSello = () => {
   //QUERY
   const registroQuery = useQuery({
@@ -15,8 +12,17 @@ export const useSello = () => {
 
   //GENERAR PDF SELLO
   const generarPDFSello = async () => {
-    if (!window.confirm("¿Confirma la generación del sello?")) return;
+    const result = await Swal.fire({
+      title: "¿Generar sello?",
+      text: "Se generará un nuevo sello de registro.",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "Sí, generar",
+      cancelButtonText: "Cancelar",
+      confirmButtonColor: "#2563eb",
+    });
 
+    if (!result.isConfirmed) return;
     try {
       const data = await generarPreSello(); //Trae los datos del Backend
       const doc = new jsPDF();
@@ -36,20 +42,54 @@ export const useSello = () => {
       drawSignature(doc, config);
 
       window.open(URL.createObjectURL(doc.output("blob")));
+      Swal.fire({
+        icon: "success",
+        title: "Sello generado",
+        text: "El sello fue generado correctamente.",
+        timer: 2000,
+        showConfirmButton: false,
+      });
     } catch (error) {
       console.error("Error al generar el sello:", error);
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "No se pudo generar el sello.",
+      });
     }
   };
 
   //GENERAR NÚMERO SIGUIENTE
   const handleGenerarNroSiguiente = async () => {
-    if (!window.confirm("¿Siguiente número de registro?")) return;
+    const result = await Swal.fire({
+      title: "¿Generar siguiente registro?",
+      text: "Se asignará el siguiente número disponible.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Sí, continuar",
+      cancelButtonText: "Cancelar",
+      confirmButtonColor: "#16a34a",
+    });
+
+    if (!result.isConfirmed) return;
     try {
       await generarPreSello();
       //refetch the query to update the data
       registroQuery.refetch();
+      Swal.fire({
+        icon: "success",
+        title: "Registro actualizado",
+        text: "Se generó el siguiente número correctamente.",
+        timer: 2000,
+        showConfirmButton: false,
+      });
     } catch (error) {
       console.error("Error al generar el sello:", error);
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "No se pudo generar el siguiente número.",
+      });
     }
   };
   return { registroQuery, generarPDFSello, handleGenerarNroSiguiente };
@@ -92,9 +132,13 @@ const drawDate = (doc, c, data) => {
 const drawRegister = (doc, c, data) => {
   doc.setFont("helvetica", "bold");
   doc.setFontSize(14);
-  doc.text(`N° ${data.pre_nro_registro}`, c.x + 45, c.y + 28, {
-    align: "center",
-  });
+
+  doc.text(
+    `N° Registro: ${data.pre_nro_registro?.replace(/^Pre-/i, "") || ""}`,
+    c.x + 45,
+    c.y + 28,
+    { align: "center" }
+  );
 };
 
 const drawSignature = (doc, c) => {
