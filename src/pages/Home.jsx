@@ -13,6 +13,8 @@ import {
 } from "react-icons/fa";
 import { useSello } from "../hooks/useSello";
 
+import { Link } from "react-router-dom";
+
 function Home() {
   // Para sello
   const { registroQuery, handleGenerarNroSiguiente } = useSello();
@@ -63,133 +65,244 @@ function Home() {
   //Componente de tarjeta
   const StatCard = ({ icon, title, value, color, bgColor }) => (
     <div
-      className={`${bgColor} rounded-lg shadow-lg p-6 border border-gray-200 hover:shadow-xl transition-shadow duration-300`}
+      className={`${bgColor} rounded-xl shadow-md p-6 border border-gray-100 hover:shadow-xl transition duration-300`}
     >
-      <div className="flex items-center justify-between">
+      <div className="flex justify-between items-center">
         <div>
-          <div className={`${color} text-sm font-medium mb-1`}>{title}</div>
-          <div className="text-3xl font-bold text-gray-900">{value}</div>
+          <p className="text-gray-500 text-sm">{title}</p>
+
+          <h3 className="text-4xl font-bold mt-2 text-gray-900">{value}</h3>
         </div>
-        <div className={`${color} text-4xl opacity-80`}>{icon}</div>
+
+        <div className={`${color} text-5xl opacity-80`}>{icon}</div>
       </div>
     </div>
   );
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      {/* Header -    flex convierte el contenedor en flexbox los hijo se colocan horizontalmente
-                          justify-between hace que los elementos se pongan uno al lado de otro*/}
-      <div className="flex justify-between items-center mb-8">
-        {/*Div principal*/}
+    <div className="min-h-screen bg-gray-100 p-6">
+      {/* HEADER */}
+      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-8 gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Dashboard de Correspondencia
+          <h1 className="text-4xl font-bold text-gray-900">
+           Bienvenido
           </h1>
-          <p className="text-gray-600">
-            Vista general de la gestión documental
+          <p className="text-gray-600 mt-1">
+            Resumen general de la gestión documental
           </p>
         </div>
-        <button 
-        onClick={handleGenerarNroSiguiente}>
-          <div className="text-center p-4 bg-purple-50 rounded-lg border-4 border-red-800">
-          <div className="text-2xl font-bold text-red-800">
-            <div className="text-sm text-gray-600 ">
-              Siguiente Nro. registro
-            </div>
-            {/* Llamarlo como un componente...!!! */}
-            <p>{registroQuery.data?.siguiente}</p>
+
+        <button
+          onClick={handleGenerarNroSiguiente}
+          className="bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-xl shadow-lg px-8 py-5 hover:scale-105 transition"
+        >
+          <div className="text-sm opacity-90">Próximo N° de Registro</div>
+
+          <div className="text-3xl font-bold">
+            {registroQuery.data?.siguiente || "---"}
           </div>
-        </div>
         </button>
       </div>
 
-      {/* Grid de tarjetas */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-        <StatCard
-          icon={<FaInbox />}
-          title="Correspondencia Recibida"
-          value={totalRecibidas}
-          color="text-[rgba(10,89,92,0.9)]"
-          bgColor="bg-white"
-        />
+      {/* TARJETAS KPI */}
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-8">
+        <Link to="/correspondenciaRecibidaList">
+          <StatCard
+            icon={<FaInbox />}
+            title="Recibida"
+            value={totalRecibidas}
+            color="text-blue-600"
+            bgColor="bg-white"
+          />
+        </Link>
 
-        <StatCard
-          icon={<FaPaperPlane />}
-          title="Correspondencia Externa"
-          value={totalEnviadasExternas}
-          color="text-[rgba(10,89,92,0.9)]"
-          bgColor="bg-white"
-        />
-        <StatCard
-          icon={<FaPaperPlane />}
-          title="Enviadas Internas"
-          value={totalEnviadasInternas}
-          color="text-[rgba(10,89,92,0.9)]"
-          bgColor="bg-white"
-        />
+        <Link to="/correspondenciaEnviadaList">
+          <StatCard
+            icon={<FaPaperPlane />}
+            title="Enviadas Externas"
+            value={totalEnviadasExternas}
+            color="text-green-600"
+            bgColor="bg-white"
+          />
+        </Link>
+
+        <Link to="/correspondenciaEnviadaListInternal">
+          <StatCard
+            icon={<FaPaperPlane />}
+            title="Enviadas Internas"
+            value={totalEnviadasInternas}
+            color="text-purple-600"
+            bgColor="bg-white"
+          />
+        </Link>
 
         <StatCard
           icon={<FaClock />}
-          title="Pendientes por Responder"
-          value={totalRecibidasNoRespondidas}
-          color="text-[rgba(10,89,92,0.9)]"
-          bgColor="bg-white"
-        />
-
-        <StatCard
-          icon={<FaExclamationTriangle />}
-          title="Pendientes por Enviar"
-          value={totalElaboradasNoEnviadas}
-          color="text-[rgba(10,89,92,0.9)]"
-          bgColor="bg-white"
-        />
-
-        <StatCard
-          icon={<FaCheckCircle />}
-          title="Total Documentos"
-          value={totalRecibidas + totalEnviadasExternas + totalEnviadasInternas}
-          color="text-[rgba(10,89,92,0.9)]"
-          bgColor="bg-white"
-        />
-
-        <StatCard
-          icon={<FaFileAlt />}
-          title="Documentos Elaborados"
+          title="Elaboradas"
           value={totalElaboradas}
-          color="text-[rgba(10,89,92,0.9)]"
+          color="text-orange-600"
           bgColor="bg-white"
         />
       </div>
 
-      {/* Sección adicional - Resumen */}
-      <div className="bg-white rounded-lg shadow-lg p-6">
-        <h2 className="text-xl font-bold text-gray-900 mb-4">
-          Resumen de Actividad
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="text-center p-4 bg-blue-50 rounded-lg">
-            <div className="text-2xl font-bold text-blue-600">
-              {totalRecibidas}
-            </div>
-            <div className="text-sm text-gray-600">Documentos Recibidos</div>
+      {/* CORRESPONDENCIAS + TAREAS */}
+      <div className="grid grid-cols-1 xl:grid-cols-4 gap-6 mb-8">
+        {/* CORRESPONDENCIAS RECIBIDAS */}
+        <div className="xl:col-span-3 bg-white rounded-xl shadow-md p-6">
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-xl font-semibold">
+              Últimas Correspondencias Recibidas
+            </h2>
+
+            <Link
+              to="/correspondenciaRecibidaList"
+              className="text-blue-600 hover:text-blue-800 font-medium"
+            >
+              Ver todas →
+            </Link>
           </div>
-          <div className="text-center p-4 bg-green-50 rounded-lg">
-            <div className="text-2xl font-bold text-green-600">
-              {totalEnviadasExternas + totalEnviadasInternas}
-            </div>
-            <div className="text-sm text-gray-600">Documentos Enviados</div>
+
+          <div className="overflow-x-auto">
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">
+                    Registro
+                  </th>
+
+                  <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">
+                    Referencia
+                  </th>
+
+                  <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">
+                    Remitente
+                  </th>
+
+                  <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">
+                    Prioridad
+                  </th>
+
+                  <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">
+                    Estado
+                  </th>
+                </tr>
+              </thead>
+
+              <tbody className="divide-y divide-gray-100">
+                {recibidas?.data?.slice(0, 5)?.map((item) => (
+                  <tr
+                    key={item.id_correspondencia}
+                    className="hover:bg-gray-50 transition"
+                  >
+                    <td className="px-4 py-3 font-medium">
+                      {item.nro_registro}
+                    </td>
+
+                    <td className="px-4 py-3">{item.referencia}</td>
+
+                    <td className="px-4 py-3">
+                      {item.datos_contacto || "Sin remitente"}
+                    </td>
+
+                    <td className="px-4 py-3">
+                      <span
+                        className={`px-2 py-1 rounded-full text-xs font-medium ${
+                          item.prioridad === "alta"
+                            ? "bg-red-100 text-red-700"
+                            : item.prioridad === "media"
+                              ? "bg-yellow-100 text-yellow-700"
+                              : "bg-green-100 text-green-700"
+                        }`}
+                      >
+                        {item.prioridad}
+                      </span>
+                    </td>
+
+                    <td className="px-4 py-3">
+                      <span className="px-2 py-1 rounded-full bg-blue-100 text-blue-700 text-xs font-medium">
+                        {item.estado}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
-          <div className="text-center p-4 bg-purple-50 rounded-lg">
-            <div className="text-2xl font-bold text-purple-600">
-              {totalElaboradas}
+        </div>
+
+        {/* TAREAS PENDIENTES */}
+        <div className="bg-white rounded-xl shadow-md p-6">
+          <h2 className="text-xl font-semibold mb-6">Tareas Pendientes</h2>
+
+          <div className="space-y-5">
+            <div className="flex justify-between items-center border-b pb-3">
+              <span className="text-gray-700">Por responder</span>
+
+              <span className="bg-orange-100 text-orange-700 px-3 py-1 rounded-full font-semibold">
+                {totalRecibidasNoRespondidas}
+              </span>
             </div>
-            <div className="text-sm text-gray-600">Documentos Procesados</div>
+
+            <div className="flex justify-between items-center border-b pb-3">
+              <span className="text-gray-700">Por enviar</span>
+
+              <span className="bg-red-100 text-red-700 px-3 py-1 rounded-full font-semibold">
+                {totalElaboradasNoEnviadas}
+              </span>
+            </div>
+
+            <div className="flex justify-between items-center">
+              <span className="text-gray-700">Total documentos</span>
+
+              <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full font-semibold">
+                {totalRecibidas + totalEnviadasExternas + totalEnviadasInternas}
+              </span>
+            </div>
           </div>
-          <div></div>
+        </div>
+      </div>
+
+      {/* ACCESOS RAPIDOS */}
+      <div className="bg-white rounded-xl shadow-md p-6">
+        <h2 className="text-xl font-semibold mb-6">Accesos Rápidos</h2>
+
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+          <Link
+            to="/correspondenciaRecibidaList"
+            className="p-4 rounded-lg border hover:bg-blue-50 transition"
+          >
+            <FaInbox className="text-3xl text-blue-600 mb-2" />
+            <div className="font-medium">Recibidas</div>
+          </Link>
+
+          <Link
+            to="/correspondenciaEnviadaList"
+            className="p-4 rounded-lg border hover:bg-green-50 transition"
+          >
+            <FaPaperPlane className="text-3xl text-green-600 mb-2" />
+            <div className="font-medium">Externas</div>
+          </Link>
+
+          <Link
+            to="/correspondenciaEnviadaListInternal"
+            className="p-4 rounded-lg border hover:bg-purple-50 transition"
+          >
+            <FaPaperPlane className="text-3xl text-purple-600 mb-2" />
+            <div className="font-medium">Internas</div>
+          </Link>
+
+          <div className="p-4 rounded-lg border">
+            <FaFileAlt className="text-3xl text-gray-600 mb-2" />
+            <div className="font-medium">Documentos</div>
+          </div>
+
+          <div className="p-4 rounded-lg border">
+            <FaCheckCircle className="text-3xl text-emerald-600 mb-2" />
+            <div className="font-medium">Procesados</div>
+          </div>
         </div>
       </div>
     </div>
   );
 }
-
 export default Home;

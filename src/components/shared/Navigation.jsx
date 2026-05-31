@@ -1,25 +1,57 @@
 import { ActionButton } from "./ActionButton";
 
-export function Navigation({ title, actions = [], subTitle = "", icon: Icon }) {
+export function Navigation({
+  title,
+  actions = [],
+  subTitle = "",
+  icon: Icon,
+}) {
   return (
-    <div className="flex flex-col" style={{ backgroundColor: 'rgba(10, 89, 92, 0.9)' }}>
+    <div
+      className="
+        bg-gradient-to-r
+        from-teal-800
+        to-teal-700
+        rounded-lg
+        shadow-md
+        border
+        border-teal-600/30
+        mb-6
+      "
+    >
+      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between p-6">
+        {/* Título */}
+        <div className="flex items-center gap-4">
+          {Icon && (
+            <div className="bg-white/10 p-3 rounded-xl">
+              <Icon className="w-7 h-7 text-white" />
+            </div>
+          )}
 
-      <div className="flex justify-between rounded-lg p-4">
-        {/* Enlace al listado */}
-        <div className="flex items-center gap-2">
-          {Icon && <Icon className="w-7 h-7 text-white" />}
           <div>
-            <h1 className="font-bold text-white text-xl">{title}</h1>
-            {subTitle && <p className="text-white text-lg">{subTitle}</p>}
+            <h1 className="font-bold text-white text-2xl">
+              {title}
+            </h1>
+
+            {subTitle && (
+              <p className="text-teal-100 text-sm mt-1">
+                {subTitle}
+              </p>
+            )}
           </div>
         </div>
 
-        {/* Botones de acciones */}
-        <div className="flex items-center text-sm gap-3">
-          {actions.map((action, index) => (
-            <ActionButton key={index} {...action} />
-          ))}
-        </div>
+        {/* Acciones */}
+        {actions.length > 0 && (
+          <div className="flex flex-wrap items-center gap-3">
+            {actions.map((action, index) => (
+              <ActionButton
+                key={index}
+                {...action}
+              />
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

@@ -150,7 +150,7 @@ export default function DetailRecibida() {
     ));
 
   return (
-    <div className="p-4">
+    <div className="min-h-screen bg-gray-100 p-2">
       <Navigation
         title="Detalle de Correspondencia"
         actions={[
@@ -196,7 +196,7 @@ export default function DetailRecibida() {
       />
 
       {/* Datos generales del documento */}
-      <div className="bg-white p-6 rounded-lg shadow-md mb-6">
+      <div className="bg-white rounded-xl shadow-md border border-gray-100 p-6 mb-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
           <div className="space-y-1 w-4/5">
             <p className="text-gray-900">

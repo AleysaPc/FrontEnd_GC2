@@ -9,56 +9,86 @@ import { AuthContext } from "../../context/AuthContext";
 const Sidebar = ({ isVisible }) => {
   const [openMenu, setOpenMenu] = useState(null);
   const { user: authUser } = useContext(AuthContext);
+
   const userId = obtenerIdUser();
   const { data: user } = useUser(userId);
 
   return (
     <div
-      className={`sticky z-50 shadow w-64 transition-all duration-300 ${
+      className={`sticky z-50 transition-all duration-300 ${
         isVisible ? "flex flex-col" : "hidden"
-      } h-[calc(100vh)]`}
+      } w-72 h-screen bg-white border-r border-gray-200 shadow-xl`}
     >
-      {/* titulo */}
-      <div className="h-16 flex items-center justify-center gap-2 bg-red-700 p-4">
+      {/* HEADER */}
+      <div className="h-16 bg-gradient-to-r from-red-800 to-red-800 flex items-center justify-center gap-3 shadow-md">
         <FaBuilding className="text-white text-2xl" />
-        <h1 className="text-white text-xl font-bold">FDLP</h1>
+
+        <div>
+          <h1 className="text-white text-xl font-bold">FDLP</h1>
+        </div>
       </div>
 
-      {/* Sección de Perfil de Usuario */}
+      {/* PERFIL */}
       <div
-        className="flex flex-col items-center p-4"
-        style={{ backgroundColor: "rgba(10, 89, 92, 0.9)" }}
+        className="flex flex-col items-center px-4 py-6"
+        style={{
+          backgroundColor: "rgba(10,89,92,0.9)",
+        }}
       >
         {user?.data?.imagen ? (
           <img
             src={user.data.imagen}
             alt={`${user.data.first_name} ${user.data.last_name}`}
-            className="w-28 h-28 rounded-full mb-4 object-cover shadow-lg "
+            className="
+              w-36
+              h-36
+              rounded-full
+              object-cover
+              border-4
+              border-white
+              shadow-xl
+            "
           />
         ) : (
-          <div className="w-28 h-28 rounded-full mb-4 bg-white flex items-center justify-center text-gray-500 text-6xl border-2 border-gray-200 shadow-sm">
+          <div
+            className="
+              w-40
+              h-40
+              rounded-full
+              bg-white
+              flex
+              items-center
+              justify-center
+              text-gray-500
+              text-5xl
+              border-4
+              border-white
+              shadow-xl
+            "
+          >
             <FaUser />
           </div>
         )}
-        {/* Información del usuario */}
-        <div className="text-center text-xl">
-          <p className=" font-normal text-white">
+
+        <div className="text-center mt-4">
+          <p className="text-white font-semibold text-lg">
             {user?.data?.first_name || "Usuario"}{" "}
             {user?.data?.second_name || ""}
           </p>
-          <p className=" font-normal text-white">
-            {user?.data?.last_name || "Usuario"}{" "}
-            {user?.data?.second_last_name || ""}
+
+          <p className="text-white text-lg">
+            {user?.data?.last_name || ""} {user?.data?.second_last_name || ""}
           </p>
-          <p className="text-center text-white">
+
+          <p className="text-lg text-gray-200 mt-2 break-all">
             {user?.data?.email || "correo@ejemplo.com"}
           </p>
         </div>
       </div>
 
-      {/* Contenedor del menú con scroll      bg-white  color del sidebar donde se muestran los datos*/}
-      <div className="flex-1 overflow-y-auto bg-white">
-        <ul className="px-2 space-y-2">
+      {/* MENÚ */}
+      <div className="flex-1 overflow-y-auto bg-gray-100 p-3 ">
+          <ul className="space-y-2">
           {menus.map((menu, index) => (
             <SidebarMenu
               key={index}

@@ -110,16 +110,6 @@ function EntityList({ entityData }) {
         actions={actions}
         icon={icon}
       />
-      {hasPagination && (
-        <Pagination
-          current_page={currentPage}
-          nextPage={next}
-          prevPage={previous}
-          onPageChange={handlePageChange}
-          total={totalItems}
-          total_pages={total_pages}
-        />
-      )}
       <FiltroBusquedaOrden
         onChange={manejarFiltro}
         filtros={filtros}
@@ -140,8 +130,19 @@ function EntityList({ entityData }) {
         itemsPerPage={per_page}
         itemKey={itemKey || "id"}
       />
+      {hasPagination && (
+        <Pagination
+          current_page={currentPage}
+          nextPage={next}
+          prevPage={previous}
+          onPageChange={handlePageChange}
+          total={totalItems}
+          total_pages={total_pages}
+        />
+      )}
     </div>
   );
 }
 
 export default EntityList;
+ 
