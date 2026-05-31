@@ -16,7 +16,7 @@ export function Navigation({
         shadow-md
         border
         border-teal-600/30
-        mb-6
+        mb-2
       "
     >
       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between p-6">

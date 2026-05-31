@@ -18,10 +18,10 @@ const Table = ({
   ));
 
   return (
-    <div className="overflow-hidden shadow-lg border border-gray-200">
+    <div className="overflow-hidden shadow-lg border border-gray-200 rounded-lg mt-2">
       <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-teal-700 text-white">
+          <thead className="bg-teal-800 text-white">
             <tr>{headers}</tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">

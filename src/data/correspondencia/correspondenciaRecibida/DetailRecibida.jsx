@@ -150,7 +150,7 @@ export default function DetailRecibida() {
     ));
 
   return (
-    <div className="min-h-screen bg-gray-100 p-2">
+    <div className="min-h-screen p-2">
       <Navigation
         title="Detalle de Correspondencia"
         actions={[

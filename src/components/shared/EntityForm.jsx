@@ -13,7 +13,7 @@ const EntityForm = ({
   if (esLoading) return <Loading />;
 
   return (
-    <div className="min-h-screen bg-gray-100 ">
+    <div className="min-h-screen bg-gray-10">              
       <Navigation
         title={paraNavegacion.title}
         subTitle={paraNavegacion.subTitle}
