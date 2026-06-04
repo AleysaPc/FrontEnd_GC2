@@ -1,6 +1,7 @@
 import { ActionButton } from "./ActionButton";
 import Loading from "./Loading";
 import { Navigation } from "./Navigation";
+import { useState} from "react";
 
 const EntityForm = ({
   valorsForm,
@@ -11,6 +12,8 @@ const EntityForm = ({
   paraNavegacion,
 }) => {
   if (esLoading) return <Loading />;
+
+  const [ enviando, setEnviando ] = useState(false);
 
   return (
     <div className="min-h-screen bg-gray-10">              
@@ -23,10 +26,15 @@ const EntityForm = ({
 
       <div className="bg-white rounded-lg shadow-md border border-gray-100 p-6 ">
         <form
-          onSubmit={manejarEnviar}
-          encType="multipart/form-data"
-          className="space-y-5"
-        >
+            onSubmit={(e) => {
+              if (enviando) return;
+
+              setEnviando(true);
+              manejarEnviar(e);
+            }}
+            encType="multipart/form-data"
+            className="space-y-5"
+          >
           {fields.map(
             ({ component: Component, actionButtons, ...props }) => (
               <div
@@ -60,8 +68,9 @@ const EntityForm = ({
 
           {/* Botón principal */}
           <div className="pt-4 border-t border-gray-100">
-            <button
+           <button
               type="submit"
+              disabled={enviando}
               className="
                 bg-gradient-to-r
                 from-blue-600
@@ -71,13 +80,16 @@ const EntityForm = ({
                 py-3
                 rounded-lg
                 shadow-md
-                hover:shadow-lg
-                hover:scale-[1.02]
-                transition
                 font-semibold
+                disabled:opacity-50
+                disabled:cursor-not-allowed
               "
             >
-              {entityId ? "Actualizar" : "Enviar"}
+              {enviando
+                ? "Procesando..."
+                : entityId
+                  ? "Actualizar"
+                  : "Enviar"}
             </button>
           </div>
         </form>
