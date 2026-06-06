@@ -1,5 +1,8 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { useCorrespondenciaRecibida } from "../../hooks/useEntities";
+import {
+  useCorrespondenciaRecibida,
+  useCorrespondenciaElaborada,
+} from "../../hooks/useEntities";
 import { useState, useEffect, useRef } from "react";
 import { ActionButton } from "../../components/shared/ActionButton";
 import FormattedDateTime from "../../components/shared/FormattedDate";
@@ -7,16 +10,34 @@ import html2pdf from "html2pdf.js";
 import { FaFile, FaArrowLeft } from "react-icons/fa";
 
 export default function HojadeRuta() {
-  const { id } = useParams();
+  const { tipo, id } = useParams();
   const navigate = useNavigate();
   const printRef = useRef();
   const [documentoActivo, setDocumentoActivo] = useState("");
 
-  const { data: response, isLoading: isLoadingCorrespondencia } =
-    useCorrespondenciaRecibida(id);
+  const recibidaQuery = useCorrespondenciaRecibida(id, tipo === "recibida");
 
-  const correspondencia = response?.data;
+  const elaboradaQuery = useCorrespondenciaElaborada(id, tipo === "elaborada");
+
+  const correspondencia =
+    tipo === "recibida" ? recibidaQuery.data?.data : elaboradaQuery.data?.data;
+
+  const isLoading =
+    tipo === "recibida" ? recibidaQuery.isLoading : elaboradaQuery.isLoading;
+
+  const error =
+    tipo === "recibida" ? recibidaQuery.error : elaboradaQuery.error;
+
+  if (isLoading) return <div>Cargando...</div>;
+  if (error) return <div>Error al cargar la correspondencia</div>;
+  if (!correspondencia) return <div>No se encontró la correspondencia</div>;
+
   const documentos = correspondencia?.documentos || [];
+  {
+    documentos.length === 0 && correspondencia.contenido_html && (
+      <p className="text-green-600">Documento generado desde plantilla HTML</p>
+    );
+  }
 
   useEffect(() => {
     if (documentos.length > 0) {
@@ -35,7 +56,7 @@ export default function HojadeRuta() {
     html2pdf().from(element).set(options).save();
   };
 
-  if (isLoadingCorrespondencia) return <div>Cargando...</div>;
+  if (isLoading) return <div>Cargando...</div>;
   if (!correspondencia) return <div>No se encontró la correspondencia</div>;
 
   const obtenerAccionesRecursivas = (respuestas = []) =>
@@ -90,7 +111,7 @@ export default function HojadeRuta() {
               <div>
                 <label className="font-semibold">Nro Registro:</label>
                 <p className="border p-2 rounded bg-gray-50">
-                  {correspondencia.nro_registro}
+                  {correspondencia.nro_registro || correspondencia.cite}
                 </p>
               </div>
 
@@ -102,23 +123,35 @@ export default function HojadeRuta() {
               </div>
 
               <div>
-                <label className="font-semibold">Fecha y hora de recepción:</label>
+                <label className="font-semibold">
+                  Fecha y hora de recepción:
+                </label>
                 <p className="border p-2 rounded bg-gray-50">
-                  <FormattedDateTime dateTime={correspondencia.fecha_recepcion} />
+                  <FormattedDateTime
+                    dateTime={
+                      correspondencia.fecha_recepcion ||
+                      correspondencia.fecha_envio ||
+                      correspondencia.fecha_elaboracion
+                    }
+                  />
                 </p>
               </div>
 
               <div>
-                <label className="font-semibold">Remitente/Cargo/Institución:</label>
+                <label className="font-semibold">
+                  Remitente/Cargo/Institución:
+                </label>
                 <p className="border p-2 rounded bg-gray-50">
-                  {correspondencia.datos_contacto}
+                  {correspondencia.datos_contacto ||
+                    correspondencia.datos_contacto ||
+                    "Afiliados"}
                 </p>
               </div>
 
               <div>
                 <label className="font-semibold">Descripción:</label>
                 <p className="border p-2 rounded bg-gray-50">
-                  {correspondencia.descripcion}
+                  {correspondencia.descripcion || "Sin descripción"}
                 </p>
               </div>
             </div>
@@ -142,7 +175,9 @@ export default function HojadeRuta() {
                 <label className="font-semibold">Fecha de Respuesta:</label>
                 <p className="border p-2 rounded bg-gray-50">
                   {correspondencia.fecha_respuesta ? (
-                    <FormattedDateTime dateTime={correspondencia.fecha_respuesta} />
+                    <FormattedDateTime
+                      dateTime={correspondencia.fecha_respuesta}
+                    />
                   ) : (
                     "No requiere respuesta"
                   )}
@@ -162,7 +197,9 @@ export default function HojadeRuta() {
         <h3 className="font-bold text-xl mt-6 mb-3">Documentos Adjuntos</h3>
         <div className="border border-gray-400 p-4 rounded">
           {documentoActivo ? (
-            <p className="mb-2 font-medium">Documento principal seleccionado:</p>
+            <p className="mb-2 font-medium">
+              Documento principal seleccionado:
+            </p>
           ) : null}
           <div className="flex flex-wrap gap-3 mt-3">
             {documentos.map((doc, index) => (
@@ -178,14 +215,18 @@ export default function HojadeRuta() {
           </div>
         </div>
 
-        <h3 className="font-bold text-xl mt-8 mb-3">Historial de Derivaciones</h3>
+        <h3 className="font-bold text-xl mt-8 mb-3">
+          Historial de Derivaciones
+        </h3>
         {accionesUnificadas.length > 0 ? (
           accionesUnificadas.map((accion, index) => (
             <div
               key={accion.id || index}
               className="border border-gray-400 p-4 rounded mb-4"
             >
-              <h4 className="font-bold text-lg mb-2">Derivación #{index + 1}</h4>
+              <h4 className="font-bold text-lg mb-2">
+                Derivación #{index + 1}
+              </h4>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 <div>
@@ -224,7 +265,9 @@ export default function HojadeRuta() {
 
                 {accion._respuesta_contexto ? (
                   <div className="md:col-span-2">
-                    <label className="font-semibold">Respuesta vinculada:</label>
+                    <label className="font-semibold">
+                      Respuesta vinculada:
+                    </label>
                     <p className="border p-2 rounded bg-gray-50">
                       {(accion._respuesta_contexto.cite ||
                         `#${accion._respuesta_contexto.id}`) +
@@ -243,7 +286,9 @@ export default function HojadeRuta() {
 
         <div className="mt-10 grid grid-cols-2 gap-10 text-center">
           <div>
-            <div className="border-t border-gray-600 pt-2">Firma Responsable</div>
+            <div className="border-t border-gray-600 pt-2">
+              Firma Responsable
+            </div>
           </div>
           <div>
             <div className="border-t border-gray-600 pt-2">

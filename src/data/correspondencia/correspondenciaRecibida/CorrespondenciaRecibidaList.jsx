@@ -74,11 +74,6 @@ function CorrespondenciaRecibidaList() {
       render: (item) => <FormattedDateTime dateTime={item.fecha_recepcion} />,
     },
     {
-      key: "fecha_respuesta",
-      label: "Fecha Respuesta",
-      render: (item) => <FormattedDateTime dateTime={item.fecha_respuesta} />,
-    },
-    {
       key: "referencia",
       label: "Referencia",
       render: (item) => item.referencia,

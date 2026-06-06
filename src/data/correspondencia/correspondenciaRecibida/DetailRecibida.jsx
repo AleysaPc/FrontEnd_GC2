@@ -169,14 +169,14 @@ export default function DetailRecibida() {
               "bg-white hover:bg-gray-300 text-black px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",
           },
           {
-            to: `/historial/${id}`,
+            to: `/historial/recibida/${id}`,
             label: "Historial",
             icon: FaStopwatch,
             estilos:
               "bg-white hover:bg-gray-300 text-black px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",
           },
           {
-            to: `/hojaDeRuta/${id}`,
+            to: `/hojaDeRuta/recibida/${id}`,
             label: "Hoja de Ruta",
             icon: FaFile,
             estilos:
@@ -190,7 +190,6 @@ export default function DetailRecibida() {
               "bg-white hover:bg-gray-300 text-black px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",
           },
         ]}
-
         subTitle={`Información del Documento: ${correspondencia.nro_registro}`}
         //icon={FaFileSignature}
       />
@@ -199,6 +198,8 @@ export default function DetailRecibida() {
       <div className="bg-white rounded-xl shadow-md border border-gray-100 p-6 mb-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
           <div className="space-y-1 w-4/5">
+            <br />
+            <br />
             <p className="text-gray-900">
               <span className="font-medium text-blue-700">Nro Registro:</span>{" "}
               {correspondencia.nro_registro}
@@ -241,11 +242,15 @@ export default function DetailRecibida() {
             <hr />
             <p className="text-gray-900">
               <span className="font-medium text-blue-700">Estado:</span>{" "}
-              {correspondencia.estado?.replace("_", " ")}
+              {correspondencia.estado
+                ?.replace("_", " ")
+                .replace(/^./, (c) => c.toUpperCase())}
             </p>
             <p className="text-gray-900">
               <span className="font-medium text-blue-700">Prioridad:</span>{" "}
-              {correspondencia.prioridad}
+              {correspondencia.prioridad
+                ?.replace("_", " ")
+                .replace(/^./, (c) => c.toUpperCase())}
             </p>
             <p className="text-gray-900">
               <span className="font-medium text-blue-700">Registrado por:</span>{" "}

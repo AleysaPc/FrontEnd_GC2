@@ -14,6 +14,7 @@ import {
   FaFileSignature,
   FaShare,
   FaFileMedical,
+  FaStopwatch,
 } from "react-icons/fa";
 import TestDerivar from "../correspondencia/TestDerivar";
 import { useNavigate } from "react-router-dom";
@@ -107,6 +108,20 @@ export default function DetailEnviada() {
               "bg-white hover:bg-gray-300 text-black px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",
           },
           {
+            to: `/historial/elaborada/${id}`,
+            label: "Historial",
+            icon: FaStopwatch,
+            estilos:
+              "bg-white hover:bg-gray-300 text-black px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",
+          },
+          {
+            to: `/hojaDeRuta/elaborada/${id}`,
+            label: "Hoja de Ruta",
+            icon: FaFile,
+            estilos:
+              "bg-white hover:bg-gray-300 text-black px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",
+          },
+          {
             to: -1,
             label: "Volver",
             icon: FaArrowLeft,
@@ -114,7 +129,7 @@ export default function DetailEnviada() {
               "bg-white hover:bg-gray-300 text-black px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",
           },
         ]}
-        subTitle={`Información del Documento: ${correspondencia.cite}`}
+        subTitle={correspondencia.cite}
         icon={FaFileSignature}
       />
       <div className="bg-white p-6 rounded-lg shadow-md mb-6">
@@ -122,45 +137,67 @@ export default function DetailEnviada() {
           <div className="space-y-1 w-4/5">
             {" "}
             {/* Primera Columna */}
-            <p className="font-medium text-blue-700">CITE: </p>
-            <p className="text-gray-900">{correspondencia.cite}</p>
-            <p className="font-medium text-blue-700">Referencia:</p>
-            <p className="text-gray-900">{correspondencia.referencia}</p>
-            <p className="font-medium text-blue-700 mt-4">
-              Fecha y hora de envio:
+            <br />
+            <br />
+            <p>
+              <span className="font-medium text-blue-700">Registro: </span>{" "}
+              {correspondencia.cite}
             </p>
-            <p className="text-gray-900">
+            <p>
+              <span className="font-medium text-blue-700">Referencia:</span>{" "}
+              {correspondencia.referencia}
+            </p>
+            <p>
+              <span className="font-medium text-blue-700 mt-4">
+                Fecha y hora de envio:
+              </span>{" "}
               {new Date(correspondencia.fecha_envio).toLocaleString()}
             </p>
-            <p className="font-medium text-blue-700 mt-4">Destinatario:</p>
-            <p className="text-gray-900">
+            <p>
+              <span className="font-medium text-blue-700 mt-4">
+                Destinatario:
+              </span>{" "}
               {correspondencia.datos_contacto || "Afiliados"}
             </p>
-            <p className="font-medium text-blue-700 mt-4">Descripción:</p>
-            <p className="text-gray-900">{correspondencia.descripcion}</p>
+            <p>
+              <span className="font-medium text-blue-700 mt-4">
+                Descripción:
+              </span>{" "}
+              {correspondencia.descripcion}
+            </p>
             <hr />
-            <p className="font-medium text-blue-700">Estado:</p>
-            <p className="text-gray-900 capitalize">
-              {correspondencia.estado?.replace("_", " ")}
+            <p>
+              <span className="font-medium text-blue-700">Estado:</span>{" "}
+              <span className="text-gray-900">
+                {correspondencia.estado
+                  ?.replace("_", " ")
+                  .replace(/\b\w/g, (l) => l.toUpperCase())}
+              </span>
             </p>
-            <p className="font-medium text-blue-700 mt-4">Prioridad:</p>
-            <p className="text-gray-900 capitalize">
-              {correspondencia.prioridad}
+            <p>
+              <span className="font-medium text-blue-700">Prioridad:</span>{" "}
+              <span className="text-gray-900">
+                {correspondencia.prioridad?.replace(/\b\w/g, (l) =>
+                  l.toUpperCase(),
+                )}
+              </span>
             </p>
-            <p className="font-medium text-blue-700 mt-4">
-              Fecha de seguimiento:
+            <p>
+              <span className="font-medium text-blue-700">
+                Fecha de seguimiento:
+              </span>{" "}
+              <span className="text-gray-900">
+                {correspondencia.fecha_seguimiento
+                  ? new Date(correspondencia.fecha_seguimiento).toLocaleString()
+                  : "No registrada"}
+              </span>
             </p>
-            <p className="text-gray-900">
-              {correspondencia.fecha_seguimiento
-                ? new Date(correspondencia.fecha_seguimiento).toLocaleString()
-                : "No registrada"}
-            </p>
-            <p className="font-medium text-blue-700 mt-4">
-              Fecha y hora de Elaboracion:
-            </p>
-            <p className="text-gray-900 capitalize">
+            <span className="font-medium text-blue-700">
+              Fecha y hora de creación:
+            </span>{" "}
+            <span className="text-gray-900">
               {new Date(correspondencia.fecha_elaboracion).toLocaleString()}
-            </p>
+            </span>
           </div>
 
           <div className="space-y-1 w-9/10">
@@ -176,34 +213,24 @@ export default function DetailEnviada() {
             {/* Botones dinámicos para documentos */}
             <div className="mt-4 space-y-2">
               <div className="mt-4 space-y-2">
-                {documentos.map((doc, index) => (
+                {documentos.length > 0 ? (
+                  documentos.map((doc) => (
+                    <ActionButton
+                      key={doc.id_documento}
+                      label="Abrir PDF"
+                      icon={FaFile}
+                      onClick={() => window.open(doc.archivo, "_blank")}
+                      estilos="px-4 py-2 border rounded-md bg-white text-blue-600 border-blue-600"
+                    />
+                  ))
+                ) : (
                   <ActionButton
-                    key={doc.id_documento}
-                    label=" Abrir PDF"
-                    //label={doc.archivo || `Documento ${index + 1}`}
+                    label="Ver PDF"
                     icon={FaFile}
-                    onClick={() => {
-                      if (doc.archivo) {
-                        // Mostrar en visor y abrir en nueva pestaña
-                        setDocumentoActivo(doc.archivo);
-                        window.open(doc.archivo, "_blank");
-                      } else {
-                        // Si no hay archivo, usar PDF generado
-                        if (pdfFallbackUrl) {
-                          setDocumentoActivo(pdfFallbackUrl);
-                        }
-                        navigate(
-                          `/vistaPdfDocumento/${correspondencia.id_correspondencia}`,
-                        );
-                      }
-                    }}
-                    estilos={`px-4 py-2 border rounded-md ${
-                      documentoActivo === doc.archivo
-                        ? "bg-blue-600 text-white"
-                        : "bg-white text-blue-600 border-blue-600"
-                    }`}
+                    onClick={() => window.open(pdfFallbackUrl, "_blank")}
+                    estilos="px-4 py-2 border rounded-md bg-white text-blue-600 border-blue-600"
                   />
-                ))}
+                )}
               </div>
             </div>
           </div>

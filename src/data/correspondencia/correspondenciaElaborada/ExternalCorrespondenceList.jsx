@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { FaEdit, FaEye, FaInfo, FaStream } from "react-icons/fa";
+import { FaEdit, FaEye, FaInfo, FaPlus, FaStream } from "react-icons/fa";
 import { ActionButton } from "../../../components/shared/ActionButton";
 import { useCorrespondenciaElaboradas } from "../../../hooks/useEntities";
 import EntityList from "../../../components/shared/EntityList";
@@ -132,6 +132,13 @@ export default function externalCorrespondenceList() {
       { name: "tipo", label: "Tipo" },
       { name: "fecha_registro", label: "Fecha de Registro" },
     ],
+    actions: [
+          {
+            to: "/createElaborada",
+            icon: FaPlus,
+            estilos: "text-white bg-green-600 rounded-full p-2",
+          },
+        ],
   };
   return (
     <>

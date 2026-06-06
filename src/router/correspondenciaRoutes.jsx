@@ -157,11 +157,11 @@ export const correspondenciaRoutes = [
     element: <DetailContacto />,
   },
   {
-    path: "historial/:id",
+    path: "historial/:tipo/:id",
     element: <HistorialDocumento />,
   },
   {
-    path: "hojaDeRuta/:id",
+    path: "hojaDeRuta/:tipo/:id",
     element: <HojaDeRuta />,
   },
   {

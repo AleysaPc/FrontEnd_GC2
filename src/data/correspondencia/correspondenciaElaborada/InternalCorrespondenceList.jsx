@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { FaEdit, FaEye, FaInfo, FaStream } from "react-icons/fa";
+import { act, useState } from "react";
+import { FaEdit, FaEye, FaInfo, FaPlus, FaStream } from "react-icons/fa";
 import { ActionButton } from "../../../components/shared/ActionButton";
 import { useCorrespondenciaElaboradas } from "../../../hooks/useEntities";
 import EntityList from "../../../components/shared/EntityList";
@@ -136,6 +136,13 @@ export default function internalCorrespondenciaList() {
       { name: "plantilla__tipo", placeholder: "Tipo Documento" },
       { name: "referencia", placeholder: "Referencia" },
     ],
+    actions: [
+          {
+            to: "/createElaborada",
+            icon: FaPlus,
+            estilos: "text-white bg-green-600 rounded-full p-2",
+          },
+        ],
   };
   //EntityList es un componente genérico que recibe la configuración entityData.
   return (

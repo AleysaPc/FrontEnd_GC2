@@ -12,13 +12,26 @@ import {
   FaCheck,
 } from "react-icons/fa";
 
-import { useCorrespondenciaRecibida } from "../../hooks/useEntities";
+import {
+  useCorrespondenciaRecibida,
+  useCorrespondenciaElaborada,
+} from "../../hooks/useEntities";
 import FormattedDateTime from "../shared/FormattedDate";
 
 export default function HistorialDocumento() {
-  const { id } = useParams();
-  const { data: response, error, isLoading } = useCorrespondenciaRecibida(id);
-  const correspondencia = response?.data;
+  const { tipo, id } = useParams();
+  const recibidaQuery = useCorrespondenciaRecibida(id, tipo === "recibida");
+
+  const elaboradaQuery = useCorrespondenciaElaborada(id, tipo === "elaborada");
+
+  const correspondencia =
+    tipo === "recibida" ? recibidaQuery.data?.data : elaboradaQuery.data?.data;
+
+  const isLoading =
+    tipo === "recibida" ? recibidaQuery.isLoading : elaboradaQuery.isLoading;
+
+  const error =
+    tipo === "recibida" ? recibidaQuery.error : elaboradaQuery.error;
 
   if (isLoading) return <div className="p-4">Cargando...</div>;
   if (error) return <div className="p-4 text-red-600">Error</div>;
@@ -30,7 +43,7 @@ export default function HistorialDocumento() {
         ...accion,
         _respuesta_contexto: respuesta,
       })),
-      ...obtenerAccionesRecursivas(respuesta.respuestas || []),
+      ...obtenerAccionesRecursivas(correspondencia?.respuestas || []),
     ]);
 
   const acciones = [
@@ -75,11 +88,12 @@ export default function HistorialDocumento() {
               "bg-white hover:bg-red-700 text-black px-4 py-2 rounded-md flex items-center gap-2",
           },
         ]}
-        subTitle={`Documento: ${correspondencia?.nro_registro}`}
+        subTitle={`Documento: ${
+          correspondencia?.nro_registro || correspondencia?.cite || ""
+        }`}
       />
 
       <div className="mt-6 bg-white p-6 rounded-lg shadow">
-
         <h3 className="text-xl font-semibold text-center mb-8">
           Flujo del documento
         </h3>
@@ -87,7 +101,6 @@ export default function HistorialDocumento() {
         {/* 🔵 ORIGEN */}
         <div className="flex justify-center mb-10">
           <div className="bg-blue-50 px-6 py-4 rounded-xl shadow text-center">
-
             <div className="font-bold text-blue-800 text-sm">
               USUARIO ORIGEN
             </div>
@@ -104,10 +117,8 @@ export default function HistorialDocumento() {
 
         {/* TIMELINE CENTRAL */}
         <div className="relative border-l-2 border-gray-200 ml-4">
-
           {acciones.map((accion, index) => (
             <div key={index} className="mb-8 ml-6 relative">
-
               {/* nodo */}
               <span className="absolute -left-5 top-2 bg-white border rounded-full p-2 shadow">
                 {getIconoAccion(accion.accion)}
@@ -115,7 +126,6 @@ export default function HistorialDocumento() {
 
               {/* CARD */}
               <div className="bg-gray-50 p-4 rounded-lg shadow-sm">
-
                 {/* HEADER */}
                 <div className="font-semibold text-gray-800">
                   {(accion.accion || "").toUpperCase()}
@@ -129,24 +139,25 @@ export default function HistorialDocumento() {
                 {/* FLUJO REAL */}
                 <div className="text-base mt-2 text-gray-700">
                   <span className="font-semibold">De:</span>{" "}
-                  {accion.usuario_origen?.email || "-"} →  {accion.usuario_origen?.nombre_departamento || "-"}
+                  {accion.usuario_origen?.email || "-"} →{" "}
+                  {accion.usuario_origen?.nombre_departamento || "-"}
                 </div>
 
                 <div className="text-base text-gray-700">
                   <span className="font-semibold">A:</span>{" "}
-                  {accion.usuario_destino?.email || "-"} → {accion.usuario_destino?.nombre_departamento || "-"}
+                  {accion.usuario_destino?.email || "-"} →{" "}
+                  {accion.usuario_destino?.nombre_departamento || "-"}
                 </div>
 
                 {/* ESTADO */}
                 <div className="text-base mt-2">
                   Estado:{accion.accion || accion.estado || "-"} | Visto:{" "}
-                  {accion.visto ? "Sí" : "No"} - <FormattedDateTime dateTime={accion.fecha_visto} />
+                  {accion.visto ? "Sí" : "No"} -{" "}
+                  <FormattedDateTime dateTime={accion.fecha_visto} />
                 </div>
 
-                 {/* FECHA */}
-                <div className="text-base text-gray-500">
-                 
-                </div>
+                {/* FECHA */}
+                <div className="text-base text-gray-500"></div>
 
                 {/* COMENTARIO */}
                 <div className="text-base mt-2 text-gray-700 bg-white p-2 rounded border">

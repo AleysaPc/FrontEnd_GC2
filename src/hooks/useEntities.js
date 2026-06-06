@@ -87,8 +87,8 @@ export const useCorrespondenciaRecibidas = (
     enable
   );
 };
-export const useCorrespondenciaRecibida = (id) =>
-  useData(RecibidaApi, "correspondenciaRecibida", id, {}, 1000 * 60 * 5, !!id); //Singular
+export const useCorrespondenciaRecibida = (id, enable=true) =>
+  useData(RecibidaApi, "correspondenciaRecibida", id, {}, 1000 * 60 * 5, !!id && enable); //Singular
 export const useCorrespondenciaRecibidaMutations = () =>
   useEntityMutations(RecibidaApi, "correspondenciaRecibida");
 
@@ -151,14 +151,14 @@ export const useCorrespondenciaElaboradas = (
     enable
   );
 };
-export const useCorrespondenciaElaborada = (id) =>
+export const useCorrespondenciaElaborada = (id, enable=true) =>
   useData(
     ElaboradaApi,
     "correspondenciaElaborada",
     id,
     {},
     1000 * 60 * 5,
-    !!id
+    !!id && enable
   ); //Singular
 export const useCorrespondenciaElaboradaMutations = () =>
   useEntityMutations(ElaboradaApi, "correspondenciaElaborada");
