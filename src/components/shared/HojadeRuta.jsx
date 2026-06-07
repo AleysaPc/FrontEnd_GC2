@@ -28,13 +28,9 @@ export default function HojadeRuta() {
   const error =
     tipo === "recibida" ? recibidaQuery.error : elaboradaQuery.error;
 
-  if (isLoading) return <div>Cargando...</div>;
-  if (error) return <div>Error al cargar la correspondencia</div>;
-  if (!correspondencia) return <div>No se encontró la correspondencia</div>;
-
   const documentos = correspondencia?.documentos || [];
   {
-    documentos.length === 0 && correspondencia.contenido_html && (
+    documentos.length === 0 && correspondencia?.contenido_html && (
       <p className="text-green-600">Documento generado desde plantilla HTML</p>
     );
   }
@@ -45,15 +41,40 @@ export default function HojadeRuta() {
     }
   }, [documentos]);
 
+  if (isLoading) return <div>Cargando...</div>;
+  if (error) return <div>Error al cargar la correspondencia</div>;
+  if (!correspondencia) return <div>No se encontró la correspondencia</div>;
+
   const handlePrint = () => {
     const element = printRef.current;
     const options = {
-      margin: 10,
+      margin: [7, 7, 7, 7],
       filename: `correspondencia_${id}.pdf`,
-      html2canvas: { scale: 2 },
+      html2canvas: { scale: 3, useCORS: true, logging: false },
       jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
     };
-    html2pdf().from(element).set(options).save();
+    html2pdf()
+      .from(element)
+      .set(options)
+      .toPdf()
+      .get("pdf")
+      .then((pdf) => {
+        const totalPages = pdf.internal.getNumberOfPages();
+
+        for (let i = 1; i <= totalPages; i++) {
+          pdf.setPage(i);
+
+          pdf.setFontSize(8);
+
+          pdf.text(
+            `Página ${i} de ${totalPages}`,
+            pdf.internal.pageSize.getWidth() / 2,
+            pdf.internal.pageSize.getHeight() - 5,
+            { align: "center" },
+          );
+        }
+      })
+      .save();
   };
 
   if (isLoading) return <div>Cargando...</div>;
@@ -79,16 +100,26 @@ export default function HojadeRuta() {
 
   return (
     <div className="p-4">
-      <div className="flex gap-4 mb-4">
+      <div className="flex gap-4 mb-4 flex-wrap">
         <button
           onClick={handlePrint}
-          className="bg-blue-600 text-white px-4 py-2 rounded-md"
+          className="bg-cyan-900 text-white px-4 py-2 rounded-md"
         >
-          Imprimir / Descargar PDF
+          Descarga Hoja de Ruta
         </button>
+
+        {documentos.map((doc, index) => (
+          <ActionButton
+            key={index}
+            label={`Documento`}
+            onClick={() => window.open(doc.archivo, "_blank")}
+            estilos="bg-cyan-900 text-white px-4 py-2 rounded-md"
+          />
+        ))}
+
         <button
           onClick={() => navigate(-1)}
-          className="bg-gray-600 text-white px-4 py-2 rounded-md flex items-center gap-2"
+          className="bg-cyan-900 text-white px-4 py-2 rounded-md flex items-center gap-2"
         >
           <FaArrowLeft />
           Volver
@@ -96,193 +127,209 @@ export default function HojadeRuta() {
       </div>
 
       <div ref={printRef} className="bg-white p-6 rounded-lg shadow-md">
-        <h2 className="text-2xl font-bold text-center mb-4">
-          FORMULARIO DE DETALLE DE CORRESPONDENCIA
-        </h2>
-        <p className="text-center text-gray-700 mb-6">
-          Documento generado automáticamente desde el Sistema de Correspondencia
-        </p>
-
-        <div className="border border-gray-400 p-4 rounded">
-          <h3 className="font-bold text-xl mb-3">Información General</h3>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            <div className="space-y-2">
-              <div>
-                <label className="font-semibold">Nro Registro:</label>
-                <p className="border p-2 rounded bg-gray-50">
-                  {correspondencia.nro_registro || correspondencia.cite}
-                </p>
-              </div>
-
-              <div>
-                <label className="font-semibold">Referencia:</label>
-                <p className="border p-2 rounded bg-gray-50">
-                  {correspondencia.referencia}
-                </p>
-              </div>
-
-              <div>
-                <label className="font-semibold">
-                  Fecha y hora de recepción:
-                </label>
-                <p className="border p-2 rounded bg-gray-50">
-                  <FormattedDateTime
-                    dateTime={
-                      correspondencia.fecha_recepcion ||
-                      correspondencia.fecha_envio ||
-                      correspondencia.fecha_elaboracion
-                    }
-                  />
-                </p>
-              </div>
-
-              <div>
-                <label className="font-semibold">
-                  Remitente/Cargo/Institución:
-                </label>
-                <p className="border p-2 rounded bg-gray-50">
-                  {correspondencia.datos_contacto ||
-                    correspondencia.datos_contacto ||
-                    "Afiliados"}
-                </p>
-              </div>
-
-              <div>
-                <label className="font-semibold">Descripción:</label>
-                <p className="border p-2 rounded bg-gray-50">
-                  {correspondencia.descripcion || "Sin descripción"}
-                </p>
-              </div>
+        <div className="border border-black">
+          <div className="grid grid-cols-12 border-b border-black">
+            <div className="col-span-2 p-2 border-r border-black flex items-center justify-center">
+              <img
+                src="http://localhost:8000/media/Sello.PNG"
+                alt="Membrete superior"
+                className="w-16 h-16"
+              />
             </div>
 
-            <div className="space-y-2">
-              <div>
-                <label className="font-semibold">Estado:</label>
-                <p className="border p-2 rounded bg-gray-50">
-                  {correspondencia.estado?.replace("_", " ")}
-                </p>
-              </div>
-
-              <div>
-                <label className="font-semibold">Prioridad:</label>
-                <p className="border p-2 rounded bg-gray-50">
-                  {correspondencia.prioridad}
-                </p>
-              </div>
-
-              <div>
-                <label className="font-semibold">Fecha de Respuesta:</label>
-                <p className="border p-2 rounded bg-gray-50">
-                  {correspondencia.fecha_respuesta ? (
-                    <FormattedDateTime
-                      dateTime={correspondencia.fecha_respuesta}
-                    />
-                  ) : (
-                    "No requiere respuesta"
-                  )}
-                </p>
-              </div>
-
-              <div>
-                <label className="font-semibold">Registrado por:</label>
-                <p className="border p-2 rounded bg-gray-50">
-                  {correspondencia.usuario?.email}
-                </p>
-              </div>
+            <div className="col-span-7 border-r border-black flex items-center justify-center">
+              <h1 className="font-bold text-lg">HOJA DE RUTA INTERNA</h1>
             </div>
-          </div>
-        </div>
 
-        <h3 className="font-bold text-xl mt-6 mb-3">Documentos Adjuntos</h3>
-        <div className="border border-gray-400 p-4 rounded">
-          {documentoActivo ? (
-            <p className="mb-2 font-medium">
-              Documento principal seleccionado:
-            </p>
-          ) : null}
-          <div className="flex flex-wrap gap-3 mt-3">
-            {documentos.map((doc, index) => (
-              <div key={index} className="w-full">
-                <ActionButton
-                  label="Abrir PDF"
-                  icon={FaFile}
-                  onClick={() => window.open(doc.archivo, "_blank")}
-                  estilos="bg-blue-500 text-white px-4 py-2 rounded"
+            <div className="col-span-3 text-xs p-2">
+              <div>
+                <strong>NURI:</strong>
+              </div>
+
+              <div>{correspondencia.cite || correspondencia.nro_registro}</div>
+
+              <div className="mt-2">
+                <strong>Fecha:</strong>
+              </div>
+
+              <div>
+                <FormattedDateTime
+                  dateTime={
+                    correspondencia.fecha_elaboracion ||
+                    correspondencia.fecha_recepcion
+                  }
                 />
               </div>
-            ))}
+            </div>
+          </div>
+
+          <div className="border-b border-black text-xs">
+            <div className="grid grid-cols-12">
+              <div className="col-span-2 border-r border-black p-1 font-semibold">
+                PROCEDENCIA
+              </div>
+
+              <div className="col-span-10 p-1">
+                {correspondencia.usuario?.nombre_departamento ||
+                  correspondencia.datos_contacto}
+              </div>
+            </div>
+          </div>
+
+          <div className="border-b border-black text-xs">
+            <div className="grid grid-cols-12">
+              <div className="col-span-2 border-r border-black p-1 font-semibold">
+                REMITENTE INTERNO
+              </div>
+              <div>
+                <div className="col-span-11 p-1 whitespace-nowrap">
+                  {accionesUnificadas[0]?.usuario_origen
+                    ? `${accionesUnificadas[0].usuario_origen.first_name} ${accionesUnificadas[0].usuario_origen.last_name} - ${accionesUnificadas[0].usuario_origen.email}`
+                    : "Sin origen"}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="border-b border-black text-xs">
+            <div className="grid grid-cols-12">
+              <div className="col-span-2 border-r border-black p-1 font-semibold">
+                DEPARTAMENTO
+              </div>
+              <div>
+                <div className="col-span-11 p-1 whitespace-nowrap">
+                  {accionesUnificadas[0]?.usuario_origen
+                    ? `${accionesUnificadas[0].usuario_origen.nombre_departamento} `
+                    : "Sin origen"}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="border-b border-black text-xs">
+            <div className="grid grid-cols-12">
+              <div className="col-span-2 border-r border-black p-1 font-semibold">
+                REFERENCIA
+              </div>
+
+              <div className="col-span-10 p-1">
+                {correspondencia.referencia}
+              </div>
+            </div>
           </div>
         </div>
 
-        <h3 className="font-bold text-xl mt-8 mb-3">
-          Historial de Derivaciones
-        </h3>
-        {accionesUnificadas.length > 0 ? (
-          accionesUnificadas.map((accion, index) => (
-            <div
-              key={accion.id || index}
-              className="border border-gray-400 p-4 rounded mb-4"
-            >
-              <h4 className="font-bold text-lg mb-2">
-                Derivación #{index + 1}
-              </h4>
+        <div className="border border-black mt-2">
+          <div className="bg-gray-100 border-b border-black py-1 px-2 font-bold text-center">
+            INFORMACIÓN GENERAL DEL DOCUMENTO
+          </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                <div>
-                  <label className="font-semibold">Acción:</label>
-                  <p className="border p-2 rounded bg-gray-50">
-                    {(accion.accion || "").toUpperCase()}
-                  </p>
-                </div>
-                <div>
-                  <label className="font-semibold">Usuario Origen:</label>
-                  <p className="border p-2 rounded bg-gray-50">
-                    {accion.usuario_origen?.email || "No especificado"}
-                  </p>
-                </div>
+          <div className="grid grid-cols-12 text-xs">
+            <div className="col-span-3 border-r border-b border-black py-1 px-2 font-semibold">
+              Nro. Registro
+            </div>
+            <div className="col-span-9 border-b border-black py-1 px-2">
+              {correspondencia.nro_registro || correspondencia.cite}
+            </div>
 
-                <div>
-                  <label className="font-semibold">Usuario Destino:</label>
-                  <p className="border p-2 rounded bg-gray-50">
-                    {accion.usuario_destino?.email || "No especificado"}
-                  </p>
-                </div>
+            <div className="col-span-3 border-r border-b border-black py-1 px-2 font-semibold">
+              Referencia
+            </div>
+            <div className="col-span-9 border-b border-black py-1 px-2">
+              {correspondencia.referencia}
+            </div>
 
-                <div>
-                  <label className="font-semibold">Fecha:</label>
-                  <p className="border p-2 rounded bg-gray-50">
-                    <FormattedDateTime dateTime={accion.fecha_inicio} />
-                  </p>
-                </div>
+            <div className="col-span-3 border-r border-b border-black py-1 px-2 font-semibold">
+              Fecha
+            </div>
+            <div className="col-span-9 border-b border-black py-1 px-2">
+              <FormattedDateTime
+                dateTime={
+                  correspondencia.fecha_recepcion ||
+                  correspondencia.fecha_envio ||
+                  correspondencia.fecha_elaboracion
+                }
+              />
+            </div>
 
-                <div>
-                  <label className="font-semibold">Comentario:</label>
-                  <p className="border p-2 rounded bg-gray-50">
-                    {accion.comentario || "Sin comentarios"}
-                  </p>
-                </div>
+            <div className="col-span-3 border-r border-b border-black py-1 px-2 font-semibold">
+              {tipo === "recibida" ? "Remitente" : "Destinatario"}
+            </div>
 
-                {accion._respuesta_contexto ? (
-                  <div className="md:col-span-2">
-                    <label className="font-semibold">
-                      Respuesta vinculada:
-                    </label>
-                    <p className="border p-2 rounded bg-gray-50">
-                      {(accion._respuesta_contexto.cite ||
-                        `#${accion._respuesta_contexto.id}`) +
-                        " - " +
-                        (accion._respuesta_contexto.referencia ||
-                          "Sin referencia")}
-                    </p>
+            <div className="col-span-9 border-b border-black py-1 px-2">
+              {tipo === "recibida"
+                ? correspondencia.datos_contacto || "No registrado"
+                : correspondencia.destino_interno_info?.nombre_departamento ||
+                  "No registrado"}
+            </div>
+
+            <div className="col-span-3 border-r border-b border-black py-1 px-2 font-semibold">
+              Estado
+            </div>
+
+            <div className="col-span-9 border-b border-black py-1 px-2 uppercase">
+              {correspondencia.estado?.replace("_", " ")}
+            </div>
+
+            <div className="col-span-3 border-r border-b border-black py-1 px-2 font-semibold">
+              Prioridad
+            </div>
+
+            <div className="col-span-9 border-b border-black py-1 px-2 capitalize">
+              {correspondencia.prioridad}
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-2">
+          {accionesUnificadas.map((accion, index) => (
+            <div key={accion.id}>
+              {index > 0 && index % 3 === 0 && (
+                <div className="page-break"></div>
+              )}
+              <div className="border border-black mb-1 no-break">
+                <div className="grid grid-cols-12 border-b border-black text-sm">
+                  <div className="col-span-1 border-r border-black p-1 font-semibold">
+                    A:
                   </div>
-                ) : null}
+
+                  <div className="col-span-11 p-1">
+                    {accion.usuario_destino
+                      ? `${accion.usuario_destino.first_name}
+               ${accion.usuario_destino.last_name}
+               (${accion.usuario_destino.sigla})`
+                      : "Sin destino"}
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-12 min-h-[100px]">
+                  <div className="col-span-9 border-r border-black p-2">
+                    <div className="text-sm whitespace-pre-wrap">
+                      {accion.comentario || ""}
+                    </div>
+
+                    <div className="mt-3 text-xs">
+                      <strong>Acción:</strong> {accion.accion}
+                    </div>
+
+                    <div className="mt-1 text-xs">
+                      <strong>Origen:</strong> {accion.usuario_origen?.sigla}
+                    </div>
+                  </div>
+
+                  <div className="col-span-3 flex items-center justify-center text-gray-300 italic text-lg">
+                    Firma y Sello
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-12 border-t border-black text-xs">
+                  <div className="col-span-6 border-r border-black p-1">
+                    <strong>Fecha:</strong> <FormattedDateTime dateTime={accion.fecha_inicio} />
+                  </div>
+                </div>
               </div>
             </div>
-          ))
-        ) : (
-          <p>No hay acciones registradas.</p>
-        )}
+          ))}
+        </div>
 
         <div className="mt-10 grid grid-cols-2 gap-10 text-center">
           <div>

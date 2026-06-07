@@ -115,7 +115,7 @@ export default function DetailEnviada() {
               "bg-white hover:bg-gray-300 text-black px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",
           },
           {
-            to: `/hojaDeRuta/elaborada/${id}`,
+            to: `/hojadeRuta/elaborada/${id}`,
             label: "Hoja de Ruta",
             icon: FaFile,
             estilos:
