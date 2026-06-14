@@ -4,33 +4,30 @@ import {
   useAccionCorrespondenciaMutations,
   useCustomUserList,
 } from "../../../hooks/useEntities";
-import { useFormEntity } from "../../../utils/useFormEntity";
 import { UserDropdownSelect } from "../../../components/shared/UserDropdownSelect";
 import { InputField } from "../../../components/shared/InputField";
 import { SelectField } from "../../../components/shared/SelectField";
 import CreateEntity from "../../../components/shared/CreateEntity";
-import { FaArrowRight, FaShareSquare } from "react-icons/fa";
+import { FaShareSquare } from "react-icons/fa";
+
+const ACCIONES_CON_DESTINO_OBLIGATORIO = ["derivado", "devuelto"];
+const ACCIONES_SIN_DESTINO = ["archivado"];
 
 export default function TestDerivar({ isOpen, onClose, id }) {
   const {
     data: usuariosData,
     isLoading: loadingUsuarios,
     error: errorUsuarios,
-  } = useCustomUserList({ all_data: true }); //hace un request al backend y trae todos los usu
+  } = useCustomUserList({ all_data: true });
 
-  const usuariosArray = usuariosData?.data || []; // es un array de objetos de usuario.
-  const { options } = useFormEntity();
+  const usuariosArray = usuariosData?.data || [];
 
-  //Aquí options es una función (definida en useFormEntity) que transforma tu array de usuarios en un array de opciones para el dropdown
   const usuarioOptions = () =>
-  usuariosArray
-    ? usuariosArray.map((u) => ({
-        id: u.id,
-        nombre: `${u.first_name || ""} ${u.last_name || ""} - ${u.nombre_departamento || ""}`,
-      }))
-    : [];
+    usuariosArray.map((u) => ({
+      id: u.id,
+      nombre: `${u.first_name || ""} ${u.last_name || ""} - ${u.nombre_departamento || ""}`,
+    }));
 
-  //De acuerdo al modelo
   const accionOptions = [
     { id: "derivado", nombre: "Derivado" },
     { id: "observado", nombre: "Observado" },
@@ -41,59 +38,82 @@ export default function TestDerivar({ isOpen, onClose, id }) {
   ];
 
   const configuracionFormulario = {
-    correspondencia_id: id, // ID de la correspondencia a derivar
-    usuario_destino_id: null, // usuario destino (un solo valor)
-    comentario_derivacion: "", // comentario opcional
-    accion: "derivado", // acción por defecto
-    //estado_resultante: "derivado", // estado resultante
+    correspondencia_id: id,
+    usuario_destino_id: [],
+    comentario_derivacion: "",
+    accion: "derivado",
   };
 
-  const camposExtras = (formValues) => ({
-    usuarios: formValues.usuarios,
-    usuario_destino_id: formValues.usuario_destino_id
-      ? Number(formValues.usuario_destino_id)
-      : null,
-    comentario_derivacion: formValues.comentario_derivacion,
-    accion: formValues.accion,
-    //estado_resultante: formValues.estado_resultante,
-  });
+  const normalizarUsuariosDestino = (value) => {
+    if (Array.isArray(value)) {
+      return value.map(Number).filter(Boolean);
+    }
+    return value ? [Number(value)] : [];
+  };
+
+  const camposExtras = (formValues) => {
+    const usuariosDestino = ACCIONES_SIN_DESTINO.includes(formValues.accion)
+      ? []
+      : normalizarUsuariosDestino(formValues.usuario_destino_id);
+
+    return {
+      correspondencia_id: id,
+      usuario_destino_id: usuariosDestino,
+      comentario_derivacion: formValues.comentario_derivacion,
+      accion: formValues.accion,
+    };
+  };
 
   const paraEnvio = (formValues) => ({
     link: "/correspondenciaRecibidaList",
-    data: {
-      ...camposExtras(formValues),
-      usuario_destino_id: formValues.usuario_destino_id,
-    },
+    params: camposExtras(formValues),
   });
 
-  const construirCampos = (formValues, manejarEntradas) => [
-    {
-      component: SelectField,
-      label: "Acción",
-      name: "accion",
-      options: accionOptions,
-      value: formValues.accion,
-      onChange: manejarEntradas.handleInputChange,
-    },
-    {
-      component: UserDropdownSelect,
-      label: "Derivar a:",
-      name: "usuario_destino_id",
-      options: usuarioOptions(),
-      onChange: (name, value) =>
-        manejarEntradas.handleToggleChange(name)(value),
-      isLoading: loadingUsuarios,
-      error: errorUsuarios,
-    },
-    {
+  const construirCampos = (formValues, manejarEntradas) => {
+    const requiereDestino = ACCIONES_CON_DESTINO_OBLIGATORIO.includes(
+      formValues.accion,
+    );
+    const permiteDestino = !ACCIONES_SIN_DESTINO.includes(formValues.accion);
+
+    const campos = [
+      {
+        component: SelectField,
+        label: "Accion",
+        name: "accion",
+        options: accionOptions,
+        value: formValues.accion,
+        onChange: (event) => {
+          manejarEntradas.handleInputChange(event);
+          manejarEntradas.handleToggleChange("usuario_destino_id")([]);
+        },
+      },
+    ];
+
+    if (permiteDestino) {
+      campos.push({
+        component: UserDropdownSelect,
+        label: requiereDestino ? "Destino (obligatorio):" : "Destino (opcional):",
+        name: "usuario_destino_id",
+        value: formValues.usuario_destino_id,
+        options: usuarioOptions(),
+        onChange: (name, value) =>
+          manejarEntradas.handleToggleChange(name)(value),
+        isLoading: loadingUsuarios,
+        error: errorUsuarios,
+      });
+    }
+
+    campos.push({
       component: InputField,
       label: "Comentario",
       name: "comentario_derivacion",
       value: formValues.comentario_derivacion,
       required: false,
       onChange: manejarEntradas.handleInputChange,
-    },
-  ];
+    });
+
+    return campos;
+  };
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
@@ -103,7 +123,7 @@ export default function TestDerivar({ isOpen, onClose, id }) {
         paraEnvio={paraEnvio}
         construirCampos={construirCampos}
         paraNavegacion={{
-          title: `Derivar`,
+          title: "Acciones",
           subTitle: "",
           icon: FaShareSquare,
           actions: [],

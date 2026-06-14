@@ -151,7 +151,7 @@ export default function HistorialDocumento() {
 
                 {/* ESTADO */}
                 <div className="text-base mt-2">
-                  Estado:{accion.accion || accion.estado || "-"} | Visto:{" "}
+                  Estado:{accion.estado_resultante || accion.estado || "-"} | Visto:{" "}
                   {accion.visto ? "Sí" : "No"} -{" "}
                   <FormattedDateTime dateTime={accion.fecha_visto} />
                 </div>

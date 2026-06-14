@@ -162,7 +162,7 @@ export default function DetailRecibida() {
               "bg-white hover:bg-gray-300 text-black px-4 py-2 rounded-md flex items-center gap-2 transition duration-200",
           },
           {
-            label: "Derivar",
+            label: "Acciones",
             icon: FaShare,
             onClick: () => setMostrarModalDerivar(true),
             estilos:
@@ -304,7 +304,7 @@ export default function DetailRecibida() {
               className="bg-white p-6 rounded-lg shadow-md"
             >
               <h4 className="text-lg font-semibold mb-2">
-                Derivación #{index + 1}
+                Acción #{index + 1}
               </h4>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
@@ -321,7 +321,7 @@ export default function DetailRecibida() {
                     </p>
                   ) : null}
                   <p className="font-medium text-gray-700 mt-4">
-                    Derivado por:
+                    Realizado por:
                   </p>
                   <p className="text-gray-900">
                     {accion.usuario_origen?.email || "No especificado"}
@@ -330,16 +330,32 @@ export default function DetailRecibida() {
                   <p className="text-gray-900">
                     <FormattedDateTime dateTime={accion.fecha_inicio} />
                   </p>
+                  <p className="font-medium text-gray-700 mt-4">
+                    El doc fue Visto ?:
+                  </p>
+                  <p className="text-gray-900">
+                    {accion.visto ? (
+                      <>
+                        Sí - <FormattedDateTime dateTime={accion.visto} />
+                      </>
+                    ) : (
+                      "No"
+                    )}
+                  </p>
                 </div>
 
                 <div className="space-y-2">
                   <p className="font-medium text-gray-700">Usuario Destino:</p>
                   <p className="text-gray-900">
-                    {accion.usuario_destino?.email || "No especificado"}
+                    {accion.usuario_destino?.email || "No requerido"}
                   </p>
                   <p className="font-medium text-gray-700 mt-4">Comentario:</p>
                   <p className="text-gray-900">
-                    {accion.comentario || "Sin comentarios"}
+                    {accion.comentario || "No requerido"}
+                  </p>
+                  <p className="font-medium text-gray-700 mt-4">Estado:</p>
+                  <p className="text-gray-900">
+                    {accion.estado_resultante || accion.estado || "Estado"}
                   </p>
                 </div>
               </div>
