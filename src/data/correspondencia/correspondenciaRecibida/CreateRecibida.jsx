@@ -21,7 +21,6 @@ import { UserDropdownSelect } from "../../../components/shared/UserDropdownSelec
 import { useEffect } from "react";
 import FormattedDate from "../../../components/shared/FormattedDate";
 import { TextAreaField } from "../../../components/shared/TextAreaField";
-import { usePreSellos } from "../../../hooks/usePreSellos";
 export default function createRecibida() {
   const { paraSelectsdestructuringYMap } = useFormEntity();
 
@@ -46,17 +45,17 @@ export default function createRecibida() {
     error: errorRelacionadas,
   } = useCorrespondencias({ all_data: true });
 
-  const {
-    data: preSellosData,
-    isLoading: loadingPreSellos,
-    error: errorPreSellos,
-  } = usePreSellos();
+  //const {
+  //  data: preSellosData,
+  //  isLoading: loadingPreSellos,
+  //  error: errorPreSellos,
+  //} = usePreSellos();
 
   // Asegurarnos de que los datos sean arrays
   const contactosArray = contactosData?.data || [];
   const usuariosArray = usuariosData?.data || [];
   const correspondenciasArray = correspondenciasData?.data || [];
-  const preSellosArray = preSellosData || [];
+  //const preSellosArray = preSellosData || [];
   const { options } = useFormEntity();
 
   const contactoOptions = () =>
@@ -65,12 +64,12 @@ export default function createRecibida() {
       : [];
 
   const usuarioOptions = () =>
-  usuariosArray
-    ? usuariosArray.map((u) => ({
-        id: u.id,
-        nombre: `${u.first_name || ""} ${u.last_name || ""} - ${u.nombre_departamento || ""}`,
-      }))
-    : [];
+    usuariosArray
+      ? usuariosArray.map((u) => ({
+          id: u.id,
+          nombre: `${u.first_name || ""} ${u.last_name || ""} - ${u.nombre_departamento || ""}`,
+        }))
+      : [];
 
   const relacionadaOptions = () =>
     correspondenciasArray.map((item) => ({
@@ -78,13 +77,13 @@ export default function createRecibida() {
       nombre: `#${item.id_correspondencia} - ${item.tipo || "doc"} - ${item.referencia || "Sin referencia"}`,
     }));
 
-  const preSellosOptions = () =>
-    preSellosArray
-      .filter((item) => item.numero > 0)
-      .map((item) => ({
-        id: item.id,
-        nombre: item.pre_nro_registro,
-      }));
+  //const preSellosOptions = () =>
+  //  preSellosArray
+  //    .filter((item) => item.numero > 0)
+  //    .map((item) => ({
+  //      id: item.id,
+  //      nombre: item.pre_nro_registro,
+  //    }));
   // Manejo de errores
   useEffect(() => {
     if (errorContactos) {
@@ -99,14 +98,11 @@ export default function createRecibida() {
         errorRelacionadas,
       );
     }
-    if (errorPreSellos) {
-      console.error("Error al cargar pre-sellos:", errorPreSellos);
-    }
-  }, [errorContactos, errorUsuarios, errorRelacionadas, errorPreSellos]);
+    
+  }, [errorContactos, errorUsuarios, errorRelacionadas]);
 
   if (
-    (loadingContactos || loadingUsuarios || loadingRelacionadas,
-    loadingPreSellos)
+    (loadingContactos || loadingUsuarios || loadingRelacionadas)
   ) {
     return <div className="text-center">Cargando datos...</div>;
   }
@@ -124,7 +120,6 @@ export default function createRecibida() {
   ];
 
   const opcionEstado = [
-    { id: "registrado", nombre: "Registrado" },
     { id: "en_revision", nombre: "En revisión" },
     { id: "aprobado", nombre: "Aprobado" },
     { id: "rechazado", nombre: "Rechazado" },
@@ -176,14 +171,14 @@ export default function createRecibida() {
   });
 
   const construirCampos = (formValues, manejarEntradas) => [
-    {
-      component: SelectField,
-      label: "N° de Registros pendientes",
-      name: "pre_sello",
-      options: preSellosOptions(),
-      onChange: manejarEntradas.handleInputChange,
-      required: false,
-    },
+    //{
+    //  component: SelectField,
+    //  label: "N° de Registros pendientes",
+    //  name: "pre_sello",
+    //  options: preSellosOptions(),
+    //  onChange: manejarEntradas.handleInputChange,
+    //  required: false,
+    //},
     {
       component: () => (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">

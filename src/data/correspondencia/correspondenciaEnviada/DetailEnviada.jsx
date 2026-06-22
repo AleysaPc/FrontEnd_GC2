@@ -149,12 +149,6 @@ export default function DetailEnviada() {
             </p>
             <p>
               <span className="font-medium text-blue-700 mt-4">
-                Fecha y hora de envio:
-              </span>{" "}
-              {new Date(correspondencia.fecha_envio).toLocaleString()}
-            </p>
-            <p>
-              <span className="font-medium text-blue-700 mt-4">
                 Destinatario:
               </span>{" "}
               {correspondencia.datos_contacto || "Afiliados"}
@@ -169,19 +163,48 @@ export default function DetailEnviada() {
             <p>
               <span className="font-medium text-blue-700">Estado:</span>{" "}
               <span className="text-gray-900">
-                {correspondencia.estado
-                  ?.replace("_", " ")
-                  .replace(/\b\w/g, (l) => l.toUpperCase())}
+                {correspondencia.estado?.charAt(0).toUpperCase() + correspondencia.estado.slice(1)}
               </span>
+            </p>
+            <p>
+              <span className="font-medium text-blue-700 mt-4">
+                Estado de entrega:
+              </span>{" "}
+              {correspondencia?.estado_entrega
+                ? correspondencia.estado_entrega.charAt(0).toUpperCase() +
+                  correspondencia.estado_entrega.slice(1)
+                : ""}
             </p>
             <p>
               <span className="font-medium text-blue-700">Prioridad:</span>{" "}
               <span className="text-gray-900">
-                {correspondencia.prioridad?.replace(/\b\w/g, (l) =>
-                  l.toUpperCase(),
-                )}
+                {correspondencia.prioridad?.charAt(0).toUpperCase() + correspondencia.prioridad.slice(1)}
               </span>
             </p>
+            <hr />
+            <p>
+              <span className="font-medium text-blue-700">
+              Fecha y hora de creación:
+            </span>{" "}
+            <span className="text-gray-900">
+              {new Date(correspondencia.fecha_elaboracion).toLocaleString()}
+            </span>
+              </p>
+            <p>
+              <span className="font-medium text-blue-700 mt-4">
+                Fecha y hora de envio:
+              </span>{" "}
+              {new Date(correspondencia.fecha_envio).toLocaleString()}
+            </p>
+            
+            <p>
+              <span className="font-medium text-blue-700 mt-4">
+                Fecha y hora de recepción:
+              </span>{" "}
+              {correspondencia?.fecha_recepcion
+                ? new Date(correspondencia.fecha_recepcion).toLocaleString()
+                : ""}
+            </p>  
             <p>
               <span className="font-medium text-blue-700">
                 Fecha de seguimiento:
@@ -189,15 +212,17 @@ export default function DetailEnviada() {
               <span className="text-gray-900">
                 {correspondencia.fecha_seguimiento
                   ? new Date(correspondencia.fecha_seguimiento).toLocaleString()
-                  : "No registrada"}
+                  : ""}
               </span>
             </p>
-            <span className="font-medium text-blue-700">
-              Fecha y hora de creación:
-            </span>{" "}
-            <span className="text-gray-900">
-              {new Date(correspondencia.fecha_elaboracion).toLocaleString()}
-            </span>
+            <hr />
+            <p>
+              <span className="font-medium text-blue-700 mt-4">
+                Elaborado por:
+              </span>{" "}
+              {correspondencia?.usuario?.first_name + " " + correspondencia?.usuario?.last_name}
+            </p>
+            
           </div>
 
           <div className="space-y-1 w-9/10">

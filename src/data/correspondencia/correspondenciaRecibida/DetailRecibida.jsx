@@ -23,8 +23,11 @@ export default function DetailRecibida() {
   const navigate = useNavigate();
   const [documentoActivo, setDocumentoActivo] = useState("");
 
-  const { data: response, isLoading: isLoadingCorrespondencia } =
-    useCorrespondenciaRecibida(id);
+  const {
+    data: response,
+    isLoading: isLoadingCorrespondencia,
+    refetch,
+  } = useCorrespondenciaRecibida(id);
 
   const correspondencia = response?.data;
   const documentos = correspondencia?.documentos || [];
@@ -59,6 +62,14 @@ export default function DetailRecibida() {
     }
   }, [documentos]);
   const isUrlValid = documentoActivo && documentoActivo.startsWith("http");
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      refetch();
+    }, 5000); // cada 5 segundos
+
+    return () => clearInterval(interval);
+  }, [refetch]);
 
   if (isLoadingCorrespondencia) {
     return <div>Cargando...</div>;
@@ -307,9 +318,10 @@ export default function DetailRecibida() {
                 Acción #{index + 1}
               </h4>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2">
+                <div className="space-y-1">
                   <p className="font-medium text-gray-700">Tipo de Acción:</p>
                   <p className="text-gray-900">{accion.accion}</p>
+
                   {accion._respuesta_contexto ? (
                     <p className="text-xs text-indigo-700">
                       Respuesta vinculada:{" "}
@@ -320,23 +332,26 @@ export default function DetailRecibida() {
                         "Sin referencia"}
                     </p>
                   ) : null}
-                  <p className="font-medium text-gray-700 mt-4">
+
+                  <p className="font-medium text-gray-700 mt-1">
                     Realizado por:
                   </p>
                   <p className="text-gray-900">
                     {accion.usuario_origen?.email || "No especificado"}
                   </p>
-                  <p className="font-medium text-gray-700 mt-4">Fecha:</p>
+
+                  <p className="font-medium text-gray-700 mt-1">Fecha:</p>
                   <p className="text-gray-900">
                     <FormattedDateTime dateTime={accion.fecha_inicio} />
                   </p>
-                  <p className="font-medium text-gray-700 mt-4">
-                    El doc fue Visto ?:
+
+                  <p className="font-medium text-gray-700 mt-1">
+                    ¿El doc fue visto?
                   </p>
                   <p className="text-gray-900">
-                    {accion.visto ? (
+                    {accion.fecha_visto ? (
                       <>
-                        Sí - <FormattedDateTime dateTime={accion.visto} />
+                        Sí - <FormattedDateTime dateTime={accion.fecha_visto} />
                       </>
                     ) : (
                       "No"
@@ -344,16 +359,18 @@ export default function DetailRecibida() {
                   </p>
                 </div>
 
-                <div className="space-y-2">
+                <div className="space-y-1">
                   <p className="font-medium text-gray-700">Usuario Destino:</p>
                   <p className="text-gray-900">
                     {accion.usuario_destino?.email || "No requerido"}
                   </p>
-                  <p className="font-medium text-gray-700 mt-4">Comentario:</p>
+
+                  <p className="font-medium text-gray-700 mt-1">Comentario:</p>
                   <p className="text-gray-900">
                     {accion.comentario || "No requerido"}
                   </p>
-                  <p className="font-medium text-gray-700 mt-4">Estado:</p>
+
+                  <p className="font-medium text-gray-700 mt-1">Estado:</p>
                   <p className="text-gray-900">
                     {accion.estado_resultante || accion.estado || "Estado"}
                   </p>

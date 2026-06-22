@@ -43,14 +43,8 @@ export default function RegisterEnviada() {
   const usuarioOptions = () => options(usuariosArray, "id", "email");
 
   const opcion_EstadoEntrega = [
-    { id: "pendiente", nombre: "Pendiente" },
     { id: "entregado", nombre: "Entregado" },
     { id: "no_entregado", nombre: "No entregado" },
-    { id: "devuelto", nombre: "Devuelto" },
-    { id: "rechazado", nombre: "Rechazado" },
-    { id: "extraviado", nombre: "Extraviado" },
-    { id: "direccion_incorrecta", nombre: "Dirección incorrecta" },
-    { id: "destinatario_incorrecto", nombre: "Destinatario incorrecto" },
   ];
 
   // Cambiar estado desde el toggle
@@ -163,7 +157,7 @@ export default function RegisterEnviada() {
     // --- Estado entrega ---
     {
       component: () => (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
           <SelectField
             label="Estado de Entrega"
             name="estado_entrega"
@@ -172,33 +166,18 @@ export default function RegisterEnviada() {
             onChange={manejarEntradas.handleInputChange}
           />
 
-          <InputField
-            name="fecha_intento_entrega"
-            label="Fecha intento"
-            type="datetime-local"
-            value={form.fecha_intento_entrega}
-            onChange={manejarEntradas.handleInputChange}
-          />
-
-          <InputField
-            name="numero_intentos"
-            label="N° Intentos"
-            type="number"
-            min={0}
-            value={form.numero_intentos}
-            onChange={manejarEntradas.handleInputChange}
-          />
+          <div className="flex items-end">
+            <ToggleSwitch
+              label="Registrar oficialmente"
+              name="estado_toggle"
+              checked={form.estado === "enviado"}
+              onChange={(checked) =>
+                manejarEstadoToggle(checked, manejarEntradas)
+              }
+            />
+          </div>
         </div>
       ),
-    },
-
-    // Toggle
-    {
-      component: ToggleSwitch,
-      label: "Registrar oficialmente",
-      name: "estado_toggle",
-      checked: form.estado === "enviado",
-      onChange: (checked) => manejarEstadoToggle(checked, manejarEntradas),
     },
 
     // Motivo no entrega
@@ -241,7 +220,6 @@ export default function RegisterEnviada() {
 
   const paraNavegacion = {
     title: `Correspondencia Enviada - CITE: ${cite}`,
-    icon: FaFile,
     actions: [
       {
         to: "/listEnviados",

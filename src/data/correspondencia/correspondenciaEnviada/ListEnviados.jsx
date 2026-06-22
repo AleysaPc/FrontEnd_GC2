@@ -1,6 +1,6 @@
 import EntityList from "../../../components/shared/EntityList";
 import { useCorrespondenciaElaboradas } from "../../../hooks/useEntities";
-import { FaAngleUp, FaSave, FaStream, FaEye } from "react-icons/fa";
+import { FaAngleUp, FaSave, FaStream, FaEye, FaInfo } from "react-icons/fa";
 import { ActionButton } from "../../../components/shared/ActionButton";
 import GenerarDocumentoButton from "../../../components/documentos/GenerarDocumentoButton";
 import Trazabilidad from "../../../components/shared/Trazabilidad";
@@ -35,18 +35,11 @@ export default function ListEnviados() {
             estilos="hover:bg-green-500 hover:text-white text-gray-500 rounded-md flex items-center gap-2 transition duration-200 p-1"
           />
           <GenerarDocumentoButton id={item.id_correspondencia} />
-          <button
-            onClick={() => handleOpenModal(item.id_correspondencia)} // Abre modal con ID
-            title="Ver historial"
-            className="hover:bg-orange-600 hover:text-gray-100 text-gray-500 rounded-md flex items-center gap-2 transition duration-200 p-1"
-            aria-label="Ver historial"
-          >
-            <FaStream />
-          </button>
-          <Trazabilidad
-            visible={mostrarHistorial}
-            onClose={() => setMostrarHistorial(false)}
-            correspondenciaId={correspondenciaId} // ✅ Corregido
+          <ActionButton
+            to={`/detailEnviada/${item.id_correspondencia}`}
+            icon={FaInfo}
+            title="Ver detalles del documento"
+            estilos="hover:bg-gray-600 hover:text-gray-100 text-gray-500 rounded-md flex items-center gap-2 transition duration-200 p-1"
           />
         </div>
       ),
@@ -66,6 +59,16 @@ export default function ListEnviados() {
       label: "Fecha de Envio",
       render: (item) => <FormattedDateTime dateTime={item.fecha_envio} />,
     },
+    {
+      key: "estado_entrega",
+      label: "Estado de Entrega",
+      render: (item) =>
+        item.estado_entrega
+          ? item.estado_entrega.charAt(0).toUpperCase() +
+            item.estado_entrega.slice(1)
+          : "Sin estado",
+    },
+
     {
       key: "referencia",
       label: "Referencia",
@@ -91,8 +94,8 @@ export default function ListEnviados() {
     //icon: FaAngleUp,
     filtros: [
       { name: "cite", placeholder: "CITE " },
+      { name: "plantilla__tipo", placeholder: "Tipo Documento" },
       { name: "referencia", placeholder: "Referencia" },
-      
     ],
     filtrosAvanzados: [
       { name: "plantilla__tipo", placeholder: "Tipo Documento" },

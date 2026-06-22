@@ -1,5 +1,5 @@
 import { act, useState } from "react";
-import { FaEdit, FaEye, FaInfo, FaPlus, FaStream } from "react-icons/fa";
+import { FaDochub, FaEdit, FaEye, FaFile, FaInfo, FaPassport, FaPlus, FaRegPaperPlane, FaStream } from "react-icons/fa";
 import { ActionButton } from "../../../components/shared/ActionButton";
 import { useCorrespondenciaElaboradas } from "../../../hooks/useEntities";
 import EntityList from "../../../components/shared/EntityList";
@@ -45,7 +45,7 @@ export default function internalCorrespondenciaList() {
         <div className="flex gap-2">
           <ActionButton
             to={`/vistaPreviaDocumento/${item.id_correspondencia}`}
-            icon={FaEye}
+            icon={FaFile}
             ttile={"Vista previa del documento"}
             estilos="hover:bg-blue-600 hover:text-white text-gray-500 rounded-md flex items-center gap-2 p-1"
           />
@@ -133,6 +133,7 @@ export default function internalCorrespondenciaList() {
     itemKey: "id_correspondencia",
     entityFields: useFields,
     filtros: [
+      { name: "cite", placeholder: "CITE " },
       { name: "plantilla__tipo", placeholder: "Tipo Documento" },
       { name: "referencia", placeholder: "Referencia" },
     ],

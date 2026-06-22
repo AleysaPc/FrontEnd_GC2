@@ -29,7 +29,9 @@ export default function ContactoList() {
               onClick={async () => {
                 toast.dismiss(t.id_contacto);
                 try {
-                  await contactosMutations.eliminar.mutateAsync({ id: id_contacto });
+                  await contactosMutations.eliminar.mutateAsync({
+                    id: id_contacto,
+                  });
                   toast.success("Usuario eliminado correctamente");
                 } catch (error) {
                   toast.error("Error al eliminar el usuario");
@@ -43,7 +45,7 @@ export default function ContactoList() {
       ),
       {
         duration: Infinity, // ⏳ hasta que el usuario decida
-      }
+      },
     );
   };
 
@@ -77,16 +79,10 @@ export default function ContactoList() {
       ),
     },
     {
-      key: "nombre_contacto",
-      label: "Nombre",
-    },
-    {
-      key: "apellido_pat_contacto",
-      label: "Apellido Paterno",
-    },
-    {
-      key: "apellido_mat_contacto",
-      label: "Apellido Materno",
+      key: "nombre_completo",
+      label: "Nombre Completo",
+      render: (row) =>
+        `${row.nombre_contacto || ""} ${row.apellido_pat_contacto || ""} ${row.apellido_mat_contacto || ""}`.trim(),
     },
     {
       key: "nombre_institucion",

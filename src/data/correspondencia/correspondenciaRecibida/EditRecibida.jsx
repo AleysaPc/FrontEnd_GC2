@@ -54,10 +54,10 @@ export default function editEnviada() {
     }));
 
   const estadoOptions = [
-    { id: "enviado", nombre: "Enviado" },
     { id: "en_revision", nombre: "En revisión" },
     { id: "aprobado", nombre: "Aprobado" },
     { id: "rechazado", nombre: "Rechazado" },
+    { id: "archivado", nombre: "Archivado" },
   ];
 
   const prioridadOptions = [
