@@ -14,6 +14,6 @@ export const generarPreSello = async () => {
 }
 
 export const SellosPendientes = async () => {
-    const { data } = await api.get("/correspondencia/pre_sellos_pendientes/");
+    const { data } = await api.get("/correspondencia/pre_sellos_disponibles/");
     return data;
 }

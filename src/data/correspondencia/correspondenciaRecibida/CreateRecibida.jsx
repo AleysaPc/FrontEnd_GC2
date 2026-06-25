@@ -7,6 +7,7 @@ import {
   useCorrespondenciaRecibidaMutations,
   useCustomUserList,
 } from "../../../hooks/useEntities";
+import { usePreSellos } from "../../../hooks/usePreSellos";
 import {
   FaBackspace,
   FaEye,
@@ -45,17 +46,18 @@ export default function createRecibida() {
     error: errorRelacionadas,
   } = useCorrespondencias({ all_data: true });
 
-  //const {
-  //  data: preSellosData,
-  //  isLoading: loadingPreSellos,
-  //  error: errorPreSellos,
-  //} = usePreSellos();
+  // PreSellos obteniendo todos los preSellos
+  const {
+    data: preSellosData,
+    isLoading: loadingPreSellos,
+  error: errorPreSellos,
+  } = usePreSellos();
 
   // Asegurarnos de que los datos sean arrays
   const contactosArray = contactosData?.data || [];
   const usuariosArray = usuariosData?.data || [];
   const correspondenciasArray = correspondenciasData?.data || [];
-  //const preSellosArray = preSellosData || [];
+  const preSellosArray = preSellosData || [];  // React recibe los datos de preSellos disponibles como un array
   const { options } = useFormEntity();
 
   const contactoOptions = () =>
@@ -77,14 +79,12 @@ export default function createRecibida() {
       nombre: `#${item.id_correspondencia} - ${item.tipo || "doc"} - ${item.referencia || "Sin referencia"}`,
     }));
 
-  //const preSellosOptions = () =>
-  //  preSellosArray
-  //    .filter((item) => item.numero > 0)
-  //    .map((item) => ({
-  //      id: item.id,
-  //      nombre: item.pre_nro_registro,
-  //    }));
-  // Manejo de errores
+  //Conversion para seleccionar preSellos
+  const preSellosOptions = () =>
+    preSellosArray.map((item) => ({
+      id: item.id,
+      nombre: item.pre_nro_registro,
+    }))
   useEffect(() => {
     if (errorContactos) {
       console.error("Error al cargar contactos:", errorContactos);
@@ -98,12 +98,9 @@ export default function createRecibida() {
         errorRelacionadas,
       );
     }
-    
   }, [errorContactos, errorUsuarios, errorRelacionadas]);
 
-  if (
-    (loadingContactos || loadingUsuarios || loadingRelacionadas)
-  ) {
+  if (loadingContactos || loadingUsuarios || loadingRelacionadas) {
     return <div className="text-center">Cargando datos...</div>;
   }
 
@@ -143,11 +140,13 @@ export default function createRecibida() {
     documentos: [],
     usuarios: [], // Changed from usuario to usuarios and made it an array
     usuario: logicaNegocio.idUsuario,
-    pre_sello: "",
+    //Usuario seleciona un preSello y react guarda el id
+    pre_sello: "", 
   };
   const camposExtras = (formValues) => ({
     contacto: Number(formValues.contacto),
-    pre_sello: Number(formValues.pre_sello),
+    //EL preSello se guarda en el campo pre_sello y se convierte a number
+    pre_sello: formValues.pre_sello ? Number(formValues.pre_sello) : null,
     relacionada_a: formValues.relacionada_a
       ? Number(formValues.relacionada_a)
       : null,
@@ -171,14 +170,15 @@ export default function createRecibida() {
   });
 
   const construirCampos = (formValues, manejarEntradas) => [
-    //{
-    //  component: SelectField,
-    //  label: "N° de Registros pendientes",
-    //  name: "pre_sello",
-    //  options: preSellosOptions(),
-    //  onChange: manejarEntradas.handleInputChange,
-    //  required: false,
-    //},
+    {
+      //Render del select para preSellos
+      component: SelectField,
+      label: "N° de Registros pendientes",
+      name: "pre_sello",
+      options: preSellosOptions(),
+      onChange: manejarEntradas.handleInputChange,
+      required: false,
+    },
     {
       component: () => (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
