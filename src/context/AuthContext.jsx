@@ -12,10 +12,11 @@ export const AuthProvider = ({ children }) => {
     if (!token) return null;
     return {
       id: localStorage.getItem("id_usuario"),
-      fullName: localStorage.getItem("full_name"),
+      full_name: localStorage.getItem("full_name"),
       email: localStorage.getItem("email"),
       rol: localStorage.getItem("rol"),
       token,
+      imagen: localStorage.getItem("imagen")
     };
   });
 
@@ -27,13 +28,15 @@ export const AuthProvider = ({ children }) => {
     localStorage.setItem("email", userData.email);
     localStorage.setItem("rol", userData.rol);
     localStorage.setItem("id_departamento", userData.lugar_de_trabajo);
+    localStorage.setItem("imagen", userData.imagen);
 
     setUser({
       id: userData.id,
-      fullName: userData.full_name,
+      full_name: userData.full_name,
       email: userData.email,
       rol: userData.rol,
       token: userData.token,
+      imagen: userData.imagen
     });
   };
 

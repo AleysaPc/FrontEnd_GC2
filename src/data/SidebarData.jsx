@@ -7,12 +7,13 @@ export const menus = [
   {
     title: "Nuevo Registro",
     icon: FaFileMedical,
+    rolerequired: ["Administrador"],
     items: [
       { label: "Recibido", path: "/createRecibida" },
-      { label: "Enviado", path: "/listEnviados" },
+      { label: "Enviado", path: "/listEnviados", rolerequired: ["Afiliado"] },
     ],
-    //roleRequired: "administrador",
   },
+
   {
     title: "Crear Documento",
     icon: IoCreateSharp,
@@ -22,6 +23,7 @@ export const menus = [
       { label: "Lista Externos", path: "/externalCorrespondenceList" },
     ],
   },
+
   {
     title: "Registros Oficiales",
     icon: RiArchiveDrawerFill,
@@ -35,6 +37,7 @@ export const menus = [
       { label: "Correspondencias", path: "/correspondenciaList" },
     ],
   },
+
   {
     title: "Contactos",
     icon: RiContactsBookFill,
@@ -45,6 +48,7 @@ export const menus = [
       { label: "Crear institucion", path: "/createInstitucion" },
     ],
   },
+
   {
     title: "Usuarios",
     icon: FaUser,
@@ -56,8 +60,8 @@ export const menus = [
       { label: "Lista de departamentos", path: "/departamentList" },
       { label: "Crear departamento", path: "/createDepartament" },
     ],
-    //leRequired: "administrador",
   },
+
   {
     title: "Estadísticas",
     icon: FaChartLine,

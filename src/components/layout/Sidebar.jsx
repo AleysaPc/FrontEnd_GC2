@@ -2,16 +2,17 @@ import { useState, useContext } from "react";
 import SidebarMenu from "./SidebarMenu";
 import { menus } from "../../data/SidebarData";
 import { FaBuilding, FaUser } from "react-icons/fa";
-import { useUser } from "../../hooks/useEntities";
-import { obtenerIdUser } from "../../utils/auth";
 import { AuthContext } from "../../context/AuthContext";
 
 const Sidebar = ({ isVisible }) => {
+  const { user } = useContext(AuthContext); // obtiene datos del usuario desde el context
   const [openMenu, setOpenMenu] = useState(null);
-  const { user: authUser } = useContext(AuthContext);
 
-  const userId = obtenerIdUser();
-  const { data: user } = useUser(userId);
+  // Filtra los menus para que los roles correspondan con los del usuario
+  const filteredMenus = menus.filter((menu) => {
+    if (!menu.roleRequired) return true;
+    return menu.roleRequired.some((role) => user?.data?.rol?.includes(role));
+  });
 
   return (
     <div
@@ -35,10 +36,10 @@ const Sidebar = ({ isVisible }) => {
           backgroundColor: "rgba(10,89,92,0.9)",
         }}
       >
-        {user?.data?.imagen ? (
+        {user?.imagen ? ( // se obtiene la imagen sin data?
           <img
-            src={user.data.imagen}
-            alt={`${user.data.first_name} ${user.data.last_name}`}
+            src={user?.imagen} // se obtiene la imagen sin data?
+            alt={`${user.full_name}`} // se obtiene el nombre sin data?
             className="
               w-36
               h-36
@@ -72,16 +73,11 @@ const Sidebar = ({ isVisible }) => {
 
         <div className="text-center mt-4">
           <p className="text-white font-semibold text-lg">
-            {user?.data?.first_name || "Usuario"}{" "}
-            {user?.data?.second_name || ""}
-          </p>
-
-          <p className="text-white text-lg">
-            {user?.data?.last_name || ""} {user?.data?.second_last_name || ""}
+            {user?.full_name || "Usuario" /* se obtiene el full_name sin data? */} 
           </p>
 
           <p className="text-lg text-gray-200 mt-2 break-all">
-            {user?.data?.email || "correo@ejemplo.com"}
+            {user?.email || "correo@ejemplo.com" /* se obtiene el email sin data? */}
           </p>
         </div>
       </div>
@@ -89,18 +85,17 @@ const Sidebar = ({ isVisible }) => {
       {/* MENÚ */}
       <div className="flex-1 overflow-y-auto bg-gray-100 p-3 ">
           <ul className="space-y-2">
-          {menus.map((menu, index) => (
+          {filteredMenus.map((menu, index) => ( // se llenan los submenus pero ahora mandando roles en un array
             <SidebarMenu
               key={index}
               title={menu.title}
               icon={menu.icon}
               items={menu.items}
+              userRoles={user?.data?.rol} // se añadio los roles del usuario
               isOpen={openMenu === menu.title}
               toggleMenu={() =>
                 setOpenMenu(openMenu === menu.title ? null : menu.title)
               }
-              userRole={authUser?.rol}
-              menuRoleRequired={menu.roleRequired}
             />
           ))}
         </ul>

@@ -14,24 +14,13 @@ const SidebarMenu = ({
   items,
   isOpen,
   toggleMenu,
-  userRole,
-  menuRoleRequired,
+  userRoles // nuevo argumento: roles del usuario
 }) => {
-  // Si el menú requiere un rol específico y el usuario no lo tiene, no mostrar el menú
-  if (menuRoleRequired && userRole !== menuRoleRequired) {
-    return null;
-  }
-
-  // Filtrar subítems según el rol
+  // Filtrar subitems según roles del usuario
   const filteredItems = items.filter((item) => {
     if (!item.roleRequired) return true;
-    return item.roleRequired === userRole;
+    return item.roleRequired.some((role) => userRoles?.includes(role));
   });
-
-  // Si no hay ítems para mostrar después del filtrado, no mostrar el menú
-  if (filteredItems.length === 0) {
-    return null;
-  }
 
   return (
     <li>
@@ -44,10 +33,10 @@ const SidebarMenu = ({
         icon={Icon}
       />
 
-      {isOpen && (
+      {isOpen && filteredItems.length > 0 && ( // se pregunta si el menu esta abierto y si hay items filtrados
         <ul className="mt-2 pl-6 space-y-1">
-          {filteredItems.map((item, index) => (
-            <li key={index}>
+          {filteredItems.map((item) => (
+            <li key={item.label}>
               <NavLink
                 to={item.path}
                 className={({ isActive }) => getNavLinkClass(isActive)}

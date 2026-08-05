@@ -30,7 +30,8 @@ const Login = () => {
         full_name: response.data.user.full_name,
         email: response.data.user.email,
         rol: response.data.user.rol,
-        lugar_de_trabajo: response.data.user.lugar_de_trabajo, // Si lo devuelve el backend
+        lugar_de_trabajo: response.data.user.departamento, // Si lo devuelve el backend
+        imagen: response.data.user.imagen, // Si lo devuelve el backend
       });
 
       setLoginSuccess(true);
