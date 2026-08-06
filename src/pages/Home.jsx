@@ -1,9 +1,4 @@
 import {
-  useCorrespondenciaRecibidas,
-  useCorrespondenciaElaboradas,
-} from "../hooks/useEntities";
-
-import {
   FaInbox,
   FaPaperPlane,
   FaFileAlt,
@@ -12,55 +7,31 @@ import {
   FaExclamationTriangle,
 } from "react-icons/fa";
 import { useSello } from "../hooks/useSello";
+import { useResumenInicio } from "../hooks/useResumenInicio";
 
 import { Link } from "react-router-dom";
 
 function Home() {
   // Para sello
-  const { registroQuery, handleGenerarNroSiguiente } = useSello();
+  const { registroQuery, handleGenerarNroSiguiente } = useSello(true);
   //Obtener datos para estadísticas
-  const { data: recibidas } = useCorrespondenciaRecibidas({ all_data: true });
-  const { data: elaboradas } = useCorrespondenciaElaboradas({ all_data: true });
-
-  console.log("Total recibidas", recibidas?.data.length);
-  console.log("Total elaboradas", elaboradas?.data.length);
-  console.log(
-    "Total enviasExternas",
-    elaboradas?.data?.filter((item) => item.ambito === "externo")?.length,
-  );
-  console.log(
-    "Total recibidasNoRespondidas",
-    recibidas?.data?.filter(
-      (item) => item.fecha_respuesta && item.estado === "en_revision",
-    )?.length,
-  );
+  const { data: resumen } = useResumenInicio();
+  const totales = resumen?.totales;
+  const ultimasRecibidas = resumen?.ultimas_recibidas || [];
 
   //Calcular estadísticas
   //Recibidas
-  const totalRecibidas = recibidas?.data.length || 0;
+  const totalRecibidas = totales?.recibidas || 0;
   //Enviadas Externas
-  const totalEnviadasExternas = elaboradas?.data?.filter(
-    (item) => item.ambito === "externo",
-  )?.length;
+  const totalEnviadasExternas = totales?.elaboradas_externas || 0;
   //Enviadas Internas
-  const totalEnviadasInternas = elaboradas?.data?.filter(
-    (item) => item.ambito === "interno",
-  )?.length;
+  const totalEnviadasInternas = totales?.elaboradas_internas || 0;
   //Recibidas que tienen fecha_respuesta y no fueron respondidas
-  const totalRecibidasNoRespondidas = recibidas?.data?.filter(
-    (item) => item.fecha_respuesta && item.estado === "en_revision",
-  )?.length;
+  const totalRecibidasNoRespondidas = totales?.recibidas_sin_responder || 0;
   //Elaboradas no enviadas
-  const totalElaboradasNoEnviadas = elaboradas?.data?.filter(
-    (item) => item.estado === "aprobado",
-  )?.length;
+  const totalElaboradasNoEnviadas = totales?.elaboradas_por_enviar || 0;
 
-  const totalElaboradas = elaboradas?.data.length || 0;
-
-  const pendientesEnviadas =
-    elaboradas?.results?.filter(
-      (item) => item.estado !== "borrador" || item.estado === "pendiente",
-    ).length || 0;
+  const totalElaboradas = totales?.elaboradas || 0;
 
   //Componente de tarjeta
   const StatCard = ({ icon, title, value, color, bgColor }) => (
@@ -189,7 +160,7 @@ function Home() {
               </thead>
 
               <tbody className="divide-y divide-gray-100">
-                {recibidas?.data?.slice(0, 5)?.map((item) => (
+                {ultimasRecibidas.map((item) => (
                   <tr
                     key={item.id_correspondencia}
                     className="hover:bg-gray-50 transition"

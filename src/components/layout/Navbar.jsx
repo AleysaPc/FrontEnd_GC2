@@ -8,7 +8,7 @@ import { useSello } from "../../hooks/useSello";
 
 const Navbar = ({ toggleSidebar, user }) => {
   //Para sello
-  const { generarPDFSello } = useSello();
+  const { generarPDFSello } = useSello(false);
 
   const logoutUser = useLogout();
 

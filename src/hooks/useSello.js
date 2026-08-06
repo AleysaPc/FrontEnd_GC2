@@ -1,13 +1,16 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getProximoRegistro, generarPreSello } from "../api/selloService";
 import { jsPDF } from "jspdf";
 import Swal from "sweetalert2";
-export const useSello = () => {
+export const useSello = (consultarRegistro = false) => {
+  const queryClient = useQueryClient();
   //QUERY
   const registroQuery = useQuery({
     queryKey: ["proximo_registro"],
     queryFn: getProximoRegistro, //Función que llama a la API
-    refetchInterval: 5000,
+    enabled: consultarRegistro,
+    staleTime: 60_000,
+    refetchOnWindowFocus: true,
   });
 
   //GENERAR PDF SELLO
@@ -24,7 +27,10 @@ export const useSello = () => {
 
     if (!result.isConfirmed) return;
     try {
-      const data = await generarPreSello(); //Trae los datos del Backend
+      const data = await generarPreSello();
+      await queryClient.invalidateQueries({
+        queryKey: ["proximo_registro"],
+      }); //Trae los datos del Backend
       const doc = new jsPDF();
 
       const config = {
@@ -75,7 +81,9 @@ export const useSello = () => {
     try {
       await generarPreSello();
       //refetch the query to update the data
-      registroQuery.refetch();
+      await queryClient.invalidateQueries({
+        queryKey: ["proximo_registro"],
+      });
       Swal.fire({
         icon: "success",
         title: "Registro actualizado",
@@ -137,7 +145,7 @@ const drawRegister = (doc, c, data) => {
     `N° Registro: ${data.pre_nro_registro?.replace(/^Pre-/i, "") || ""}`,
     c.x + 45,
     c.y + 28,
-    { align: "center" }
+    { align: "center" },
   );
 };
 

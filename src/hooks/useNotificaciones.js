@@ -9,6 +9,10 @@ export const useNotificacionesPendientes = () => {
   return useQuery({
     queryKey: ['notificacionesPendientes'],
     queryFn: AccionCorrespondenciaApi.notificacionesPendientes,
+    refetchInterval: 60_000, //una consulta cada minuto
+    refetchIntervalInBackground: false,
+    staleTime: 30_000,
+    refetchOnWindowFocus: true,
   });
 };
 

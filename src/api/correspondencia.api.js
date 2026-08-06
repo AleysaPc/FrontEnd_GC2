@@ -10,7 +10,12 @@ export const ElaboradaApi = createCrudOperations(ApiCorrespondencia, "elaborada"
 export const AccionCorrespondenciaApi = {
     ...createCrudOperations(ApiCorrespondencia, "acciones"),
     notificacionesPendientes: () =>
-        ApiCorrespondencia.get("notificacion/pendiente").then(res => res.data),
+        ApiCorrespondencia.get("notificacion/pendiente/").then(res => res.data),
     marcarNotificacionVista: (id) =>
         ApiCorrespondencia.post(`notificacion/vista/${id}/`),
+}
+
+export const InicioApi = {
+    obtenerResumen: () =>
+        ApiCorrespondencia.get("inicio/resumen/").then(res => res.data),
 }
