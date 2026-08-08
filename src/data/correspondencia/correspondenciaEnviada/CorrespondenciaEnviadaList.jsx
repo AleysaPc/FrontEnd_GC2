@@ -93,6 +93,7 @@ function CorrespondenciaEnviadaList() {
     subTitle: "Correspondencias externas",
     loadingMessage: "Cargando correspondencias enviadas...",
     errorMessage: "Error al obtener las correspondencias enviadas",
+    mostrarBusquedaSemantica: true,
 
     // Filtro para estado "estado=enviado"
     fetchDataHook: (params = {}) =>
@@ -133,7 +134,6 @@ function CorrespondenciaEnviadaList() {
       { name: "cite", label: "CITE" },
       { name: "fecha_envio", label: "Fecha de Envio" },
     ],
-    mostrarBusquedaSemantica: false,
   };
 
   return (

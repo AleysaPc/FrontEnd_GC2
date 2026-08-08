@@ -120,6 +120,7 @@ export default function internalCorrespondenciaList() {
     subTitle: "Listado",
     loadingMenssage: "Cargando documentos internos...",
     errorMesage: "Error al obtener la lista",
+    mostrarBusquedaSemantica: true,
     fetchDataHook: (params = {}) =>
       useCorrespondenciaElaboradas({
         ...params,

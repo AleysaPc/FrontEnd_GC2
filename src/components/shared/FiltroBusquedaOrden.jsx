@@ -6,6 +6,7 @@ function FiltroBusquedaOrden({
   filtrosAvanzados = [],
   ordenes = [],
   placeholderSearch,
+  mostrarBusquedaSemantica = false,
 }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [ordering, setOrdering] = useState("");
@@ -52,16 +53,29 @@ function FiltroBusquedaOrden({
     });
   };
 
+  const limpiarFiltros = () => {
+    setSearchTerm("");
+    setOrdering("");
+    setFilterValues({});
+
+    onChange({
+      search: "",
+      ordering: "",
+    });
+  };
+
   return (
     <div className="flex flex-wrap gap-2 my-2">
-      <input
-        type="text"
-        placeholder="Buscar por contenido del documento..."
-        value={filterValues["consulta_semantica"] || ""}
-        onChange={(e) => manejarCambioFiltro(e, "consulta_semantica")}
-        onKeyDown={(e) => manejarEnterFiltro(e, "consulta_semantica")}
-        className="border px-2 py-1 rounded w-64"
-      />
+      {mostrarBusquedaSemantica && (
+        <input
+          type="text"
+          placeholder="Buscar por contenido del documento..."
+          value={filterValues["consulta_semantica"] || ""}
+          onChange={(e) => manejarCambioFiltro(e, "consulta_semantica")}
+          onKeyDown={(e) => manejarEnterFiltro(e, "consulta_semantica")}
+          className="border px-3 py-2 rounded w-[450px]"
+        />
+      )}
       {/*<input
         type="text"
         placeholder={placeholderSearch || "Buscar..."}
@@ -118,6 +132,13 @@ function FiltroBusquedaOrden({
           </option>
         ))}
       </select>
+      <button
+        type="button"
+        onClick={limpiarFiltros}
+        className="border px-3 py-1 rounded text-sm bg-gray-200 hover:bg-gray-300"
+      >
+        Limpiar
+      </button>
     </div>
   );
 }

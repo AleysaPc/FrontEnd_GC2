@@ -55,7 +55,7 @@ export const useFormEntity = () => {
     createMutation,
     updateMutation,
     entityId,
-    params = {}
+    params = {},
   ) => {
     event.preventDefault(); // Prevenir acción por defecto del formulario
 
@@ -122,8 +122,8 @@ export const useFormEntity = () => {
         (Array.isArray(value) &&
           value.some(
             (item) =>
-              item.archivo instanceof File || item.archivo instanceof Blob
-          ))
+              item.archivo instanceof File || item.archivo instanceof Blob,
+          )),
     );
 
     let data;
@@ -146,7 +146,7 @@ export const useFormEntity = () => {
             if (doc?.nombre_documento) {
               data.append(
                 `documentos[${index}][nombre_documento]`,
-                doc.nombre_documento
+                doc.nombre_documento,
               );
             }
           });
@@ -174,7 +174,7 @@ export const useFormEntity = () => {
       console.log("Plain object data:", data);
     }
 
-    mutation.mutate(
+    return mutation.mutateAsync(
       { id: entityId || undefined, data },
       {
         onSuccess: (response) => {
@@ -188,7 +188,7 @@ export const useFormEntity = () => {
             navigate(entityName);
           }
         },
-      }
+      },
     );
   };
 

@@ -7,16 +7,17 @@ export const menus = [
   {
     title: "Nuevo Registro",
     icon: FaFileMedical,
-    rolerequired: ["Afiliado"],
+    roleRequired: ["Secretaria", "Directivo", "Administrador"],
     items: [
-      { label: "Recibido", path: "/createRecibida" },
-      { label: "Enviado", path: "/listEnviados", rolerequired: ["Afiliado"] },
+      { label: "Recibido", path: "/createRecibida", },
+      { label: "Enviado", path: "/listEnviados", },
     ],
   },
 
   {
     title: "Crear Documento",
     icon: IoCreateSharp,
+    roleRequired: ["Secretaria", "Directivo"],
     items: [
       { label: "Nuevo", path: "/createElaborada" },
       { label: "Lista Interno", path: "/internalCorrespondenceList" },
@@ -27,20 +28,22 @@ export const menus = [
   {
     title: "Registros Oficiales",
     icon: RiArchiveDrawerFill,
+    roleRequired: ["Secretaria", "Directivo", "Administrador", "Afiliado"],
     items: [
-      { label: "Recibidos", path: "/correspondenciaRecibidaList" },
-      { label: "Enviados Externos", path: "/correspondenciaEnviadaList" },
+      { label: "Recibidos", path: "/correspondenciaRecibidaList", roleRequired: ["Afiliado", "Secretaria", "Directivo"] },
+      { label: "Enviados Externos", path: "/correspondenciaEnviadaList" , roleRequired: ["Secretaria", "Directivo"]},
       {
         label: "Enviados Internos",
-        path: "/correspondenciaEnviadaListInternal",
+        path: "/correspondenciaEnviadaListInternal", roleRequired: ["Secretaria", "Directivo"],
       },
-      { label: "Correspondencias", path: "/correspondenciaList" },
+      { label: "Correspondencias", path: "/correspondenciaList", roleRequired: ["Secretaria", "Directivo"] },
     ],
   },
 
   {
     title: "Contactos",
     icon: RiContactsBookFill,
+    roleRequired: ["Administrador", "Secretaria", "Directivo"],
     items: [
       { label: "Lista de contactos", path: "/contactoList" },
       { label: "Crear Contacto", path: "/createContacto" },
@@ -52,6 +55,7 @@ export const menus = [
   {
     title: "Usuarios",
     icon: FaUser,
+    roleRequired: ["Administrador", "Secretaria"],
     items: [
       { label: "Lista de Usuarios", path: "/userList" },
       { label: "Nuevo Usuario", path: "/createUser" },

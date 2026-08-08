@@ -44,7 +44,7 @@ export default function CreateEntity({
 
   const envio = paraEnvio(formValues);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault(); // Asegúrate de prevenir la acción predeterminada del formulario
 
     // Validación de Contraseña solo si existen los campos 'password' y 'confirm_password'
@@ -60,7 +60,7 @@ export default function CreateEntity({
       return; // 🔑 DETIENE el submit
     }
 
-    manejarEnvio(event, envio.link, formValues, crear, null, envio.entityId, {
+    await manejarEnvio(event, envio.link, formValues, crear, null, envio.entityId, {
       ...envio.params,
     });
     clearCache();

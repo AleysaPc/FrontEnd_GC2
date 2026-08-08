@@ -10,23 +10,37 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(() => {
     const token = localStorage.getItem("Token");
     if (!token) return null;
+
+    // Recuperar rol como array (con fallback por si quedó string antiguo)
+    let rol = localStorage.getItem("rol");
+    try {
+      rol = JSON.parse(rol);
+    } catch {
+      // Si era string simple (legado), conviértelo a array
+      rol = rol ? [rol] : [];
+    }
+
     return {
       id: localStorage.getItem("id_usuario"),
       full_name: localStorage.getItem("full_name"),
       email: localStorage.getItem("email"),
-      rol: localStorage.getItem("rol"),
+      rol, // ← ahora es array
       token,
-      imagen: localStorage.getItem("imagen")
+      imagen: localStorage.getItem("imagen"),
     };
   });
 
-  // Ajuste aquí: se eliminó userData.user porque la respuesta tiene directamente los campos
   const loginUser = (userData) => {
+    // Asegurar que rol sea array antes de guardar
+    const rolArray = Array.isArray(userData.rol)
+      ? userData.rol
+      : [userData.rol];
+
     localStorage.setItem("Token", userData.token);
     localStorage.setItem("id_usuario", userData.id);
     localStorage.setItem("full_name", userData.full_name);
     localStorage.setItem("email", userData.email);
-    localStorage.setItem("rol", userData.rol);
+    localStorage.setItem("rol", JSON.stringify(rolArray)); // ← JSON.stringify
     localStorage.setItem("id_departamento", userData.lugar_de_trabajo);
     localStorage.setItem("imagen", userData.imagen);
 
@@ -34,9 +48,9 @@ export const AuthProvider = ({ children }) => {
       id: userData.id,
       full_name: userData.full_name,
       email: userData.email,
-      rol: userData.rol,
+      rol: rolArray, // ← array real
       token: userData.token,
-      imagen: userData.imagen
+      imagen: userData.imagen,
     });
   };
 

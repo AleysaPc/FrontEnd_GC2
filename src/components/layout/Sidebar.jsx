@@ -11,7 +11,7 @@ const Sidebar = ({ isVisible }) => {
   // Filtra los menus para que los roles correspondan con los del usuario
   const filteredMenus = menus.filter((menu) => {
     if (!menu.roleRequired) return true;
-    return menu.roleRequired.some((role) => user?.data?.rol?.includes(role));
+    return menu.roleRequired.some((role) => user?.rol?.includes(role));
   });
 
   return (
@@ -91,7 +91,7 @@ const Sidebar = ({ isVisible }) => {
               title={menu.title}
               icon={menu.icon}
               items={menu.items}
-              userRoles={user?.data?.rol} // se añadio los roles del usuario
+              userRoles={user?.rol} // se añadio los roles del usuario
               isOpen={openMenu === menu.title}
               toggleMenu={() =>
                 setOpenMenu(openMenu === menu.title ? null : menu.title)

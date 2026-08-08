@@ -5,7 +5,7 @@ import Pagination from "../../components/shared/Pagination";
 import { Navigation } from "../../components/shared/Navigation";
 import { useFormEntity } from "../../utils/useFormEntity";
 import FiltroBusquedaOrden from "../../components/shared/FiltroBusquedaOrden";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 function EntityList({ entityData }) {
   const {
@@ -21,23 +21,62 @@ function EntityList({ entityData }) {
     filtros,
     filtrosAvanzados,
     ordenes,
+    mostrarBusquedaSemantica = false,
   } = entityData;
 
+  const storageKey = `entityList_${title}`;
+
   //Los set son para modificar los estados de las variables
-  const [page, setPage] = useState(1);
-  const [perPage, setPerPage] = useState(10); //Estado inicial
-  const [allData, setAllData] = useState(false);
+  const getInitialState = () => {
+    const saved = sessionStorage.getItem(storageKey);
 
-  const [search, setSearch] = useState("");
-  const [filters, setFilters] = useState({});
-  const [ordering, setOrdering] = useState("");
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch (error) {
+        console.error("Error recuperando estado de la lista:", error);
+      }
+    }
 
+    return {
+      page: 1,
+      perPage: 10,
+      allData: false,
+      search: "",
+      filters: {},
+      ordering: "",
+    };
+  };
+
+  const initialState = getInitialState();
+
+  const [page, setPage] = useState(initialState.page);
+  const [perPage, setPerPage] = useState(initialState.perPage);
+  const [allData, setAllData] = useState(initialState.allData);
+
+  const [search, setSearch] = useState(initialState.search);
+  const [filters, setFilters] = useState(initialState.filters);
+  const [ordering, setOrdering] = useState(initialState.ordering);
+
+  useEffect(() => {
+    sessionStorage.setItem(
+      storageKey,
+      JSON.stringify({
+        page,
+        perPage,
+        allData,
+        search,
+        filters,
+        ordering,
+      }),
+    );
+  }, [storageKey, page, perPage, allData, search, filters, ordering]);
   // Función para actualizar filtros específicos
   const manejarFiltro = (nuevosValores) => {
     // Extraemos los valores desde el objeto combinado que viene desde FiltroBusquedaOrden
     const { search, ordering, ...restFilters } = nuevosValores;
-    setSearch(search || '');
-    setOrdering(ordering || '');
+    setSearch(search || "");
+    setOrdering(ordering || "");
     setFilters(restFilters || {});
     setPage(1);
   };
@@ -116,6 +155,7 @@ function EntityList({ entityData }) {
         filtrosAvanzados={filtrosAvanzados}
         ordenes={ordenes}
         placeholderSearch="Search"
+        mostrarBusquedaSemantica={mostrarBusquedaSemantica}
       />
       <SelectPerPage
         perPage={perPage}
@@ -145,4 +185,3 @@ function EntityList({ entityData }) {
 }
 
 export default EntityList;
- 

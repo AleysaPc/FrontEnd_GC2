@@ -107,6 +107,7 @@ function CorrespondenciaRecibidaList() {
     loadingMessage: "Cargando correspondencias recibidas...",
     errorMessage: "Error al obtener las correspondencias recibidas",
     fetchDataHook: useCorrespondenciaRecibidas,
+    mostrarBusquedaSemantica: true,
     itemKey: "id_doc_entrante",
     entityFields: useFields,
     //icon: FaFileInvoice,

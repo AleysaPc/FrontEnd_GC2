@@ -43,13 +43,13 @@ export default function EditEntity({
 
   const envio = paraEnvio(formValues);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     if (formValues.new_password ?? false) {
       formValues.new_password = formValues.new_password;
     }
-    manejarEnvio(
+    await manejarEnvio(
       event,
       envio.link,
       formValues,

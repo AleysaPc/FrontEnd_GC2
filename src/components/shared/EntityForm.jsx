@@ -26,11 +26,15 @@ const EntityForm = ({
 
       <div className="bg-white rounded-lg shadow-md border border-gray-100 p-6 ">
         <form
-            onSubmit={(e) => {
+            onSubmit={ async (e) => {
               if (enviando) return;
 
               setEnviando(true);
-              manejarEnviar(e);
+              try {
+                await manejarEnviar(e);
+              } finally {
+                setEnviando(false);
+              }
             }}
             encType="multipart/form-data"
             className="space-y-5"

@@ -101,6 +101,7 @@ export default function externalCorrespondenceList() {
     subTitle: "Listado",
     loadingMesage: "Cargando...",
     errorMessage: "Error al obtener la correspondencia",
+    mostrarBusquedaSemantica:true,
     fetchDataHook: (params = {}) =>
       useCorrespondenciaElaboradas({
         ...params,
