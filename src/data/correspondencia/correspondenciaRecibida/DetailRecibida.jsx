@@ -263,10 +263,12 @@ export default function DetailRecibida() {
                 ?.replace("_", " ")
                 .replace(/^./, (c) => c.toUpperCase())}
             </p>
+            {/* Visor de documentos}
             <p className="text-gray-900">
               <span className="font-medium text-blue-700">Registrado por:</span>{" "}
               {correspondencia.usuario?.email || "No especificado"}
             </p>
+            */}
           </div>
 
           {/* Visor de documentos */}

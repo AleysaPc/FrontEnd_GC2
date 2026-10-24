@@ -219,7 +219,7 @@ export default function RegisterEnviada() {
   ];
 
   const paraNavegacion = {
-    title: `Correspondencia Enviada - CITE: ${cite}`,
+    title: `Correspondencia Enviada: ${cite}`,
     actions: [
       {
         to: "/listEnviados",

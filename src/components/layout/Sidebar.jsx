@@ -25,7 +25,7 @@ const Sidebar = ({ isVisible }) => {
         <FaBuilding className="text-white text-2xl" />
 
         <div>
-          <h1 className="text-white text-xl font-bold">FDLP</h1>
+          <h1 className="text-white text-xl font-bold">FTL-FTA LA PAZ</h1>
         </div>
       </div>
 

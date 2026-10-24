@@ -24,7 +24,7 @@ const Navbar = ({ toggleSidebar, user }) => {
 
       <div className="text-lg font-semibold">
         <Link to="/home" aria-label="Ir al inicio">
-          Sistema de Gestión de Correspondencia
+          SISTEMA DE CORRESPONDENCIA 
         </Link>
       </div>
 

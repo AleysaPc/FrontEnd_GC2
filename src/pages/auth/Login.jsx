@@ -49,7 +49,7 @@ const Login = () => {
         <div className="flex flex-col items-center mb-6">
           <img src="/LogoFed.PNG" alt="Logo de la Empresa" className="h-16 mb-2" />
           <h1 className="text-center text-xl font-bold bg-gradient-to-r from-red-800 via-red-800 to-red-800 text-transparent bg-clip-text">
-            FEDERACIÓN DE TRABAJADORES LA PAZ
+            FTL-FTA LA PAZ
           </h1>
         </div>
 
